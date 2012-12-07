@@ -1,0 +1,2 @@
+1.0.0 - December 7 2012
+- First release!
