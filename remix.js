@@ -1,4 +1,4 @@
-// Remixer.js
+// Remix.js
 // Thor Kell & Paul Lamere, 12/2012
 // Based on Paul Lamere's Infinite Jukebox and assorted other javascript projects
 
