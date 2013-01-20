@@ -24,9 +24,12 @@ var remixed;
 
 function init() {
 
-    var waveform = new Waveform({
+    new Waveform({
       container: document.getElementById("waveform"),
-      data: [1, 0.2, 0.5]
+      innerColor: function(x, y){
+        return '#'+Math.floor(Math.random()*16777215).toString(16);
+      },
+      data: [0, 0.3, 1, 0.5, 1, 0.3, 0]
     });
 
 
