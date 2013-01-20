@@ -5,14 +5,14 @@
 </head>
 
 <body>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
 <script type="text/javascript">
 
 // First-beat extraction and assembly
 // You will need to supply your Echo Nest API key, the trackID, and a URL to the track.
 // The supplied track can be found in the audio subdirectory.
-var apiKey = 'YOUR_API_KEY';
+var apiKey = 'FILDTEOIK2HBORODV';
 var trackID = 'TRJTLOZ12F09775D41';
 var trackURL = 'audio/Karl_Blau-Gnos_Levohs.mp3'
 
@@ -56,10 +56,54 @@ function init() {
 window.onload = init;
 </script>
 
-Welcome to One.html
+
+remix.js:  one.html
 <div id='info'> </div>
+<div id='waveform'></div>
 <button onClick="player.play(0, remixed);">Play!</button>
 <button onClick="player.stop()">Stop!</button>
+
+<div id='newWaveform'></div>
+
+<div id='theCode'>
+    <pre><code>
+function init() {
+    if (window.webkitAudioContext === undefined) {
+        error("Sorry, this app needs advanced web audio. Your browser doesn't"
+            + " support it. Try the latest version of Chrome");
+    } else {
+        var context = new webkitAudioContext();
+        remixer = createJRemixer(context, $, apiKey);
+        player = remixer.getPlayer();
+        $("#info").text("Loading analysis data...");
+
+        remixer.remixTrackById(trackID, trackURL, function(t, percent) {
+            track = t;
+
+            $("#info").text(percent + "% of the track loaded");
+            if (percent == 100) {
+                $("#info").text(percent + "% of the track loaded, remixing...");
+            }
+
+            if (track.status == 'ok') {
+                remixed = new Array();
+                // Do the remixing here!
+                for (var i=0; i < track.analysis.beats.length; i++) {
+                    if (i % 4 == 0) {
+                        remixed.push(track.analysis.beats[i])
+                    }
+                }
+                $("#info").text("Remix complete!");
+            }
+        });
+    }
+}
+
+window.onload = init;
+    </code></pre>
+
+ </div>
+
 </body>
 
 
