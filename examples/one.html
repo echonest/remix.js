@@ -50,7 +50,7 @@ function init() {
         player = remixer.getPlayer();
         $("#info").text("Loading analysis data...");
 
-        remixer.remixTrwaveCanvasackById(trackID, trackURL, function(t, percent) {
+        remixer.remixTrackById(trackID, trackURL, function(t, percent) {
             track = t;
 
             $("#info").text(percent + "% of the track loaded");
@@ -84,7 +84,7 @@ Extract the first beat of every bar.
 <div id='info'> </div>
 
 <div id='waveform'>
-<canvas id='waveCanvas' width='100%' height='100'></canvas>
+<canvas id='waveCanvas' width='1024px' height='100px'></canvas>
 </div>
 
 <button onClick="player.play(0, remixed);">Play</button>
