@@ -15,14 +15,6 @@ var WaveSurfer = {
 
         this.drawer = Object.create(WaveSurfer.Drawer);
         this.drawer.init(params);
-
-        this.backend.bindUpdate(function () {
-            my.onAudioProcess();
-        });
-
-        this.bindClick(params.canvas, function (percents) {
-            my.playAt(percents);
-        });
     },
 
     onAudioProcess: function () {
