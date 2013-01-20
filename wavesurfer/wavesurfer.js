@@ -81,36 +81,4 @@ var WaveSurfer = {
         xhr.open('GET', src, true);
         xhr.send();
     },
-
-    /**
-     * Loads an audio file via drag'n'drop.
-     */
-    bindDragNDrop: function (dropTarget) {
-        var my = this;
-        var reader = new FileReader();
-        reader.addEventListener('load', function (e) {
-            my.backend.loadData(
-                e.target.result,
-                my.drawBuffer.bind(my)
-            );
-        }, false);
-
-        (dropTarget || document).addEventListener('drop', function (e) {
-            e.preventDefault();
-            var file = e.dataTransfer.files[0];
-            file && reader.readAsArrayBuffer(file);
-        }, false);
-    },
-
-    /**
-     * Click to seek.
-     */
-    bindClick: function (element, callback) {
-        var my = this;
-        element.addEventListener('click', function (e) {
-            var relX = e.offsetX;
-            if (null == relX) { relX = e.layerX; }
-            callback(relX / this.clientWidth);
-        }, false);
-    }
 };

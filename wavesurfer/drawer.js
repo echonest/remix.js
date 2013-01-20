@@ -83,8 +83,6 @@ WaveSurfer.Drawer = {
         } else if (this.image) {
             this.drawImage();
         }
-
-        this.drawCursor();
     },
 
     clear: function () {
@@ -107,16 +105,6 @@ WaveSurfer.Drawer = {
         this.cc.fillRect(x, y, w, h);
     },
 
-    drawCursor: function () {
-        var w = this.params.cursorWidth;
-        var h = this.height;
-
-        var x = Math.min(this.cursorPos, this.width - w);
-        var y = 0;
-
-        this.cc.fillStyle = this.params.cursorColor;
-        this.cc.fillRect(x, y, w, h);
-    },
 
     /**
      * Loads and caches an image.

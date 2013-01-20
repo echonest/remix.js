@@ -27,7 +27,8 @@ var track;
 var remixed;
 
 function init() {
-    // Trying with wavesurfer
+    // Display the "before" wavesurfer image
+    // Need to remove the playback capabilities from this
     var wavesurfer = Object.create(WaveSurfer);
 
     wavesurfer.init({
@@ -61,6 +62,11 @@ function init() {
             if (track.status == 'ok') {
                 remixed = new Array();
                 // Do the remixing here!
+                // ok, so I could take the quanta start and finish out of here and use them to 
+                // get the chunks of audio i need
+                // or, I could render the entire file out, and then re-visualize.  That seems slow
+                // AudioJedit appears to convert between image position and audio position
+                // 
                 for (var i=0; i < track.analysis.beats.length; i++) {
                     if (i % 4 == 0) {
                         remixed.push(track.analysis.beats[i])
@@ -84,13 +90,17 @@ Extract the first beat of every bar.
 <div id='info'> </div>
 
 <div id='waveform'>
+Original Track:
 <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
 </div>
 
 <button onClick="player.play(0, remixed);">Play</button>
 <button onClick="player.stop()">Stop</button>
 
-<div id='newWaveform'></div>
+<div id='newWaveform'>
+Remixed Track:
+<canvas id='newWaveCanvas' width='1024px' height='100px'></canvas>
+</div>
 
 
 <hr />
