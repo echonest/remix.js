@@ -5,8 +5,9 @@
 </head>
 
 <body>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
+<script type="text/javascript" src='../waveform.js'></script>
 <script type="text/javascript">
 
 // First-beat extraction and assembly
@@ -22,6 +23,13 @@ var track;
 var remixed;
 
 function init() {
+
+    var waveform = new Waveform({
+      container: document.getElementById("test"),
+      data: [1, 0.2, 0.5]
+    });
+
+
     if (window.webkitAudioContext === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
             + " support it. Try the latest version of Chrome");
@@ -56,12 +64,17 @@ function init() {
 window.onload = init;
 </script>
 
-
+<div id="title">
 remix.js:  one.html
+</div>
+<div id="about">
+Extract the first beat of every bar.
+</div>
 <div id='info'> </div>
+
 <div id='waveform'></div>
-<button onClick="player.play(0, remixed);">Play!</button>
-<button onClick="player.stop()">Stop!</button>
+<button onClick="player.play(0, remixed);">Play</button>
+<button onClick="player.stop()">Stop</button>
 
 <div id='newWaveform'></div>
 
@@ -102,10 +115,6 @@ function init() {
 window.onload = init;
     </code></pre>
 
- </div>
-
+</div>
 </body>
-
-
-
 </html>
