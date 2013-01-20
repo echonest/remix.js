@@ -29,7 +29,8 @@ function init() {
       innerColor: function(x, y){
         return '#'+Math.floor(Math.random()*16777215).toString(16);
       },
-      data: [0, 0.3, 1, 0.5, 1, 0.3, 0]
+      data: [0, 0.3, 1, 0.5, 1, 0.3, 0],
+      interpolate: true
     });
 
 
@@ -75,7 +76,8 @@ Extract the first beat of every bar.
 </div>
 <div id='info'> </div>
 
-<div id='waveform'></div>
+<div id='waveform' width='200' height='100'></div>
+
 <button onClick="player.play(0, remixed);">Play</button>
 <button onClick="player.stop()">Stop</button>
 
