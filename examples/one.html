@@ -7,7 +7,9 @@
 <body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
-<script type="text/javascript" src='../waveform.js'></script>
+        <script src="../wavesurfer/wavesurfer.js"></script>
+        <script src="../wavesurfer/drawer.js"></script>
+
 <script type="text/javascript">
 
 // First-beat extraction and assembly
@@ -23,15 +25,18 @@ var track;
 var remixed;
 
 function init() {
+    // Trying with wavesurfer
+    var wavesurfer = Object.create(WaveSurfer);
 
-    new Waveform({
-      container: document.getElementById("waveform"),
-      innerColor: function(x, y){
-        return '#'+Math.floor(Math.random()*16777215).toString(16);
-      },
-      data: [0, 0.3, 1, 0.5, 1, 0.3, 0],
-      interpolate: true
+    wavesurfer.init({
+        canvas: document.querySelector('#waveCanvas'),
+        waveColor: 'violet',
+        progressColor: 'purple',
+        loadingColor: 'purple',
+        cursorColor: 'navy'
     });
+
+    wavesurfer.load(trackURL);
 
 
     if (window.webkitAudioContext === undefined) {
@@ -43,7 +48,7 @@ function init() {
         player = remixer.getPlayer();
         $("#info").text("Loading analysis data...");
 
-        remixer.remixTrackById(trackID, trackURL, function(t, percent) {
+        remixer.remixTrwaveCanvasackById(trackID, trackURL, function(t, percent) {
             track = t;
 
             $("#info").text(percent + "% of the track loaded");
@@ -76,7 +81,9 @@ Extract the first beat of every bar.
 </div>
 <div id='info'> </div>
 
-<div id='waveform' width='100%' height='50px'>where am i?</div>
+<div id='waveform'>
+<canvas id='waveCanvas' width='100%' height='100'></canvas>
+</div>
 
 <button onClick="player.play(0, remixed);">Play</button>
 <button onClick="player.stop()">Stop</button>
