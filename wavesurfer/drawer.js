@@ -56,7 +56,6 @@ WaveSurfer.Drawer = {
                         var chan = buffer.getChannelData(c);
                         var vals = slice.call(chan, i * k, (i + 1) * k);
                         var peak = Math.max.apply(Math, vals.map(Math.abs));
-                        
                         sum += peak;
                     }
                 // With what index do I append this to sums?  Hrmrm.  
@@ -64,9 +63,8 @@ WaveSurfer.Drawer = {
                 sums.push(sum);
                 console.log(sum);
                 }
-
-
             }
+        console.log(sums);
         }
 
         else {
