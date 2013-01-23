@@ -45,11 +45,13 @@ WaveSurfer.Drawer = {
         // Something like:  
         if (remixedData != null) {
             var peakIndex = 0;
-            console.log("starting to deal with remixedData");
+            console.log("Number of chuncks: " + remixedData.length);
+            console.log("Number of channels in this buff: " + buffer.numberOfChannels);
             for (var index = 0; index < remixedData.length; index++) {
                 var startSample = remixedData[index].start * 44100;
                 var endSample = (remixedData[index].start + remixedData[index].duration) * 44100;
                 var numPixels = (endSample - startSample) / k;
+                console.log("Number of pixels for this chunk: " + numPixels);
             
                 for (var i = 0; i < numPixels; i++) {
                     var sum = 0;
@@ -59,10 +61,10 @@ WaveSurfer.Drawer = {
                         var peak = Math.max.apply(Math, vals.map(Math.abs));
                         sum += peak;
                     }
-                // With what index do I append this to sums?  Hrmrm.  
-                // I think this is right:  I just push it
-                sums[peakIndex] = sum;
-                peakIndex++;
+                    // With what index do I append this to sums?  Hrmrm.  
+                    // I think this is right:  I just push it
+                    sums[peakIndex] = sum;
+                    peakIndex++;
                 }
             }
         console.log(sums);
