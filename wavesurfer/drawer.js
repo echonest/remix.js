@@ -44,6 +44,7 @@ WaveSurfer.Drawer = {
 
         // Something like:  
         if (remixedData != null) {
+            var peakIndex = 0;
             console.log("starting to deal with remixedData");
             for (var index = 0; index < remixedData.length; index++) {
                 var startSample = remixedData[index].start * 44100;
@@ -60,8 +61,8 @@ WaveSurfer.Drawer = {
                     }
                 // With what index do I append this to sums?  Hrmrm.  
                 // I think this is right:  I just push it
-                sums.push(sum);
-                console.log(sum);
+                sums[peakIndex] = sum;
+                peakIndex++;
                 }
             }
         console.log(sums);
