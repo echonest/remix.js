@@ -66,7 +66,8 @@ var WaveSurfer = {
         xhr.addEventListener('load', function (e) {
             my.backend.loadData(
                 e.target.response,
-                my.drawBuffer.bind(my)
+                my.drawBuffer.bind(my), 
+                quanta
             );
         }, false);
 

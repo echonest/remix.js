@@ -33,7 +33,7 @@ WaveSurfer.Drawer = {
         }
     },
 
-    getPeaks: function (buffer, quanta) {
+    getPeaks: function (buffer) {
         var my = this;
         // I would like to hack this to only get frames that are in our given quanta
 
@@ -43,13 +43,14 @@ WaveSurfer.Drawer = {
         var sums = [];
 
         // something like:  
-            if (quanta != null) {
-                for (var index = 0; index < quanta.length; index++) {
-                    var startSample = quanta[index].start * 44100;
-                    var endSample = quanta[index].end * 44100;
+            if (my.remixedData != null) {
+                for (var index = 0; index < remixedData.length; index++) {
+                    var startSample = remixedData[index].start * 44100;
+                    var endSample = remixedData[index].end * 44100;
                     var numPixels = (endSample - startSample) / k;
                 
                     // for every pixel, use the below math to get the peak, then append to sums
+                    
                     for (var i = 0; i < numPixels; i++) {
                         var sum = 0;
                         for (var c = 0; c < buffer.numberOfChannels; c++) {
@@ -59,20 +60,23 @@ WaveSurfer.Drawer = {
                             sum += peak;
                         }
                     }
-
+                    // With what index do I append this to sums?  Hrmrm.  
+                    // I think this is right:  I just push it
+                    sums.push(sum);
                 }
             }
 
-
-        for (var i = 0; i < this.width; i++) {
-            var sum = 0;
-            for (var c = 0; c < buffer.numberOfChannels; c++) {
-                var chan = buffer.getChannelData(c);
-                var vals = slice.call(chan, i * k, (i + 1) * k);
-                var peak = Math.max.apply(Math, vals.map(Math.abs));
-                sum += peak;
+        else {
+            for (var i = 0; i < this.width; i++) {
+                var sum = 0;
+                for (var c = 0; c < buffer.numberOfChannels; c++) {
+                    var chan = buffer.getChannelData(c);
+                    var vals = slice.call(chan, i * k, (i + 1) * k);
+                    var peak = Math.max.apply(Math, vals.map(Math.abs));
+                    sum += peak;
+                }
+                sums[i] = sum;
             }
-            sums[i] = sum;
         }
 
         return sums;

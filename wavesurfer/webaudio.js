@@ -50,7 +50,7 @@ WaveSurfer.WebAudio = {
      *
      * @param {AudioBuffer} audioData Audio data.
      */
-    loadData: function (audioData, cb) {
+    loadData: function (audioData, cb, quanta) {
         var my = this;
 
         this.pause();
@@ -63,6 +63,9 @@ WaveSurfer.WebAudio = {
                 my.lastPause = 0;
                 my.startTime = null;
                 cb(buffer);
+                if (quanta != null) {
+                    my.remixedData = quanta;
+                }
             },
             Error
         );
