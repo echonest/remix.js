@@ -66,6 +66,7 @@ WaveSurfer.WebAudio = {
                 if (quanta != null) {
                     console.log("Assigning remix data to this.remixedData");
                     my.remixedData = quanta;
+                    console.log(my.remixedData);
                 }
             },
             Error
