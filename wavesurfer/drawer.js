@@ -46,13 +46,13 @@ WaveSurfer.Drawer = {
         if (remixedData != null) {
             var peakIndex = 0;
             console.log("Number of chuncks: " + remixedData.length);
-            console.log("Number of channels in this buff: " + buffer.numberOfChannels);
             for (var index = 0; index < remixedData.length; index++) {
                 var startSample = parseFloat(remixedData[index].start) * 44100;
+                console.log("Starting sample: " + startSample);
                 var endSample = (parseFloat(remixedData[index].start) + parseFloat(remixedData[index].duration)) * 44100;
                 var numPixels = (endSample - startSample) / k;
             
-                // Good, this is wrong:  I amdrawing on the wrong sets of pixels. 
+                // Still looks lousy
                 for (var i = 0; i < numPixels; i++) {
                     var sum = 0;
                     for (var c = 0; c < buffer.numberOfChannels; c++) {
@@ -61,8 +61,6 @@ WaveSurfer.Drawer = {
                         var peak = Math.max.apply(Math, vals.map(Math.abs));
                         sum += peak;
                     }
-                    // With what index do I append this to sums?  Hrmrm.  
-                    // I think this is right:  I just push it
                     sums[peakIndex] = sum;
                     peakIndex++;
                     console.log(sum);
