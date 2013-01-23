@@ -33,7 +33,7 @@ WaveSurfer.Drawer = {
         }
     },
 
-    getPeaks: function (buffer) {
+    getPeaks: function (buffer, remixedData) {
         var my = this;
         // I would like to hack this to only get frames that are in our given quanta
 
@@ -44,15 +44,14 @@ WaveSurfer.Drawer = {
 
         // something like:  
         console.log("Top of getPeaks");
-        if (my.remixedData != null) {
+        if (remixedData != null) {
             console.log("starting to deal with remixedData");
             for (var index = 0; index < remixedData.length; index++) {
                 var startSample = remixedData[index].start * 44100;
-                var endSample = remixedData[index].end * 44100;
+                var endSample = (remixedData[index].start + remixedData[index].duration) * 44100;
                 var numPixels = (endSample - startSample) / k;
             
                 // for every pixel, use the below math to get the peak, then append to sums
-                
                 for (var i = 0; i < numPixels; i++) {
                     var sum = 0;
                     for (var c = 0; c < buffer.numberOfChannels; c++) {
@@ -90,10 +89,7 @@ WaveSurfer.Drawer = {
     },
 
     drawBuffer: function (buffer) {
-        console.log("In drawBuffer, trying to see if remixedData is here too");
-        // nope, no luck
-        console.log(this.remixedData);
-        this.peaks = this.getPeaks(buffer);
+        this.peaks = this.getPeaks(buffer, remixedData);
         this.maxPeak = Math.max.apply(Math, this.peaks);
         this.progress(0);
     },
