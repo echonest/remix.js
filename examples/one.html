@@ -7,10 +7,9 @@
 <body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
-
-        <script src="../wavesurfer/wavesurfer.js"></script>
-        <script src="../wavesurfer/webaudio.js"></script>
-        <script src="../wavesurfer/drawer.js"></script>
+<script src="../wavesurfer/wavesurfer.js"></script>
+<script src="../wavesurfer/webaudio.js"></script>
+<script src="../wavesurfer/drawer.js"></script>
 
 <script type="text/javascript">
 
@@ -59,11 +58,6 @@ function init() {
             if (track.status == 'ok') {
                 remixed = new Array();
                 // Do the remixing here!
-                // ok, so I could take the quanta start and finish out of here and use them to 
-                // get the chunks of audio i need
-                // or, I could render the entire file out, and then re-visualize.  That seems slow
-                // AudioJedit appears to convert between image position and audio position
-                // 
                 for (var i=0; i < track.analysis.beats.length; i++) {
                     if (i % 4 == 0) {
                         remixed.push(track.analysis.beats[i])
@@ -98,7 +92,7 @@ Extract the first beat of every bar.
 <div id='info'> </div>
 
 <div id='waveform'>
-Original Track:
+<p>Original Track:</p>
 <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
 </div>
 
@@ -106,7 +100,7 @@ Original Track:
 <button onClick="player.stop()">Stop</button>
 
 <div id='newWaveform'>
-Remixed Track:
+<p>Remixed Track:</p>
 <canvas id='newWaveCanvas' width='1024px' height='100px'></canvas>
 </div>
 
