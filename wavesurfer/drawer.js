@@ -89,7 +89,7 @@ WaveSurfer.Drawer = {
     },
 
     drawBuffer: function (buffer) {
-        this.peaks = this.getPeaks(buffer, remixedData);
+        this.peaks = this.getPeaks(buffer, this.remixedData);
         this.maxPeak = Math.max.apply(Math, this.peaks);
         this.progress(0);
     },
