@@ -52,11 +52,12 @@ WaveSurfer.Drawer = {
                 var endSample = (parseFloat(remixedData[index].start) + parseFloat(remixedData[index].duration)) * 44100;
                 var numPixels = (endSample - startSample) / k;
             
+                // Good, this is wrong:  I amdrawing on the wrong sets of pixels. 
                 for (var i = 0; i < numPixels; i++) {
                     var sum = 0;
                     for (var c = 0; c < buffer.numberOfChannels; c++) {
                         var chan = buffer.getChannelData(c);
-                        var vals = slice.call(chan, i * k, (i + 1) * k);
+                        var vals = slice.call(chan, startSample + (i * k) startSample + ((i + 1) * k));
                         var peak = Math.max.apply(Math, vals.map(Math.abs));
                         sum += peak;
                     }
