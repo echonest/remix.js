@@ -90,6 +90,8 @@ WaveSurfer.Drawer = {
     },
 
     drawBuffer: function (buffer) {
+        console.log("In drawBuffer, trying to see if remixedData is here too");
+        console.log(my.remixedData);
         this.peaks = this.getPeaks(buffer);
         this.maxPeak = Math.max.apply(Math, this.peaks);
         this.progress(0);
