@@ -98,9 +98,17 @@ Extract the first beat of every bar.
 <button onClick="player.play(0, track.analysis.beats);">Play Original</button>
 <button onClick="player.stop()">Stop Original</button>
 </div>
+
+<div>
+<p>Code:</p>
+    <pre><code>
+                for (var i=0; i < track.analysis.beats.length; i++) {
+                    if (i % 4 == 0) {
+                        remixed.push(track.analysis.beats[i])
+                    }
+                }
+    </code></pre>
 </div>
-
-
 
 <div id='newWaveform'>
 <p>Remixed Track:</p>
@@ -111,6 +119,7 @@ Extract the first beat of every bar.
 
 
 <hr />
+(we'll hide this code later, I think, or make it expandable..)
 <div id='theCode'>
 <p>Code:</p>
     <pre><code>
