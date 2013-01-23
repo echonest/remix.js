@@ -48,8 +48,8 @@ WaveSurfer.Drawer = {
             console.log("Number of chuncks: " + remixedData.length);
             console.log("Number of channels in this buff: " + buffer.numberOfChannels);
             for (var index = 0; index < remixedData.length; index++) {
-                var startSample = remixedData[index].start * 44100;
-                var endSample = (remixedData[index].start + remixedData[index].duration) * 44100;
+                var startSample = parseFloat(remixedData[index].start) * 44100;
+                var endSample = (parseFloat(emixedData[index].start) + parseFloat(remixedData[index].duration)) * 44100;
                 var numPixels = (endSample - startSample) / k;
                 console.log(endSample, startSample, k);
                 console.log("Number of pixels for this chunk: " + numPixels);

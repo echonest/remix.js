@@ -52,7 +52,6 @@ WaveSurfer.WebAudio = {
      */
     loadData: function (audioData, cb, quanta) {
         var my = this;
-        console.log("Top of loadData");
         this.pause();
 
         this.ac.decodeAudioData(
