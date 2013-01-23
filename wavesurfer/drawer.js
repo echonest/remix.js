@@ -51,8 +51,6 @@ WaveSurfer.Drawer = {
                 var startSample = parseFloat(remixedData[index].start) * 44100;
                 var endSample = (parseFloat(remixedData[index].start) + parseFloat(remixedData[index].duration)) * 44100;
                 var numPixels = (endSample - startSample) / k;
-                console.log(endSample, startSample, k);
-                console.log("Number of pixels for this chunk: " + numPixels);
             
                 for (var i = 0; i < numPixels; i++) {
                     var sum = 0;
@@ -66,9 +64,10 @@ WaveSurfer.Drawer = {
                     // I think this is right:  I just push it
                     sums[peakIndex] = sum;
                     peakIndex++;
+                    console.log(sum);
                 }
             }
-        console.log(sums);
+        
         }
 
         else {
