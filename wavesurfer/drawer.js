@@ -33,13 +33,36 @@ WaveSurfer.Drawer = {
         }
     },
 
-    getPeaks: function (buffer) {
+    getPeaks: function (buffer, quanta) {
         var my = this;
+        // I would like to hack this to only get frames that are in our given quanta
 
-        // Frames per pixel
+        // k is the samples per pixel
         var k = buffer.getChannelData(0).length / this.width;
         var slice = Array.prototype.slice;
         var sums = [];
+
+        // something like:  
+            if (quanta != null) {
+                for (var index = 0; index < quanta.length; index++) {
+                    var startSample = quanta[index].start * 44100;
+                    var endSample = quanta[index].end * 44100;
+                    var numPixels = (endSample - startSample) / k;
+                
+                    // for every pixel, use the below math to get the peak, then append to sums
+                    for (var i = 0; i < numPixels; i++) {
+                        var sum = 0;
+                        for (var c = 0; c < buffer.numberOfChannels; c++) {
+                            var chan = buffer.getChannelData(c);
+                            var vals = slice.call(chan, i * k, (i + 1) * k);
+                            var peak = Math.max.apply(Math, vals.map(Math.abs));
+                            sum += peak;
+                        }
+                    }
+
+                }
+            }
+
 
         for (var i = 0; i < this.width; i++) {
             var sum = 0;

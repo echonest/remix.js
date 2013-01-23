@@ -28,9 +28,7 @@ var remixed;
 
 function init() {
     // Display the "before" wavesurfer image
-    // Need to remove the playback capabilities from this
     var wavesurfer = Object.create(WaveSurfer);
-
     wavesurfer.init({
         canvas: document.querySelector('#waveCanvas'),
         waveColor: 'violet',
@@ -38,7 +36,6 @@ function init() {
         loadingColor: 'purple',
         cursorColor: 'navy'
     });
-
     wavesurfer.load(trackURL);
 
 
@@ -73,6 +70,17 @@ function init() {
                     }
                 }
                 $("#info").text("Remix complete!");
+
+                var remixedWavesurfer = Object.create(WaveSurfer);
+                remixedWavesurfer.init({
+                    canvas: document.querySelector('#newWaveCanvas'),
+                    waveColor: 'red',
+                    progressColor: 'purple',
+                    loadingColor: 'purple',
+                    cursorColor: 'navy'
+                });
+                remixedWavesurfer.load(trackURL);
+
             }
         });
     }
