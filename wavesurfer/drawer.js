@@ -51,6 +51,7 @@ WaveSurfer.Drawer = {
                 var startSample = remixedData[index].start * 44100;
                 var endSample = (remixedData[index].start + remixedData[index].duration) * 44100;
                 var numPixels = (endSample - startSample) / k;
+                console.log(endSample, startSample, k);
                 console.log("Number of pixels for this chunk: " + numPixels);
             
                 for (var i = 0; i < numPixels; i++) {
