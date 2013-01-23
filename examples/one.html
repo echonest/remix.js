@@ -83,6 +83,7 @@ function init() {
 window.onload = init;
 </script>
 
+
 <div id="title">
 remix.js:  one.html
 </div>
@@ -94,19 +95,24 @@ Extract the first beat of every bar.
 <div id='waveform'>
 <p>Original Track:</p>
 <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
+<button onClick="player.play(0, remixed);">Play Original</button>
+<button onClick="player.stop()">Stop Original</button>
+</div>
 </div>
 
-<button onClick="player.play(0, remixed);">Play</button>
-<button onClick="player.stop()">Stop</button>
+
 
 <div id='newWaveform'>
 <p>Remixed Track:</p>
 <canvas id='newWaveCanvas' width='1024px' height='100px'></canvas>
+<button onClick="player.play(0, remixed);">Play Remix</button>
+<button onClick="player.stop()">Stop Remix</button>
 </div>
 
 
 <hr />
 <div id='theCode'>
+<p>Code:</p>
     <pre><code>
 function init() {
     if (window.webkitAudioContext === undefined) {
