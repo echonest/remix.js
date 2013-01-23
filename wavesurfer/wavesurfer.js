@@ -64,7 +64,7 @@ var WaveSurfer = {
         }, false);
 
         xhr.addEventListener('load', function (e) {
-            my.drawBuffer.remixedData = quanta;
+            my.drawer.remixedData = quanta;
             my.backend.loadData(
                 e.target.response,
                 my.drawBuffer.bind(my)
