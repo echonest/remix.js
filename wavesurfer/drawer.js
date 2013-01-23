@@ -35,24 +35,20 @@ WaveSurfer.Drawer = {
 
     getPeaks: function (buffer, remixedData) {
         var my = this;
-        // I would like to hack this to only get frames that are in our given quanta
 
         // k is the samples per pixel
         var k = buffer.getChannelData(0).length / this.width;
         var slice = Array.prototype.slice;
         var sums = [];
 
-        // Something like:  
+        // This gets only the frames that match the selected chunks
         if (remixedData != null) {
             var peakIndex = 0;
-            console.log("Number of chuncks: " + remixedData.length);
             for (var index = 0; index < remixedData.length; index++) {
                 var startSample = parseFloat(remixedData[index].start) * 44100;
-                console.log("Starting sample: " + startSample);
                 var endSample = (parseFloat(remixedData[index].start) + parseFloat(remixedData[index].duration)) * 44100;
                 var numPixels = (endSample - startSample) / k;
             
-                // Still looks lousy
                 for (var i = 0; i < numPixels; i++) {
                     var sum = 0;
                     for (var c = 0; c < buffer.numberOfChannels; c++) {
@@ -63,12 +59,11 @@ WaveSurfer.Drawer = {
                     }
                     sums[peakIndex] = sum;
                     peakIndex++;
-                    console.log(sum);
                 }
             }
         
         }
-
+        // This is the old, normal visualization code.
         else {
             for (var i = 0; i < this.width; i++) {
                 var sum = 0;
