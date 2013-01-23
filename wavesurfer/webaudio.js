@@ -52,7 +52,7 @@ WaveSurfer.WebAudio = {
      */
     loadData: function (audioData, cb, quanta) {
         var my = this;
-
+        console.log("Top of loadData");
         this.pause();
 
         this.ac.decodeAudioData(
@@ -64,6 +64,7 @@ WaveSurfer.WebAudio = {
                 my.startTime = null;
                 cb(buffer);
                 if (quanta != null) {
+                    console.log("Assigning remix data to this.remixedData");
                     my.remixedData = quanta;
                 }
             },
