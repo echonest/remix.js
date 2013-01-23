@@ -59,11 +59,13 @@ WaveSurfer.Drawer = {
                         
                         sum += peak;
                     }
-                }
                 // With what index do I append this to sums?  Hrmrm.  
                 // I think this is right:  I just push it
                 sums.push(sum);
                 console.log(sum);
+                }
+
+
             }
         }
 
