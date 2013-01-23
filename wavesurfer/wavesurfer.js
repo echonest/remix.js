@@ -48,7 +48,7 @@ var WaveSurfer = {
     /**
      * Loads an audio file via XHR.
      */
-    load: function (src) {
+    load: function (src, quanta) {
         var my = this;
         var xhr = new XMLHttpRequest();
         xhr.responseType = 'arraybuffer';
