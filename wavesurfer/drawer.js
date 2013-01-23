@@ -57,7 +57,7 @@ WaveSurfer.Drawer = {
                     var sum = 0;
                     for (var c = 0; c < buffer.numberOfChannels; c++) {
                         var chan = buffer.getChannelData(c);
-                        var vals = slice.call(chan, startSample + (i * k) startSample + ((i + 1) * k));
+                        var vals = slice.call(chan, startSample + (i * k), startSample + ((i + 1) * k));
                         var peak = Math.max.apply(Math, vals.map(Math.abs));
                         sum += peak;
                     }
