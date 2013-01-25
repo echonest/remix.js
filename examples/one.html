@@ -70,8 +70,9 @@ function init() {
             if (track.status == 'ok') {
                 remixed = new Array();
                 // Do the remixing here!
+                var meter = parseInt(track.analysis.track.time_signature);
                 for (var i=0; i < track.analysis.beats.length; i++) {
-                    if (i % track.analysis.time_signature == 0) {
+                    if (i % meter == 0) {
                         remixed.push(track.analysis.beats[i])
                     }
                 }
@@ -117,9 +118,10 @@ window.onload = init;
             <h1>remix.js:  one.html<h1>
             <div id="theCode">
                 <pre><code>// Extract the first beat of every bar.
+var meter = parseInt(track.analysis.track.time_signature);
 for (var i=0; i < track.analysis.beats.length; i++) {
-    if (i % 4 == 0) {
-            remixed.push(track.analysis.beats[i])
+    if (i % meter == 0) {
+        remixed.push(track.analysis.beats[i])
     }
 }
 </code></pre>
