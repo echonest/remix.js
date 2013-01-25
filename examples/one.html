@@ -73,14 +73,12 @@ function init() {
             // fileEntry.isFile === true
             // fileEntry.name == 'log.txt'
             // fileEntry.fullPath == '/log.txt'
-            console.log(fileEntry.toURL())
+            $('#downloadButton').attr("href", fileEntry.toURL());
         }, errorHandler);
     }
 
     window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
     window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, errorHandler);
-
-
 
 
 
@@ -198,7 +196,7 @@ for (var i=0; i < track.analysis.beats.length; i++) {
             <br />
             <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
             <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
-            <button class='btn btn-remixed' onClick="">Download Remix</button>
+            <a href='' id='downloadButton'>Download Remix</an>
             </div>
         </section>
 
