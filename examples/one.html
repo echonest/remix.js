@@ -38,6 +38,10 @@ var track;
 var remixed;
 
 function init() {
+
+    // Disable all buttons
+    $('btn-').attr('disabled','disabled');
+
     // Display the "before" wavesurfer image
     var wavesurfer = Object.create(WaveSurfer);
     wavesurfer.init({
@@ -62,14 +66,16 @@ function init() {
         remixer.remixTrackById(trackID, trackURL, function(t, percent) {
             track = t;
 
-            $("#info").text(percent + "% of the track loaded");
+            $("#info").text(percent + "% of the track loaded...");
             if (percent == 100) {
                 $("#info").text(percent + "% of the track loaded, remixing...");
             }
 
             if (track.status == 'ok') {
+                // Enable the original track buttons
+
                 remixed = new Array();
-                // Do the remixing here!
+                // Extract the first beat of every bar.
                 var meter = parseInt(track.analysis.track.time_signature);
                 for (var i=0; i < track.analysis.beats.length; i++) {
                     if (i % meter == 0) {
@@ -87,6 +93,7 @@ function init() {
                     cursorColor: '#00ACEB'
                 });
                 remixedWavesurfer.load(trackURL, remixed);
+                // Enable the remixed track buttons
 
             }
         });
@@ -135,16 +142,16 @@ for (var i=0; i < track.analysis.beats.length; i++) {
             <h2>Original Track</h2>
             <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
             <br />
-            <button class='btn btn-inverse' onClick="player.play(0, track.analysis.beats);">Play Original</button>
-            <button class='btn' onClick="player.stop()">Stop Original</button>
+            <button class='btn btn-inverse btn-originl' onClick="player.play(0, track.analysis.beats);">Play Original</button>
+            <button class='btn btn-original' onClick="player.stop()">Stop Original</button>
             </div>
 
             <div id='newWaveform'>
             <h2>Remixed Track</h2>
             <canvas id='RemixedWaveCanvas' width='1024px' height='100px'></canvas>
             <br />
-            <button class='btn btn-inverse' onClick="player.play(0, remixed);">Play Remix</button>
-            <button class='btn' onClick="player.stop()">Stop Remix</button>
+            <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
+            <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
             </div>
         </section>
 
