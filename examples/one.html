@@ -135,7 +135,7 @@ for (var i=0; i < track.analysis.beats.length; i++) {
         <section>
             <div id='waveform'>
             <h2>Original Track</h2>
-            <canvas id='waveCanvas' width='80%' height='100px'></canvas>
+            <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
             <br />
             <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play Original</button>
             <button class='btn btn-original' onClick="player.stop()">Stop Original</button>
@@ -143,7 +143,7 @@ for (var i=0; i < track.analysis.beats.length; i++) {
 
             <div id='newWaveform'>
             <h2>Remixed Track</h2>
-            <canvas id='RemixedWaveCanvas' width='80%' height='100px'></canvas>
+            <canvas id='RemixedWaveCanvas' width='1024px' height='100px'></canvas>
             <br />
             <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
             <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
