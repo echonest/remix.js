@@ -40,7 +40,7 @@ var remixed;
 function init() {
 
     // Disable all buttons
-    $('btn-').attr('disabled','disabled');
+    $('.btn').attr('disabled','disabled');
 
     // Display the "before" wavesurfer image
     var wavesurfer = Object.create(WaveSurfer);
@@ -72,7 +72,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                // Enable the original track buttons
+                $('.btn-original').removeAttr('disabled');
 
                 remixed = new Array();
                 // Extract the first beat of every bar.
@@ -93,7 +93,7 @@ function init() {
                     cursorColor: '#00ACEB'
                 });
                 remixedWavesurfer.load(trackURL, remixed);
-                // Enable the remixed track buttons
+                $('.btn-remixed').removeAttr('disabled');
 
             }
         });
