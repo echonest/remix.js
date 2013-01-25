@@ -69,7 +69,7 @@ function init() {
 
     // Let's play with the filesystem, locally
     function onInitFs(fs) {
-        fs.root.getFile('test_filesystem_api_log.txt', {create: true, exclusive: true}, function(fileEntry) {
+        fs.root.getFile('test_filesystem_api_log.txt', {create: true}, function(fileEntry) {
             // fileEntry.isFile === true
             // fileEntry.name == 'log.txt'
             // fileEntry.fullPath == '/log.txt'
