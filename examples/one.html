@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset=utf-8>
+  <head>
+    <meta charset="utf-8">
+	<title>Echo Nest Remix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Echo Nest Remix:  The Internet Synthesizer">
+    <meta name="author" content="Brian Whitman / Thor Kell">
+
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 </head>
 
 <body>
+<script src="assets/js/bootstrap.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
 <script src="../wavesurfer/wavesurfer.js"></script>
@@ -67,7 +79,7 @@ function init() {
 
                 var remixedWavesurfer = Object.create(WaveSurfer);
                 remixedWavesurfer.init({
-                    canvas: document.querySelector('#newWaveCanvas'),
+                    canvas: document.querySelector('#RemixedWaveCanvas'),
                     waveColor: 'red',
                     progressColor: 'purple',
                     loadingColor: 'purple',
@@ -84,80 +96,57 @@ window.onload = init;
 </script>
 
 
-<div id="title">
-remix.js:  one.html
-</div>
-<div id="about">
-Extract the first beat of every bar.
-</div>
-<div id='info'> </div>
-
-<div id='waveform'>
-<p>Original Track:</p>
-<canvas id='waveCanvas' width='1024px' height='100px'></canvas>
-<button onClick="player.play(0, track.analysis.beats);">Play Original</button>
-<button onClick="player.stop()">Stop Original</button>
-</div>
-
-<div>
-<p>Code:</p>
-    <pre><code>
-                for (var i=0; i < track.analysis.beats.length; i++) {
-                    if (i % 4 == 0) {
-                        remixed.push(track.analysis.beats[i])
-                    }
-                }
-    </code></pre>
-</div>
-
-<div id='newWaveform'>
-<p>Remixed Track:</p>
-<canvas id='newWaveCanvas' width='1024px' height='100px'></canvas>
-<button onClick="player.play(0, remixed);">Play Remix</button>
-<button onClick="player.stop()">Stop Remix</button>
-</div>
-
-
-<hr />
-(we'll hide this code later, I think, or make it expandable..)
-<div id='theCode'>
-<p>Code:</p>
-    <pre><code>
-function init() {
-    if (window.webkitAudioContext === undefined) {
-        error("Sorry, this app needs advanced web audio. Your browser doesn't"
-            + " support it. Try the latest version of Chrome");
-    } else {
-        var context = new webkitAudioContext();
-        remixer = createJRemixer(context, $, apiKey);
-        player = remixer.getPlayer();
-        $("#info").text("Loading analysis data...");
-
-        remixer.remixTrackById(trackID, trackURL, function(t, percent) {
-            track = t;
-
-            $("#info").text(percent + "% of the track loaded");
-            if (percent == 100) {
-                $("#info").text(percent + "% of the track loaded, remixing...");
-            }
-
-            if (track.status == 'ok') {
-                remixed = new Array();
-                // Do the remixing here!
-                for (var i=0; i < track.analysis.beats.length; i++) {
-                    if (i % 4 == 0) {
-                        remixed.push(track.analysis.beats[i])
-                    }
-                }
-                $("#info").text("Remix complete!");
-            }
-        });
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="index.html">Echo Nest Remix</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="python.html">Python</a></li>
+              <li><a href="javascript.html">JavaScript</a></li>
+              <li><a href="examples.html">Examples</a></li>
+              <li><a href="who.html">Who</a></li>
+            </ul>
+          </div> <!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>  <!--/.navbar -->
+    
+    <div class="container">
+        <div class="hero-unit">
+            <h1>remix.js:  one.html<h1>
+            <div id="theCode">
+                <pre><code>// Extract the first beat of every bar.
+for (var i=0; i < track.analysis.beats.length; i++) {
+    if (i % 4 == 0) {
+            remixed.push(track.analysis.beats[i])
     }
 }
+</code></pre>
+            </div>
+        </div>
 
-window.onload = init;
-    </code></pre>
+        <section>
+            <div id='waveform'>
+            <h2>Original Track</h2>
+            <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
+            <br />
+            <button onClick="player.play(0, track.analysis.beats);">Play Original</button>
+            <button onClick="player.stop()">Stop Original</button>
+            </div>
 
-</div>
+            <div id='newWaveform'>
+            <h2>Remixed Track</h2>
+            <canvas id='RemixedWaveCanvas' width='1024px' height='100px'></canvas>
+            <br />
+            <button onClick="player.play(0, remixed);">Play Remix</button>
+            <button onClick="player.stop()">Stop Remix</button>
+            </div>
+        </section>
+
+    <img src="http://the.echonest.com/media/images/logos/250x80_lt.gif" />
+    </div> <!-- /container -->
 </body>
 </html>
+
+
