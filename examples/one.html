@@ -93,13 +93,6 @@ function init() {
         }, errorHandler);
     }
 
-    window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-    window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, errorHandler);
-
-
-
-
-
 
 
 
@@ -156,8 +149,11 @@ function init() {
                 $('.btn-remixed').removeAttr('disabled');
 
                 // This would be better.  
-                remixer.saveRemix(track, remixed, '#downloadButton');
+                //remixer.saveRemix(track, remixed, '#downloadButton');
                 
+                // This will trigger the save
+                window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+                window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, errorHandler);
 
             }
         });
