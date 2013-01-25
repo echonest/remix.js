@@ -70,9 +70,22 @@ function init() {
     // Let's play with the filesystem, locally
     function onInitFs(fs) {
         fs.root.getFile('test_filesystem_api_log.txt', {create: true}, function(fileEntry) {
-            // fileEntry.isFile === true
-            // fileEntry.name == 'log.txt'
-            // fileEntry.fullPath == '/log.txt'
+
+        // Write some d ata
+            fileEntry.createWriter(function(fileWriter) {
+                fileWriter.onwriteend = function(e) {
+                console.log('Write completed.');
+                };
+                fileWriter.onerror = function(e) {
+                console.log('Write failed: ' + e.toString());
+                };
+
+                // Create a new Blob and write it to log.txt.
+                var blob = new Blob(['Lorem Ipsum'], {type: 'text/plain'});
+
+                fileWriter.write(blob);
+            }, errorHandler);
+
             $('#downloadButton').attr("href", fileEntry.toURL());
         }, errorHandler);
     }
