@@ -317,6 +317,11 @@ function createJRemixer(context, jquery, apiKey) {
             }
             request.send();
         },
+
+        // We'll get here eventually;  for now, I want to just save track.buffer in the main file
+        saveRemix : function(remixed, link) {
+        
+        }
     };
 
     function isQuantum(a) {
