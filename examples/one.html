@@ -71,7 +71,7 @@ function init() {
                 remixed = new Array();
                 // Do the remixing here!
                 for (var i=0; i < track.analysis.beats.length; i++) {
-                    if (i % 4 == 0) {
+                    if (i % track.analysis.time_signature == 0) {
                         remixed.push(track.analysis.beats[i])
                     }
                 }
