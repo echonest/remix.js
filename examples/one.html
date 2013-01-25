@@ -42,10 +42,10 @@ function init() {
     var wavesurfer = Object.create(WaveSurfer);
     wavesurfer.init({
         canvas: document.querySelector('#waveCanvas'),
-        waveColor: '#000000',
-        progressColor: 'purple',
-        loadingColor: 'purple',
-        cursorColor: 'navy'
+        waveColor: '#888888',
+        progressColor: '#000000',
+        loadingColor: '#000000',
+        cursorColor: '#888888'
     });
     wavesurfer.load(trackURL);
 
@@ -80,10 +80,10 @@ function init() {
                 var remixedWavesurfer = Object.create(WaveSurfer);
                 remixedWavesurfer.init({
                     canvas: document.querySelector('#RemixedWaveCanvas'),
-                    waveColor: 'red',
-                    progressColor: 'purple',
-                    loadingColor: 'purple',
-                    cursorColor: 'navy'
+                    waveColor: '#00ACEB',
+                    progressColor: '#000000',
+                    loadingColor: '#000000',
+                    cursorColor: '#00ACEB'
                 });
                 remixedWavesurfer.load(trackURL, remixed);
 
@@ -125,6 +125,8 @@ for (var i=0; i < track.analysis.beats.length; i++) {
 </code></pre>
             </div>
         </div>
+
+        <div id="info"></div>
 
         <section>
             <div id='waveform'>
