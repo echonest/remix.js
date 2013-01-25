@@ -83,7 +83,7 @@ function init() {
 
             // Create a new Blob and write it .
             // Unsure about all of this.
-            var blob = new Blob(Wav.createWaveFileData(track.buffer), {type: 'binary'});
+            var blob = new Blob([Wav.createWaveFileData(track.buffer)], {type: 'binary'});
 
             fileWriter.write(blob);
         }, errorHandler);
