@@ -17,7 +17,7 @@
 
 <body>
 <script src="assets/js/bootstrap.min.js"></script>
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
 <script src="../wavesurfer/wavesurfer.js"></script>
 <script src="../wavesurfer/webaudio.js"></script>
@@ -38,6 +38,52 @@ var track;
 var remixed;
 
 function init() {
+
+
+    function errorHandler(e) {
+      var msg = '';
+
+      switch (e.code) {
+        case FileError.QUOTA_EXCEEDED_ERR:
+          msg = 'QUOTA_EXCEEDED_ERR';
+          break;
+        case FileError.NOT_FOUND_ERR:
+          msg = 'NOT_FOUND_ERR';
+          break;
+        case FileError.SECURITY_ERR:
+          msg = 'SECURITY_ERR';
+          break;
+        case FileError.INVALID_MODIFICATION_ERR:
+          msg = 'INVALID_MODIFICATION_ERR';
+          break;
+        case FileError.INVALID_STATE_ERR:
+          msg = 'INVALID_STATE_ERR';
+          break;
+        default:
+          msg = 'Unknown Error';
+          break;
+      };
+
+      console.log('Error: ' + msg);
+    }
+
+    // Let's play with the filesystem, locally
+    function onInitFs(fs) {
+        console.log('Opened file system: ' + fs.name);
+    }
+
+    window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+    window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, errorHandler);
+
+
+
+
+
+
+
+
+
+
     $('.btn').attr('disabled','disabled');
     var wavesurfer = Object.create(WaveSurfer);
     wavesurfer.init({
@@ -147,6 +193,7 @@ for (var i=0; i < track.analysis.beats.length; i++) {
             <br />
             <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
             <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
+            <button class='btn btn-remixed' onClick="">Download Remix</button>
             </div>
         </section>
 
