@@ -30,15 +30,15 @@ Wav.createWaveFileData = (function() {
 
     console.log('length of new buffer', n);
     console.log('length of old buffer', bufferL.length);
-    console.log('Estimated Time', bufferL.length / 44100 / 60.0);
+    console.log('Estimated Time', bufferL.length / 48000 / 60.0);
 
     // Some of my numbers are off, but the principle is working!!
     // Now, where are my numbers off?
     for (var q = 0; q < quanta.length; q++) {
         // I think these are the starting samples.
         // Playing a hunch and dividing by two...
-        var start = Math.floor(parseFloat(quanta[q].start) * 22050);
-        var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 22050);
+        var start = Math.floor(parseFloat(quanta[q].start) * 48000);
+        var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 48000);
         console.log("Start: ", start);
         console.log("End: ", end);
         
