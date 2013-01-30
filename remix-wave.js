@@ -80,6 +80,7 @@ Wav.createWaveFileData = (function() {
 
     // Write actual audio data starting at offset 44.
     writeAudioBuffer(audioBuffer, waveFileData, 44, quanta);
+    console.log("Surely this happens");
 
     return waveFileData;
   }
