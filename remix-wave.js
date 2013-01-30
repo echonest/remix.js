@@ -29,7 +29,7 @@ Wav.createWaveFileData = (function() {
 
     console.log("Number of samples, I think: ", n);
 
-    for (var q = 0; q < quanta.length) {
+    for (var q = 0; q < quanta.length; q++) {
         console.log(quanta[q].start * 44100);
         console.log((quanta[q].start + quanta[q].duration) * 44100);
     }
