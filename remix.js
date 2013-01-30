@@ -2,9 +2,6 @@
 // Thor Kell & Paul Lamere, 12/2012
 // Based on Paul Lamere's Infinite Jukebox and assorted other javascript projects
 
-// Import for writing wave files
-<script type="text/javascript" src='remix-wave.js'></script>
-
 function createJRemixer(context, jquery, apiKey) {
     var $ = jquery;
     $.ajaxSetup({ cache: false });
