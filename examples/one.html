@@ -88,9 +88,8 @@ function init() {
                     cursorColor: '#00ACEB'
                 });
                 remixedWavesurfer.load(trackURL, remixed);
-
-                $('.btn-remixed').removeAttr('disabled');
                 remixer.saveRemix(window, remixed, '#downloadButton');
+                $('.btn-remixed').removeAttr('disabled');
 
             }
         });
@@ -148,7 +147,7 @@ for (var i=0; i < track.analysis.beats.length; i++) {
             <br />
             <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
             <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
-            <button id='downloadButton' class='btn btn-remixed' onClick="window.location.href=''">Test Download Remix</button>
+            <span id='downloadButton'>Download Remix</a>
             </div>
         </section>
 

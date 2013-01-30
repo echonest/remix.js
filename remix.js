@@ -322,7 +322,7 @@ function createJRemixer(context, jquery, apiKey) {
         saveRemix : function(window, remixed, link) {
             // This will trigger the save
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-            window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, fileErrorHandler);
+            window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally, fileErrorHandler);
         }, 
     };
 
@@ -355,8 +355,8 @@ function createJRemixer(context, jquery, apiKey) {
     }
 
     // Let's play with the filesystem, locally
-    function onInitFs(fs) {
-        fs.root.getFile('test_wav_save.wav', {create: true}, function(fileEntry) {
+    function saveRemixLocally(fs, linkID) {
+        fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
 
         // Write some data
         fileEntry.createWriter(function(fileWriter) {
@@ -373,10 +373,7 @@ function createJRemixer(context, jquery, apiKey) {
             fileWriter.write(blob);
         }, fileErrorHandler);
 
-        // Set our link to point to the saved file?
-        $('#downloadButton').onclick= function() {window.location.href=fileEntry.toURL();};
-        
-        // $('#downloadButton').attr("href", fileEntry.toURL());
+        $('#downloadButton')..append('<a href=' + fileEntry.toURL() + '>Download Remix</a>')
         }, fileErrorHandler);
     }
 
