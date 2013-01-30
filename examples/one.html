@@ -19,7 +19,7 @@
 <script src="assets/js/bootstrap.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
-<script type="text/javascript" src='../wave.js'></script>
+<script type="text/javascript" src='../remix-wave.js'></script>
 <script src="../wavesurfer/wavesurfer.js"></script>
 <script src="../wavesurfer/webaudio.js"></script>
 <script src="../wavesurfer/drawer.js"></script>
@@ -86,7 +86,7 @@ function init() {
             // or figure out how AudioJEdit does their magic of ripping data out of things.
             // Something about context.startRendering...
             
-            var blob = new Blob([Wav.createWaveFileData(track.buffer)], {type: 'binary'});
+            var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
 
             fileWriter.write(blob);
         }, errorHandler);
