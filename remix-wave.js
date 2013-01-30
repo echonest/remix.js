@@ -27,18 +27,12 @@ Wav.createWaveFileData = (function() {
         bufferR = audioBuffer.getChannelData(1),
         sampleR;
 
-
-    console.log('length of new buffer', quanta.length * audioBuffer.sampleRate);
-    console.log('length of old buffer', bufferL.length);
-
     for (var q = 0; q < quanta.length; q++) {
-        // hese are the starting samples.
         var start = Math.floor(parseFloat(quanta[q].start) * audioBuffer.sampleRate);
         var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * audioBuffer.sampleRate);
-        
-        // i is in samples
+
         for (var i = start; i < end; ++i) {
-            sampleL = bufferL[i] * 32768.0; // and these are one 16-bit sample:  two bytes
+            sampleL = bufferL[i] * 32768.0;
             sampleR = bufferR[i] * 32768.0;
 
             // Clip left and right samples to the limitations of 16-bit.
@@ -48,7 +42,6 @@ Wav.createWaveFileData = (function() {
             if (sampleR < -32768) { sampleR = -32768; }
             if (sampleR >  32767) { sampleR =  32767; }
 
-            // offset is in bytes.  
             writeInt16(sampleL, a, offset);
             writeInt16(sampleR, a, offset + 2);
             offset += 4; 
@@ -57,13 +50,10 @@ Wav.createWaveFileData = (function() {
   };
 
   return function(audioBuffer, quanta) {
-
     var remixDuration = 0;
     for (var q = 0; q < quanta.length; q++) {
         remixDuration = remixDuration + parseFloat(quanta[q].duration);
     }
-
-    // I'll have to shorten the length, but let's just get the data out for now.
     var frameLength = remixDuration * audioBuffer.sampleRate,
         numberOfChannels = audioBuffer.numberOfChannels,
         sampleRate = audioBuffer.sampleRate,
@@ -102,3 +92,59 @@ Wav.createWaveFileData = (function() {
     return waveFileData;
   }
 }());
+
+
+function fileErrorHandler(e) {
+      var msg = '';
+
+      switch (e.code) {
+        case FileError.QUOTA_EXCEEDED_ERR:
+          msg = 'QUOTA_EXCEEDED_ERR';
+          break;
+        case FileError.NOT_FOUND_ERR:
+          msg = 'NOT_FOUND_ERR';
+          break;
+        case FileError.SECURITY_ERR:
+          msg = 'SECURITY_ERR';
+          break;
+        case FileError.INVALID_MODIFICATION_ERR:
+          msg = 'INVALID_MODIFICATION_ERR';
+          break;
+        case FileError.INVALID_STATE_ERR:
+          msg = 'INVALID_STATE_ERR';
+          break;
+        default:
+          msg = 'Unknown Error';
+          break;
+      };
+
+      console.log('Error: ' + msg);
+    }
+
+    // Let's play with the filesystem, locally
+    function onInitFs(fs) {
+        fs.root.getFile('test_wav_save.wav', {create: true}, function(fileEntry) {
+
+        // Write some data
+        fileEntry.createWriter(function(fileWriter) {
+            fileWriter.onwriteend = function(e) {
+            console.log('Write completed.');
+            };
+            fileWriter.onerror = function(e) {
+            console.log('Write failed: ' + e.toString());
+            };
+
+            // Create a new Blob and write it.
+            // I need to get each chunk as a buffer, somehow...
+            // or figure out how AudioJEdit does their magic of ripping data out of things.
+            // Something about context.startRendering...
+            
+            var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
+
+            fileWriter.write(blob);
+        }, fileErrorHandler);
+
+        // Set our link to point to the saved file.
+        $('#downloadButton').attr("href", fileEntry.toURL());
+        }, errorHandler);
+    }

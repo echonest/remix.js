@@ -2,6 +2,8 @@
 // Thor Kell & Paul Lamere, 12/2012
 // Based on Paul Lamere's Infinite Jukebox and assorted other javascript projects
 
+// Import for writing wave files
+<script type="text/javascript" src='remix-wave.js'></script>
 
 function createJRemixer(context, jquery, apiKey) {
     var $ = jquery;
@@ -320,7 +322,7 @@ function createJRemixer(context, jquery, apiKey) {
 
         // We'll get here eventually;  for now, I want to just save track.buffer in the main file
         saveRemix : function(remixed, link) {
-        
+            
         }
     };
 
