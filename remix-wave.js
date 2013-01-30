@@ -27,30 +27,26 @@ Wav.createWaveFileData = (function() {
         bufferR = audioBuffer.getChannelData(1),
         sampleR;
 
-    console.log("Number of samples, I think: ", n);
 
     for (var q = 0; q < quanta.length; q++) {
-        console.log(quanta[q].start * 44100);
-        console.log((quanta[q].start + quanta[q].duration) * 44100);
-    }
+        var start = Math.floor(parseFloat(quanta[q].start) * 44100);
+        var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 44100);
+       
+        for (var i = start; i < end; i++) {
+          sampleL = bufferL[i] * 32768.0;
+          sampleR = bufferR[i] * 32768.0;
 
-    for (var i = 0; i < n; ++i) {
+          // Clip left and right samples to the limitations of 16-bit.
+          // If we don't do this then we'll get nasty wrap-around distortion.
+          if (sampleL < -32768) { sampleL = -32768; }
+          if (sampleL >  32767) { sampleL =  32767; }
+          if (sampleR < -32768) { sampleR = -32768; }
+          if (sampleR >  32767) { sampleR =  32767; }
 
-      // if n is not within a quanta, skip it.  
-      // Better is for each quanta, get the samples...
-      sampleL = bufferL[i] * 32768.0;
-      sampleR = bufferR[i] * 32768.0;
-
-      // Clip left and right samples to the limitations of 16-bit.
-      // If we don't do this then we'll get nasty wrap-around distortion.
-      if (sampleL < -32768) { sampleL = -32768; }
-      if (sampleL >  32767) { sampleL =  32767; }
-      if (sampleR < -32768) { sampleR = -32768; }
-      if (sampleR >  32767) { sampleR =  32767; }
-
-      writeInt16(sampleL, a, offset);
-      writeInt16(sampleR, a, offset + 2);
-      offset += 4;
+          writeInt16(sampleL, a, offset);
+          writeInt16(sampleR, a, offset + 2);
+          offset += 4;
+        }
     }
   };
 
