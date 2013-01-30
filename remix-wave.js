@@ -28,7 +28,8 @@ Wav.createWaveFileData = (function() {
         sampleR;
 
     // Some of my numbers are off, but the principle is working!!
-    for (var q = 0; q < quanta.length; q++) {
+    // Now, where are my numbers off?
+    for (var q = 0; q < 1; q++) {
         var start = Math.floor(parseFloat(quanta[q].start) * 44100);
         var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 44100);
        
@@ -47,7 +48,6 @@ Wav.createWaveFileData = (function() {
             writeInt16(sampleR, a, offset + 2);
             offset += 4;
         }
-        break; // are my chunks too big or too small?
     }
   };
 
