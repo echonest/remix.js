@@ -321,7 +321,7 @@ function createJRemixer(context, jquery, apiKey) {
         saveRemix : function(window, remixed, link) {
             // This will trigger the save
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-            window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, errorHandler);
+            window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, fileErrorHandler);
         }, 
     };
 
