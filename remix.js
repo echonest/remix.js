@@ -373,8 +373,10 @@ function createJRemixer(context, jquery, apiKey) {
             fileWriter.write(blob);
         }, fileErrorHandler);
 
-        // Set our link to point to the saved file.
-        $('#downloadButton').attr("href", fileEntry.toURL());
+        // Set our link to point to the saved file?
+        $('#downloadButton').onclick= function() {window.location.href=fileEntry.toURL();};
+        
+        // $('#downloadButton').attr("href", fileEntry.toURL());
         }, fileErrorHandler);
     }
 
