@@ -367,10 +367,6 @@ function createJRemixer(context, jquery, apiKey) {
             };
 
             // Create a new Blob and write it.
-            // I need to get each chunk as a buffer, somehow...
-            // or figure out how AudioJEdit does their magic of ripping data out of things.
-            // Something about context.startRendering...
-            
             var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
 
             fileWriter.write(blob);
@@ -378,7 +374,7 @@ function createJRemixer(context, jquery, apiKey) {
 
         // Set our link to point to the saved file.
         $('#downloadButton').attr("href", fileEntry.toURL());
-        }, errorHandler);
+        }, fileErrorHandler);
     }
 
     function isQuantum(a) {
