@@ -33,20 +33,21 @@ Wav.createWaveFileData = (function() {
         var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 44100);
        
         for (var i = start; i < end; ++i) {
-          sampleL = bufferL[i] * 32768.0;
-          sampleR = bufferR[i] * 32768.0;
+            sampleL = bufferL[i] * 32768.0;
+            sampleR = bufferR[i] * 32768.0;
 
-          // Clip left and right samples to the limitations of 16-bit.
-          // If we don't do this then we'll get nasty wrap-around distortion.
-          if (sampleL < -32768) { sampleL = -32768; }
-          if (sampleL >  32767) { sampleL =  32767; }
-          if (sampleR < -32768) { sampleR = -32768; }
-          if (sampleR >  32767) { sampleR =  32767; }
+            // Clip left and right samples to the limitations of 16-bit.
+            // If we don't do this then we'll get nasty wrap-around distortion.
+            if (sampleL < -32768) { sampleL = -32768; }
+            if (sampleL >  32767) { sampleL =  32767; }
+            if (sampleR < -32768) { sampleR = -32768; }
+            if (sampleR >  32767) { sampleR =  32767; }
 
-          writeInt16(sampleL, a, offset);
-          writeInt16(sampleR, a, offset + 2);
-          offset += 4;
+            writeInt16(sampleL, a, offset);
+            writeInt16(sampleR, a, offset + 2);
+            offset += 4;
         }
+        break; // are my chunks too big or too small?
     }
   };
 
