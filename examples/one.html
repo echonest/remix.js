@@ -92,11 +92,9 @@ function init() {
                 $('.btn-remixed').removeAttr('disabled');
 
                 // This would be better.  
-                // remixer.saveRemix(remixed, '#downloadButton');
+                remixer.saveRemix(remixed, '#downloadButton');
                 
-                // This will trigger the save
-                window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-                window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, errorHandler);
+
 
             }
         });

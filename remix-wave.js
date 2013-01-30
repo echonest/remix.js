@@ -121,30 +121,30 @@ function fileErrorHandler(e) {
       console.log('Error: ' + msg);
     }
 
-    // Let's play with the filesystem, locally
-    function onInitFs(fs) {
-        fs.root.getFile('test_wav_save.wav', {create: true}, function(fileEntry) {
+// Let's play with the filesystem, locally
+function onInitFs(fs) {
+    fs.root.getFile('test_wav_save.wav', {create: true}, function(fileEntry) {
 
-        // Write some data
-        fileEntry.createWriter(function(fileWriter) {
-            fileWriter.onwriteend = function(e) {
-            console.log('Write completed.');
-            };
-            fileWriter.onerror = function(e) {
-            console.log('Write failed: ' + e.toString());
-            };
+    // Write some data
+    fileEntry.createWriter(function(fileWriter) {
+        fileWriter.onwriteend = function(e) {
+        console.log('Write completed.');
+        };
+        fileWriter.onerror = function(e) {
+        console.log('Write failed: ' + e.toString());
+        };
 
-            // Create a new Blob and write it.
-            // I need to get each chunk as a buffer, somehow...
-            // or figure out how AudioJEdit does their magic of ripping data out of things.
-            // Something about context.startRendering...
-            
-            var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
+        // Create a new Blob and write it.
+        // I need to get each chunk as a buffer, somehow...
+        // or figure out how AudioJEdit does their magic of ripping data out of things.
+        // Something about context.startRendering...
+        
+        var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
 
-            fileWriter.write(blob);
-        }, fileErrorHandler);
+        fileWriter.write(blob);
+    }, fileErrorHandler);
 
-        // Set our link to point to the saved file.
-        $('#downloadButton').attr("href", fileEntry.toURL());
-        }, errorHandler);
-    }
+    // Set our link to point to the saved file.
+    $('#downloadButton').attr("href", fileEntry.toURL());
+    }, errorHandler);
+}
