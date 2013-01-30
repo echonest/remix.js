@@ -28,7 +28,16 @@ Wav.createWaveFileData = (function() {
         sampleR;
 
     console.log("Number of samples, I think: ", n);
+
+    for (var q = 0; q < quanta.length) {
+        console.log(quanta[q].start * 44100);
+        console.log((quanta[q].start + quanta[q].duration) * 44100);
+    }
+
     for (var i = 0; i < n; ++i) {
+
+      // if n is not within a quanta, skip it.  
+      // Better is for each quanta, get the samples...
       sampleL = bufferL[i] * 32768.0;
       sampleR = bufferR[i] * 32768.0;
 
@@ -80,7 +89,6 @@ Wav.createWaveFileData = (function() {
 
     // Write actual audio data starting at offset 44.
     writeAudioBuffer(audioBuffer, waveFileData, 44, quanta);
-    console.log("Surely this happens");
 
     return waveFileData;
   }
