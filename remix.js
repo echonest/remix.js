@@ -354,11 +354,9 @@ function createJRemixer(context, jquery, apiKey) {
       console.log('Error: ' + msg);
     }
 
-    // Let's play with the filesystem, locally
-    function saveRemixLocally(fs, linkID) {
+    function saveRemixLocally(fs) {
         fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
 
-        // Write some data
         fileEntry.createWriter(function(fileWriter) {
             fileWriter.onwriteend = function(e) {
             console.log('Write completed.');
@@ -367,7 +365,6 @@ function createJRemixer(context, jquery, apiKey) {
             console.log('Write failed: ' + e.toString());
             };
 
-            // Create a new Blob and write it.
             var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
 
             fileWriter.write(blob);
