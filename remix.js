@@ -373,7 +373,7 @@ function createJRemixer(context, jquery, apiKey) {
             fileWriter.write(blob);
         }, fileErrorHandler);
 
-        $('#downloadButton').html('<a href=' + fileEntry.toURL() + 'target="_blank">Download Remix</a>')
+        $('#downloadButton').html('<a href="' + fileEntry.toURL() + '" target="_blank">Download Remix</a>')
         }, fileErrorHandler);
     }
 
