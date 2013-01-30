@@ -321,12 +321,68 @@ function createJRemixer(context, jquery, apiKey) {
         },
 
         // We'll get here eventually;  for now, I want to just save track.buffer in the main file
-        saveRemix : function(remixed, link) {
-                // This will trigger the save
-                window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-                window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, errorHandler);
-        }
+        saveRemix : function(window, remixed, link) {
+            // This will trigger the save
+            window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+            window.requestFileSystem(window.TEMPORARY, 1024*1024, onInitFs, errorHandler);
+        }, 
     };
+
+
+    function fileErrorHandler(e) {
+      var msg = '';
+
+      switch (e.code) {
+        case FileError.QUOTA_EXCEEDED_ERR:
+          msg = 'QUOTA_EXCEEDED_ERR';
+          break;
+        case FileError.NOT_FOUND_ERR:
+          msg = 'NOT_FOUND_ERR';
+          break;
+        case FileError.SECURITY_ERR:
+          msg = 'SECURITY_ERR';
+          break;
+        case FileError.INVALID_MODIFICATION_ERR:
+          msg = 'INVALID_MODIFICATION_ERR';
+          break;
+        case FileError.INVALID_STATE_ERR:
+          msg = 'INVALID_STATE_ERR';
+          break;
+        default:
+          msg = 'Unknown Error';
+          break;
+      };
+
+      console.log('Error: ' + msg);
+    }
+
+    // Let's play with the filesystem, locally
+    function onInitFs(fs) {
+        fs.root.getFile('test_wav_save.wav', {create: true}, function(fileEntry) {
+
+        // Write some data
+        fileEntry.createWriter(function(fileWriter) {
+            fileWriter.onwriteend = function(e) {
+            console.log('Write completed.');
+            };
+            fileWriter.onerror = function(e) {
+            console.log('Write failed: ' + e.toString());
+            };
+
+            // Create a new Blob and write it.
+            // I need to get each chunk as a buffer, somehow...
+            // or figure out how AudioJEdit does their magic of ripping data out of things.
+            // Something about context.startRendering...
+            
+            var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
+
+            fileWriter.write(blob);
+        }, fileErrorHandler);
+
+        // Set our link to point to the saved file.
+        $('#downloadButton').attr("href", fileEntry.toURL());
+        }, errorHandler);
+    }
 
     function isQuantum(a) {
         return 'start' in a && 'duration' in a;
