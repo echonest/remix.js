@@ -27,12 +27,12 @@ Wav.createWaveFileData = (function() {
         bufferR = audioBuffer.getChannelData(1),
         sampleR;
 
-
+    // Some of my numbers are off, but the principle is working!!
     for (var q = 0; q < quanta.length; q++) {
         var start = Math.floor(parseFloat(quanta[q].start) * 44100);
         var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 44100);
        
-        for (var i = start; i < end; i++) {
+        for (var i = start; i < end; ++i) {
           sampleL = bufferL[i] * 32768.0;
           sampleR = bufferR[i] * 32768.0;
 
