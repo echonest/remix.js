@@ -18,8 +18,8 @@
 <body>
 <script src="assets/js/bootstrap.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript" src='../remix.js'></script>
 <script type="text/javascript" src='../remix-wave.js'></script>
+<script type="text/javascript" src='../remix.js'></script>
 <script src="../wavesurfer/wavesurfer.js"></script>
 <script src="../wavesurfer/webaudio.js"></script>
 <script src="../wavesurfer/drawer.js"></script>
@@ -49,7 +49,6 @@ function init() {
         cursorColor: '#888888'
     });
     wavesurfer.load(trackURL);
-
 
     if (window.webkitAudioContext === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
@@ -89,9 +88,8 @@ function init() {
                     cursorColor: '#00ACEB'
                 });
                 remixedWavesurfer.load(trackURL, remixed);
-                $('.btn-remixed').removeAttr('disabled');
 
-                // This would be better.  
+                $('.btn-remixed').removeAttr('disabled');
                 remixer.saveRemix(window, remixed, '#downloadButton');
 
             }
@@ -101,7 +99,6 @@ function init() {
 
 window.onload = init;
 </script>
-
 
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
@@ -151,6 +148,9 @@ for (var i=0; i < track.analysis.beats.length; i++) {
             <br />
             <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
             <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
+            <button class='btn btn-remixed' onClick="window.location.href='one.html'">Test Download Remix</button>
+            
+
             <a href='' id='downloadButton'>Download Remix</an>
             </div>
         </section>
