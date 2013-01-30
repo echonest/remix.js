@@ -35,9 +35,10 @@ Wav.createWaveFileData = (function() {
     // Some of my numbers are off, but the principle is working!!
     // Now, where are my numbers off?
     for (var q = 0; q < quanta.length; q++) {
-        // I think thesea are the starting samples
-        var start = Math.floor(parseFloat(quanta[q].start) * 44100);
-        var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 44100);
+        // I think these are the starting samples.
+        // Playing a hunch and dividing by two...
+        var start = Math.floor(parseFloat(quanta[q].start) * 22050);
+        var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 22050);
         console.log("Start: ", start);
         console.log("End: ", end);
         
