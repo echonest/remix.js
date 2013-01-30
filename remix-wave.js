@@ -28,16 +28,13 @@ Wav.createWaveFileData = (function() {
         sampleR;
 
 
-    console.log('length of new buffer', quanta.length * 48000);
+    console.log('length of new buffer', quanta.length * audioBuffer.sampleRate);
     console.log('length of old buffer', bufferL.length);
-    console.log('Estimated Time', bufferL.length / 48000 / 60.0);
 
     for (var q = 0; q < quanta.length; q++) {
         // hese are the starting samples.
-        var start = Math.floor(parseFloat(quanta[q].start) * 48000);
-        var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 48000);
-        console.log("Start: ", start);
-        console.log("End: ", end);
+        var start = Math.floor(parseFloat(quanta[q].start) * audioBuffer.sampleRate);
+        var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * audioBuffer.sampleRate);
         
         // i is in samples
         for (var i = start; i < end; ++i) {
@@ -61,8 +58,13 @@ Wav.createWaveFileData = (function() {
 
   return function(audioBuffer, quanta) {
 
+    var remixDuration = 0;
+    for (var q = 0; q < quanta.length; q++) {
+        remixDuration = remixDuration + parseFloat(quanta[q].duration);
+    }
+
     // I'll have to shorten the length, but let's just get the data out for now.
-    var frameLength = quanta.length * audioBuffer.sampleRate,
+    var frameLength = remixDuration * audioBuffer.sampleRate,
         numberOfChannels = audioBuffer.numberOfChannels,
         sampleRate = audioBuffer.sampleRate,
         bitsPerSample = 16,
