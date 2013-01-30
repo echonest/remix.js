@@ -28,15 +28,12 @@ Wav.createWaveFileData = (function() {
         sampleR;
 
 
-    console.log('length of new buffer', n);
+    console.log('length of new buffer', quanta.length * 48000);
     console.log('length of old buffer', bufferL.length);
     console.log('Estimated Time', bufferL.length / 48000 / 60.0);
 
-    // Some of my numbers are off, but the principle is working!!
-    // Now, where are my numbers off?
     for (var q = 0; q < quanta.length; q++) {
-        // I think these are the starting samples.
-        // Playing a hunch and dividing by two...
+        // hese are the starting samples.
         var start = Math.floor(parseFloat(quanta[q].start) * 48000);
         var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 48000);
         console.log("Start: ", start);
@@ -65,7 +62,7 @@ Wav.createWaveFileData = (function() {
   return function(audioBuffer, quanta) {
 
     // I'll have to shorten the length, but let's just get the data out for now.
-    var frameLength = audioBuffer.length,
+    var frameLength = quanta.length * audioBuffer.sampleRate,
         numberOfChannels = audioBuffer.numberOfChannels,
         sampleRate = audioBuffer.sampleRate,
         bitsPerSample = 16,
@@ -78,6 +75,8 @@ Wav.createWaveFileData = (function() {
         subChunk1Size = 16, // for linear PCM
         subChunk2Size = wavDataByteLength,
         chunkSize = 4 + (8 + subChunk1Size) + (8 + subChunk2Size);
+
+    console.log("Sample rate: ", sampleRate);
 
     writeString('RIFF', waveFileData, 0);
     writeInt32(chunkSize, waveFileData, 4);
