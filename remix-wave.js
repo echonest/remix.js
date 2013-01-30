@@ -35,12 +35,15 @@ Wav.createWaveFileData = (function() {
     // Some of my numbers are off, but the principle is working!!
     // Now, where are my numbers off?
     for (var q = 0; q < 2; q++) {
+        // I think thesea are the starting samples
         var start = Math.floor(parseFloat(quanta[q].start) * 44100);
         var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 44100);
-       
+        console.log("Start: ", start);
+        console.log("End: ", end);
         
+        // i is in samples
         for (var i = start; i < end; ++i) {
-            sampleL = bufferL[i] * 32768.0; // and these are one 16-bit samples:  two bytes
+            sampleL = bufferL[i] * 32768.0; // and these are one 16-bit sample:  two bytes
             sampleR = bufferR[i] * 32768.0;
 
             // Clip left and right samples to the limitations of 16-bit.
@@ -50,9 +53,10 @@ Wav.createWaveFileData = (function() {
             if (sampleR < -32768) { sampleR = -32768; }
             if (sampleR >  32767) { sampleR =  32767; }
 
+            // offset is in bytes.  
             writeInt16(sampleL, a, offset);
             writeInt16(sampleR, a, offset + 2);
-            offset += 4; // this is in bytes.  
+            offset += 4; 
         }
     }
   };
