@@ -27,14 +27,19 @@ Wav.createWaveFileData = (function() {
         bufferR = audioBuffer.getChannelData(1),
         sampleR;
 
+
+    console.log('length of new buffer', n);
+    console.log('length of old buffer', bufferL.length);
+
     // Some of my numbers are off, but the principle is working!!
     // Now, where are my numbers off?
-    for (var q = 0; q < 1; q++) {
+    for (var q = 0; q < 2; q++) {
         var start = Math.floor(parseFloat(quanta[q].start) * 44100);
         var end = Math.floor((parseFloat(quanta[q].start) + parseFloat(quanta[q].duration)) * 44100);
        
+        
         for (var i = start; i < end; ++i) {
-            sampleL = bufferL[i] * 32768.0;
+            sampleL = bufferL[i] * 32768.0; // and these are one 16-bit samples:  two bytes
             sampleR = bufferR[i] * 32768.0;
 
             // Clip left and right samples to the limitations of 16-bit.
@@ -46,7 +51,7 @@ Wav.createWaveFileData = (function() {
 
             writeInt16(sampleL, a, offset);
             writeInt16(sampleR, a, offset + 2);
-            offset += 4;
+            offset += 4; // this is in bytes.  
         }
     }
   };
