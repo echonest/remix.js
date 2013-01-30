@@ -89,7 +89,6 @@ function init() {
             var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
 
             fileWriter.write(blob);
-            console.log('Is my page building?');
         }, errorHandler);
 
         // Set our link to point to the saved file.

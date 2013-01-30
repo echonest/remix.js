@@ -30,6 +30,7 @@ Wav.createWaveFileData = (function() {
 
     console.log('length of new buffer', n);
     console.log('length of old buffer', bufferL.length);
+    console.log('Estimated Time', bufferL.length / 44100 / 60.0);
 
     // Some of my numbers are off, but the principle is working!!
     // Now, where are my numbers off?
