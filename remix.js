@@ -357,6 +357,8 @@ function createJRemixer(context, jquery, apiKey) {
     function saveRemixLocally(fs, link) {
         fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
 
+        console.log("The link: ", link)
+
         fileEntry.createWriter(function(fileWriter) {
             fileWriter.onwriteend = function(e) {
             console.log('Write completed.');
