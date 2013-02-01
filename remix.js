@@ -379,16 +379,9 @@ function createJRemixer(context, jquery, apiKey) {
         // $('#downloadButton').html('<a href="' + fileEntry.toURL() + '" target="_blank">Download Remix</a>')
         }, fileErrorHandler);
         
-        console.log(saveURL);
+        console.log(saveURL)
         return saveURL;
     }
-
-    function testInit(fs) 
-
-
-    }
-
-
 
     function isQuantum(a) {
         return 'start' in a && 'duration' in a;
