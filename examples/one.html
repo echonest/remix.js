@@ -94,7 +94,7 @@ function init() {
                 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
                 window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
                     fs = filesystem;
-                }, errorHandler, fileErrorHandler);
+                }, fileErrorHandler);
 
                 var saveURL = remixer.saveRemixLocally(fs, remixed);
                 // And then we update the DOM here
