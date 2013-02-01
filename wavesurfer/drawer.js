@@ -4,7 +4,7 @@ WaveSurfer.Drawer = {
     defaultParams: {
         waveColor: '#333',
         progressColor: '#999',
-        cursorWidth: 0,
+        cursorWidth: 1,
         loadingColor: '#333',
         loadingBars: 20,
         barHeight: 1,
@@ -121,12 +121,7 @@ WaveSurfer.Drawer = {
         var x = index * w;
         var y = Math.round((this.height - h) / 2);
 
-        if (this.cursorPos >= x) {
-            this.cc.fillStyle = this.params.progressColor;
-        } else {
-            this.cc.fillStyle = this.params.waveColor;
-        }
-
+        this.cc.fillStyle = this.params.waveColor;
         this.cc.fillRect(x, y, w, h);
     },
 
