@@ -96,12 +96,12 @@ function init() {
                 });
                 remixedWavesurfer.load(trackURL, remixed);
 
+                // I should set up the FS earlier, somehow...
                 // This should return the filesystem url
+                remixer.saveRemixLocally(fs, remixed, function(saveURL) {
+                    $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
+                });
 
-                var saveURL = remixer.saveRemixLocally(fs, remixed);
-                console.log("top level save: ", saveURL);
-                // And then we update the DOM here
-                // $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
 
                 $('.btn-remixed').removeAttr('disabled');
 

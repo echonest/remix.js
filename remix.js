@@ -318,28 +318,24 @@ function createJRemixer(context, jquery, apiKey) {
         },
 
         // Saves the remixed audio using the HTML 5 temporary filesystem
-
-        saveRemixLocally : function(fs, remixed) {
+        saveRemixLocally : function(fs, remixed, callback) {
             var saveURL;
             fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
-            fileEntry.createWriter(function(fileWriter) {
-                fileWriter.onwriteend = function(e) {
-                console.log('Write completed.');
-                };
-                fileWriter.onerror = function(e) {
-                console.log('Write failed: ' + e.toString());
-                };
+                fileEntry.createWriter(function(fileWriter) {
+                    fileWriter.onwriteend = function(e) {
+                    console.log('Write completed.');
+                    callback(fileEntry.toURL());  
 
-                var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
+                    };
+                    fileWriter.onerror = function(e) {
+                    console.log('Write failed: ' + e.toString());
+                    };
 
-                fileWriter.write(blob);
+                    var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
+
+                    fileWriter.write(blob);
+                }, fileErrorHandler);
             }, fileErrorHandler);
-            console.log(fileEntry.toURL());
-            saveURL = fileEntry.toURL();
-            }, fileErrorHandler);
-            
-            console.log(saveURL);
-            return saveURL;
         },
  
     };
