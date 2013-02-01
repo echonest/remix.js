@@ -17,20 +17,6 @@ var WaveSurfer = {
         this.drawer.init(params);
     },
 
-    onAudioProcess: function () {
-        if (!this.backend.isPaused()) {
-            this.drawer.progress(this.backend.getPlayedPercents());
-        }
-    },
-
-    playPause: function () {
-        if (this.backend.paused) {
-            this.playAt(this.backend.getPlayedPercents() || 0);
-        } else {
-            this.pause();
-        }
-    },
-
     drawBuffer: function () {
         if (this.backend.currentBuffer) {
             this.drawer.drawBuffer(this.backend.currentBuffer);
