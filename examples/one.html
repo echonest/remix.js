@@ -76,7 +76,7 @@ function init() {
 
             if (track.status == 'ok') {
 
-                wavesurfer.loadBuffer(track.buffer, trackURL);
+                wavesurfer.loadBuffer(track, trackURL);
 
                 $('.btn-original').removeAttr('disabled');
                 remixed = new Array();

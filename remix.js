@@ -323,7 +323,7 @@ function createJRemixer(context, jquery, apiKey) {
                 fileEntry.createWriter(function(fileWriter) {
                     fileWriter.onwriteend = function(e) {
                     console.log('Write completed.');
-                    callback(fileEntry.toURL());  
+                    callback(fileEntry.toURL());
                     };
                     fileWriter.onerror = function(e) {
                     console.log('Write failed: ' + e.toString());
