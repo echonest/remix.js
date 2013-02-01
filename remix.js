@@ -322,8 +322,7 @@ function createJRemixer(context, jquery, apiKey) {
             var testURL = 'test';
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
             window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally, fileErrorHandler);
-
-            while 
+            
             console.log(remixed);
         },
 
