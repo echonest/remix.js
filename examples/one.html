@@ -48,7 +48,6 @@ function init() {
         cursorColor: '#888888'
     });
     // wavesurfer.load(trackURL);
-    wavesurfer.loadBuffer(trackURL);
 
     if (window.webkitAudioContext === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
@@ -75,7 +74,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                console.log(track)
+                console.log(track);
                 wavesurfer.loadBuffer(track.buffer, trackURL);
 
                 $('.btn-original').removeAttr('disabled');
