@@ -96,7 +96,7 @@ function init() {
                     loadingColor: '#000000',
                     cursorColor: '#00ACEB'
                 });
-                remixedWavesurfer.load(trackURL, remixed);
+                remixedWavesurfer.loadBuffer(track.buffer, remixed);
 
                 remixer.saveRemixLocally(fs, remixed, function(saveURL) {
                     $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
