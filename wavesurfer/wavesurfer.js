@@ -23,14 +23,6 @@ var WaveSurfer = {
         }
     },
 
-    playAt: function (percents) {
-        this.backend.play(this.backend.getDuration() * percents);
-    },
-
-    pause: function () {
-        this.backend.pause();
-    },
-
     playPause: function () {
         if (this.backend.paused) {
             this.playAt(this.backend.getPlayedPercents() || 0);
