@@ -88,8 +88,12 @@ function init() {
                     cursorColor: '#00ACEB'
                 });
                 remixedWavesurfer.load(trackURL, remixed);
+
                 // This should return the filesystem url
-                saveURL = remixer.saveRemix(window, remixed);
+                var saveURL = remixer.saveRemix(window, remixed);
+                // And then we update the DOM here
+                // $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
+
                 $('.btn-remixed').removeAttr('disabled');
 
             }

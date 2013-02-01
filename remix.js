@@ -319,38 +319,39 @@ function createJRemixer(context, jquery, apiKey) {
 
         // Saves the remixed audio using the HTML 5 temporary filesystem
         saveRemix : function(window, remixed) {
+            var testURL = 'test';
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
             window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally, fileErrorHandler);
 
+            while 
             console.log(remixed);
-        }, 
+        },
+
+        saveRemixLocally() : function(fs) {
+            console.log(testURL);
+            var saveURL;
+            fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
+            fileEntry.createWriter(function(fileWriter) {
+                fileWriter.onwriteend = function(e) {
+                console.log('Write completed.');
+                };
+                fileWriter.onerror = function(e) {
+                console.log('Write failed: ' + e.toString());
+                };
+
+                var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
+
+                fileWriter.write(blob);
+            }, fileErrorHandler);
+            saveURL = fileEntry.toURL();
+            }, fileErrorHandler);
+            
+            console.log(saveURL);
+        },
+ 
     };
 
-    function saveRemixLocally(fs) {
-        var saveURL;
-        fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
-        fileEntry.createWriter(function(fileWriter) {
-            fileWriter.onwriteend = function(e) {
-            console.log('Write completed.');
-            };
-            fileWriter.onerror = function(e) {
-            console.log('Write failed: ' + e.toString());
-            };
 
-            console.log(remixed);
-            var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
-
-            fileWriter.write(blob);
-        }, fileErrorHandler);
-
-        
-        saveURL = fileEntry.toURL();
-        remixed.test-url = saveURL;
-        // $('#downloadButton').html('<a href="' + fileEntry.toURL() + '" target="_blank">Download Remix</a>')
-        }, fileErrorHandler);
-        
-        console.log(saveURL)
-    }
 
     function fileErrorHandler(e) {
       var msg = '';
