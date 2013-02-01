@@ -326,7 +326,7 @@ function createJRemixer(context, jquery, apiKey) {
             console.log(remixed);
         },
 
-        saveRemixLocally() : function(fs) {
+        saveRemixLocally : function(fs) {
             console.log(testURL);
             var saveURL;
             fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
