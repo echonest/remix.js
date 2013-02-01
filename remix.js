@@ -322,7 +322,7 @@ function createJRemixer(context, jquery, apiKey) {
         saveRemix : function(window, remixed, link) {
             console.log("The link part 1: ", link)
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-            window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally.bind(link), fileErrorHandler);
+            window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally.bind(null, link), fileErrorHandler);
         }, 
     };
 
