@@ -30,11 +30,9 @@ var WaveSurfer = {
     loadBuffer: function(buffer, quanta) {
         var my = this;
         my.drawer.remixedData = quanta;
-        my.backend.loadData(
-                buffer,
-                my.drawBuffer.bind(my)
-            );
+        my.drawer.drawBuffer(buffer)
     },
+
 
 
     load: function (src, quanta) {
