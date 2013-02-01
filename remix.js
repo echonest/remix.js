@@ -5,8 +5,6 @@
 function createJRemixer(context, jquery, apiKey) {
     var $ = jquery;
     $.ajaxSetup({ cache: false });
-    var fs = null;
-    
 
     var remixer = {
         remixTrackById: function(trackID, trackURL, callback) {
@@ -320,16 +318,37 @@ function createJRemixer(context, jquery, apiKey) {
         },
 
         // Saves the remixed audio using the HTML 5 temporary filesystem
-        saveRemix : function(window, remixed, link) {
+        saveRemix : function(window, remixed) {
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-            window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
-                fs = filesystem;
-            }, fileErrorHandler);
+            window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally, fileErrorHandler);
 
-            console.log("the output of saveRemix... ", saveRemixLocally(fs));
+            console.log(track);
         }, 
     };
 
+    function saveRemixLocally(fs) {
+        var saveURL;
+        fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
+        fileEntry.createWriter(function(fileWriter) {
+            fileWriter.onwriteend = function(e) {
+            console.log('Write completed.');
+            };
+            fileWriter.onerror = function(e) {
+            console.log('Write failed: ' + e.toString());
+            };
+
+            console.log(track);
+            var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
+
+            fileWriter.write(blob);
+        }, fileErrorHandler);
+
+        saveURL = fileEntry.toURL();
+        // $('#downloadButton').html('<a href="' + fileEntry.toURL() + '" target="_blank">Download Remix</a>')
+        }, fileErrorHandler);
+        
+        console.log(saveURL)
+    }
 
     function fileErrorHandler(e) {
       var msg = '';
@@ -358,30 +377,7 @@ function createJRemixer(context, jquery, apiKey) {
       console.log('Error: ' + msg);
     }
 
-    function saveRemixLocally(fs) {
-        var saveURL;
-        fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
-        fileEntry.createWriter(function(fileWriter) {
-            fileWriter.onwriteend = function(e) {
-            console.log('Write completed.');
-            };
-            fileWriter.onerror = function(e) {
-            console.log('Write failed: ' + e.toString());
-            };
-            
-            console.log(theNewLink);
-            var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
 
-            fileWriter.write(blob);
-        }, fileErrorHandler);
-
-        saveURL = fileEntry.toURL();
-        // $('#downloadButton').html('<a href="' + fileEntry.toURL() + '" target="_blank">Download Remix</a>')
-        }, fileErrorHandler);
-        
-        console.log(saveURL)
-        return saveURL;
-    }
 
     function isQuantum(a) {
         return 'start' in a && 'duration' in a;
