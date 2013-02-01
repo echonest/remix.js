@@ -3,16 +3,6 @@
 var WaveSurfer = {
     init: function (params) {
         var my = this;
-
-        if (params.audio) {
-            var backend = WaveSurfer.Audio;
-        } else {
-            backend = WaveSurfer.WebAudio;
-        }
-
-        this.backend = Object.create(backend);
-        this.backend.init(params);
-
         this.drawer = Object.create(WaveSurfer.Drawer);
         this.drawer.init(params);
     },
