@@ -334,6 +334,7 @@ function createJRemixer(context, jquery, apiKey) {
 
                 fileWriter.write(blob);
             }, fileErrorHandler);
+            console.log(fileEntry.toURL());
             saveURL = fileEntry.toURL();
             }, fileErrorHandler);
             
