@@ -320,7 +320,7 @@ function createJRemixer(context, jquery, apiKey) {
 
         // Saves the remixed audio using the HTML 5 temporary filesystem
         saveRemix : function(window, remixed, link) {
-            
+            console.log("The link part 1: ", link)
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
             window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally.bind(link), fileErrorHandler);
         }, 
@@ -357,7 +357,7 @@ function createJRemixer(context, jquery, apiKey) {
     function saveRemixLocally(fs, link) {
         fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
 
-        console.log("The link: ", link)
+        console.log("The link part 2: ", link)
 
         fileEntry.createWriter(function(fileWriter) {
             fileWriter.onwriteend = function(e) {
