@@ -88,7 +88,7 @@ function init() {
                     cursorColor: '#00ACEB'
                 });
                 remixedWavesurfer.load(trackURL, remixed);
-                remixer.saveRemix(window, remixed, '#downloadButton');
+                saveURL = remixer.saveRemix(window, remixed, '#downloadButton');
                 $('.btn-remixed').removeAttr('disabled');
 
             }

@@ -321,8 +321,9 @@ function createJRemixer(context, jquery, apiKey) {
         // Saves the remixed audio using the HTML 5 temporary filesystem
         saveRemix : function(window, remixed, link) {
             console.log("The link part 1: ", link)
+            var theNewLink = 'blah blah blah';
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-            window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally.bind(fs, link), fileErrorHandler);
+            window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally, fileErrorHandler);
         }, 
     };
 
@@ -354,11 +355,8 @@ function createJRemixer(context, jquery, apiKey) {
       console.log('Error: ' + msg);
     }
 
-    function saveRemixLocally(fs, link) {
+    function saveRemixLocally(fs) {
         fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
-
-        console.log("The link part 2: ", link)
-
         fileEntry.createWriter(function(fileWriter) {
             fileWriter.onwriteend = function(e) {
             console.log('Write completed.');
@@ -366,14 +364,18 @@ function createJRemixer(context, jquery, apiKey) {
             fileWriter.onerror = function(e) {
             console.log('Write failed: ' + e.toString());
             };
-
+            
+            console.log(theNewLink);
             var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
 
             fileWriter.write(blob);
         }, fileErrorHandler);
 
-        $('#downloadButton').html('<a href="' + fileEntry.toURL() + '" target="_blank">Download Remix</a>')
+        // $('#downloadButton').html('<a href="' + fileEntry.toURL() + '" target="_blank">Download Remix</a>')
         }, fileErrorHandler);
+        theNewLink = fileEntry.toURL();
+        console.log(theNewLink)
+        return fileEntry.toURL();
     }
 
     function isQuantum(a) {
