@@ -68,8 +68,6 @@ Wav.createWaveFileData = (function() {
         subChunk2Size = wavDataByteLength,
         chunkSize = 4 + (8 + subChunk1Size) + (8 + subChunk2Size);
 
-    console.log("Sample rate: ", sampleRate);
-
     writeString('RIFF', waveFileData, 0);
     writeInt32(chunkSize, waveFileData, 4);
     writeString('WAVE', waveFileData, 8);
