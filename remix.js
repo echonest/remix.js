@@ -318,16 +318,8 @@ function createJRemixer(context, jquery, apiKey) {
         },
 
         // Saves the remixed audio using the HTML 5 temporary filesystem
-        saveRemix : function(window, remixed) {
-            var testURL = 'test';
-            window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-            window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally, fileErrorHandler);
-            
-            console.log(remixed);
-        },
 
-        saveRemixLocally : function(fs) {
-            console.log(testURL);
+        saveRemixLocally : function(fs, remixed) {
             var saveURL;
             fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
             fileEntry.createWriter(function(fileWriter) {
@@ -346,6 +338,7 @@ function createJRemixer(context, jquery, apiKey) {
             }, fileErrorHandler);
             
             console.log(saveURL);
+            return saveURL;
         },
  
     };

@@ -90,7 +90,13 @@ function init() {
                 remixedWavesurfer.load(trackURL, remixed);
 
                 // This should return the filesystem url
-                var saveURL = remixer.saveRemix(window, remixed);
+                var fs;
+                window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+                window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
+                    fs = filesystem;
+                }, errorHandler, fileErrorHandler);
+
+                var saveURL = remixer.saveRemixLocally(fs, remixed);
                 // And then we update the DOM here
                 // $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
 
