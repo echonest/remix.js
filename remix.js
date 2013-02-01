@@ -318,11 +318,11 @@ function createJRemixer(context, jquery, apiKey) {
             request.send();
         },
 
-        // We'll get here eventually;  for now, I want to just save track.buffer in the main file
+        // Saves the remixed audio using the HTML 5 temporary filesystem
         saveRemix : function(window, remixed, link) {
-            // This will trigger the save
+            
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-            window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally, fileErrorHandler);
+            window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally.bind(link), fileErrorHandler);
         }, 
     };
 
@@ -354,7 +354,7 @@ function createJRemixer(context, jquery, apiKey) {
       console.log('Error: ' + msg);
     }
 
-    function saveRemixLocally(fs) {
+    function saveRemixLocally(fs, link) {
         fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
 
         fileEntry.createWriter(function(fileWriter) {
