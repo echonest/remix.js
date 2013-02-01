@@ -322,7 +322,7 @@ function createJRemixer(context, jquery, apiKey) {
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
             window.requestFileSystem(window.TEMPORARY, 1024*1024, saveRemixLocally, fileErrorHandler);
 
-            console.log(track);
+            console.log(remixed);
         }, 
     };
 
@@ -337,13 +337,15 @@ function createJRemixer(context, jquery, apiKey) {
             console.log('Write failed: ' + e.toString());
             };
 
-            console.log(track);
+            console.log(remixed);
             var blob = new Blob([Wav.createWaveFileData(track.buffer, remixed)], {type: 'binary'});
 
             fileWriter.write(blob);
         }, fileErrorHandler);
 
+        
         saveURL = fileEntry.toURL();
+        remixed.test-url = saveURL;
         // $('#downloadButton').html('<a href="' + fileEntry.toURL() + '" target="_blank">Download Remix</a>')
         }, fileErrorHandler);
         
