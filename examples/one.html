@@ -47,7 +47,8 @@ function init() {
         loadingColor: '#000000',
         cursorColor: '#888888'
     });
-    wavesurfer.load(trackURL);
+    // wavesurfer.load(trackURL);
+    wavesurfer.loadBuffer(trackURL);
 
     if (window.webkitAudioContext === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
@@ -74,6 +75,9 @@ function init() {
             }
 
             if (track.status == 'ok') {
+
+                wavesurfer.loadBuffer(track.buffer, trackURL);
+
                 $('.btn-original').removeAttr('disabled');
                 remixed = new Array();
                 // Extract the first beat of every bar.
@@ -95,11 +99,9 @@ function init() {
                 });
                 remixedWavesurfer.load(trackURL, remixed);
 
-                // I should set up the FS better, somehow...
                 remixer.saveRemixLocally(fs, remixed, function(saveURL) {
                     $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
                 });
-
 
                 $('.btn-remixed').removeAttr('disabled');
 

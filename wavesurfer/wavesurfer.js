@@ -26,6 +26,17 @@ var WaveSurfer = {
     /**
      * Loads an audio file via XHR.
      */
+    // Can I tweak this to take a buffer (track.buffer?)?
+    loadbBuffer(buffer, quanta) {
+        var my = this;
+        my.drawer.remixedData = quanta;
+        my.backend.loadData(
+                buffer,
+                my.drawBuffer.bind(my)
+            );
+    }
+
+
     load: function (src, quanta) {
         var my = this;
         var xhr = new XMLHttpRequest();
