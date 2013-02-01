@@ -319,13 +319,11 @@ function createJRemixer(context, jquery, apiKey) {
 
         // Saves the remixed audio using the HTML 5 temporary filesystem
         saveRemixLocally : function(fs, remixed, callback) {
-            var saveURL;
             fs.root.getFile('my-remix.wav', {create: true}, function(fileEntry) {
                 fileEntry.createWriter(function(fileWriter) {
                     fileWriter.onwriteend = function(e) {
                     console.log('Write completed.');
                     callback(fileEntry.toURL());  
-
                     };
                     fileWriter.onerror = function(e) {
                     console.log('Write failed: ' + e.toString());
@@ -358,33 +356,6 @@ function createJRemixer(context, jquery, apiKey) {
 }
 
 
-function fileErrorHandler(e) {
-  var msg = '';
-
-  switch (e.code) {
-    case FileError.QUOTA_EXCEEDED_ERR:
-      msg = 'QUOTA_EXCEEDED_ERR';
-      break;
-    case FileError.NOT_FOUND_ERR:
-      msg = 'NOT_FOUND_ERR';
-      break;
-    case FileError.SECURITY_ERR:
-      msg = 'SECURITY_ERR';
-      break;
-    case FileError.INVALID_MODIFICATION_ERR:
-      msg = 'INVALID_MODIFICATION_ERR';
-      break;
-    case FileError.INVALID_STATE_ERR:
-      msg = 'INVALID_STATE_ERR';
-      break;
-    default:
-      msg = 'Unknown Error';
-      break;
-  };
-
-  console.log('Error: ' + msg);
-}
-
 function euclidean_distance(v1, v2) {
     var sum = 0;
     for (var i = 0; i < 3; i++) {
@@ -397,7 +368,6 @@ function euclidean_distance(v1, v2) {
 function timbral_distance(s1, s2) {
     return euclidean_distance(s1.timbre, s2.timbre);
 }
-
 
 function clusterSegments(track, numClusters, fieldName, vecName) {
     var vname = vecName || 'timbre';
@@ -501,7 +471,35 @@ function clusterSegments(track, numClusters, fieldName, vecName) {
 }
 
 
-// Wav code via Tomás Senart's AudioJEdit - https://github.com/tsenart/audiojedit
+// Error handler for writing remixes to wav files
+function fileErrorHandler(e) {
+  var msg = '';
+
+  switch (e.code) {
+    case FileError.QUOTA_EXCEEDED_ERR:
+      msg = 'QUOTA_EXCEEDED_ERR';
+      break;
+    case FileError.NOT_FOUND_ERR:
+      msg = 'NOT_FOUND_ERR';
+      break;
+    case FileError.SECURITY_ERR:
+      msg = 'SECURITY_ERR';
+      break;
+    case FileError.INVALID_MODIFICATION_ERR:
+      msg = 'INVALID_MODIFICATION_ERR';
+      break;
+    case FileError.INVALID_STATE_ERR:
+      msg = 'INVALID_STATE_ERR';
+      break;
+    default:
+      msg = 'Unknown Error';
+      break;
+  };
+
+  console.log('Error: ' + msg);
+}
+
+// Wav code based on Tomás Senart's AudioJEdit - https://github.com/tsenart/audiojedit
 var Wav = {};
 Wav.createWaveFileData = (function() {
   var writeString = function(s, a, offset) {

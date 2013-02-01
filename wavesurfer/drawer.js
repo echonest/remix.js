@@ -4,7 +4,7 @@ WaveSurfer.Drawer = {
     defaultParams: {
         waveColor: '#333',
         progressColor: '#999',
-        cursorWidth: 1,
+        cursorWidth: 0,
         loadingColor: '#333',
         loadingBars: 20,
         barHeight: 1,

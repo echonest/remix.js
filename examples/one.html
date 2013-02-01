@@ -96,9 +96,7 @@ function init() {
                 remixedWavesurfer.load(trackURL, remixed);
 
                 // I should set up the FS better, somehow...
-                // This should return the filesystem url
                 remixer.saveRemixLocally(fs, remixed, function(saveURL) {
-                    console.log(saveURL);
                     $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
                 });
 
