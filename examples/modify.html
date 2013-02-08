@@ -46,9 +46,9 @@ function beginRemix() {
 
 
     for (var i = 0; i < theCode.length; i++) {
-        theCode[i].replace(/\s+/g, '');
-        console.log(theCode[i]);
-        eval(theCode[i]);
+        var line = theCode[i].replace('\t', '');
+        console.log(line);
+        eval(line);
     }
     
     
