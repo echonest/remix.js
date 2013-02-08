@@ -77,9 +77,9 @@ function init() {
            ['remixed = new Array();',
             'var meter = parseInt(track.analysis.track.time_signature);',
             'for (var i=0; i < track.analysis.beats.length; i++) {',
-            'if (i % meter == 0)',
-            'remixed.push(track.analysis.beats[i])', 
-            '}', 
+            '\tif (i % meter == 0)',
+            '\t\tremixed.push(track.analysis.beats[i])', 
+            '\t}', 
             '}', 
            ].join('\n');
         
@@ -158,7 +158,7 @@ window.onload = init;
 
         <div id="userCode">
 
-        <p><textarea id="userInput" placeholder="Remember, be nice!" width='600px' wrap="off" rows="5"></textarea>
+        <p><textarea id="userInput" placeholder="Remember, be nice!" width='600px' wrap="off" rows="8"></textarea>
         </p>
         <button class='btn btn-original' onClick="beginRemix()">Remix!</button>
 
