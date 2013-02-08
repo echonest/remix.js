@@ -35,6 +35,10 @@ var remixer;
 var player;
 var track;
 var remixed;
+function beginRemix() {
+    var theCode = $("#userInput").text();
+    console.log(theCode);
+}
 
 function init() {
     $('.btn').attr('disabled','disabled');
@@ -71,10 +75,7 @@ function init() {
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
 
-        function beginRemix() {
-            var theCode = $("#userInput").text();
-            console.log(theCode);
-        }
+
 
         
         // Update the placeholder input string
