@@ -70,8 +70,13 @@ function init() {
 
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
-        
 
+        function beginRemix() {
+            var theCode = $("#userInput").text();
+            console.log(theCode);
+        }
+
+        
         // Update the placeholder input string
         var defaultText = 
            ['remixed = new Array();',
@@ -82,11 +87,7 @@ function init() {
             '\t}', 
             '}', 
            ].join('\n');
-        
         $("#userInput").text(defaultText);
-
-        // Wait for user input here?
-        
 
         $("#info").text("Loading analysis data...");
         remixer.remixTrackById(trackID, trackURL, function(t, percent) {
@@ -96,12 +97,17 @@ function init() {
             if (percent == 100) {
                 $("#info").text(percent + "% of the track loaded, ready to remix.");
             }
-
             if (track.status == 'ok') {
+
+                // Or here?
+                def beginRemix()
+
+                $('#'beginRemix).removeAttr('disabled');
+
                 wavesurfer.loadBuffer(track.buffer, track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
 
-                // Or here?
+ 
                  $("#info").text("Remixing...");
 
                 // our user code goes from here...
@@ -117,7 +123,6 @@ function init() {
 
 
                 $("#info").text("Remix complete!");
-
                 remixedWavesurfer.loadBuffer(track.buffer, remixed);
                 remixer.saveRemixLocally(fs, remixed, function(saveURL) {
                     $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
@@ -160,7 +165,7 @@ window.onload = init;
 
         <p><textarea id="userInput" placeholder="Remember, be nice!" width='600px' wrap="off" rows="8"></textarea>
         </p>
-        <button class='btn btn-original' onClick="beginRemix()">Remix!</button>
+        <button class='btn btn-original' id='beginRemix' onClick="beginRemix()">Remix!</button>
 
         </div>
 
