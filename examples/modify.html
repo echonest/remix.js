@@ -42,7 +42,7 @@ var remixedWavesurfer = Object.create(WaveSurfer);
 var fs;
 
 function beginRemix() {
-    var theCode = $("#userInput").value();
+    var theCode = $("#userInput").val();
     console.log(theCode);
     eval(theCode);
 
@@ -100,7 +100,7 @@ function init() {
             'var meter = parseInt(track.analysis.track.time_signature);',
             'for (var i=0; i < track.analysis.beats.length; i++) {',
             '\tif (i % meter == 0) {',
-            '\t\tremixed.push(track.analysis.beats[i])', 
+            '\t\tremixed.push(track.analysis.beats[i]);', 
             '\t}', 
             '}', 
            ].join('\n');
