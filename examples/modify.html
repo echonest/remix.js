@@ -24,9 +24,7 @@
 
 <script type="text/javascript">
 
-// First-beat extraction and assembly
-// You will need to supply your Echo Nest API key, the trackID, and a URL to the track.
-// The supplied track can be found in the audio subdirectory.
+// Console-like exploration environment.  
 var apiKey = 'FILDTEOIK2HBORODV';
 var trackID = 'TRCYWPQ139279B3308';
 var trackURL = 'audio/1451_-_D.mp3'
@@ -36,24 +34,29 @@ var player;
 var track;
 var remixed;
 
-
 var wavesurfer = Object.create(WaveSurfer);
 var remixedWavesurfer = Object.create(WaveSurfer);
 var fs;
 
 function beginRemix() {
+    $("#info").text("Remixing...");
     var theCode = $("#userInput").val();
     console.log(theCode);
-    eval(theCode);
+    theCode = theCode.split('\n')
 
-    $("#info").text("Remix complete!");
+    lineIndex = 1;
+    for (line in theCode) {
+        eval(line);
+    }
+    
+    
+    
     remixedWavesurfer.loadBuffer(track.buffer, remixed);
     remixer.saveRemixLocally(fs, remixed, function(saveURL) {
         $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
     });
     $('.btn-remixed').removeAttr('disabled');
-
-
+    $("#info").text("Remix complete!");
 }
 
 function init() {
@@ -92,8 +95,6 @@ function init() {
         player = remixer.getPlayer();
 
 
-
-        
         // Update the placeholder input string
         var defaultText = 
            ['remixed = new Array();',
@@ -106,17 +107,17 @@ function init() {
            ].join('\n');
         $("#userInput").text(defaultText);
 
+
         $("#info").text("Loading analysis data...");
         remixer.remixTrackById(trackID, trackURL, function(t, percent) {
             track = t;
 
             $("#info").text(percent + "% of the track loaded...");
             if (percent == 100) {
-                $("#info").text(percent + "% of the track loaded, ready to remix.");
+                $("#info").text(percent + "% of the track loaded, checking status...");
             }
             if (track.status == 'ok') {
-
-                // Or here?
+                $("#info").text(percent + "Ready to remix!");
                 $('#beginRemix').removeAttr('disabled');
 
                 wavesurfer.loadBuffer(track.buffer, track.analysis.beats);
