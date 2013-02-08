@@ -41,12 +41,14 @@ var fs;
 function beginRemix() {
     $("#info").text("Remixing...");
     var theCode = $("#userInput").val();
-    console.log(theCode);
+    
     theCode = theCode.split('\n')
 
     lineIndex = 1;
     for (line in theCode) {
+        console.log(line);
         eval(line);
+        lineIndex = lineIndex + 1;
     }
     
     
@@ -117,7 +119,7 @@ function init() {
                 $("#info").text(percent + "% of the track loaded, checking status...");
             }
             if (track.status == 'ok') {
-                $("#info").text(percent + "Ready to remix!");
+                $("#info").text("Ready to remix!");
                 $('#beginRemix').removeAttr('disabled');
 
                 wavesurfer.loadBuffer(track.buffer, track.analysis.beats);
