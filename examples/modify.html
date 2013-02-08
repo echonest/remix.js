@@ -39,6 +39,14 @@ function beginRemix() {
     var theCode = $("#userInput").text();
     console.log(theCode);
     eval(theCode);
+
+    $("#info").text("Remix complete!");
+    remixedWavesurfer.loadBuffer(track.buffer, remixed);
+    remixer.saveRemixLocally(fs, remixed, function(saveURL) {
+        $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
+    });
+    $('.btn-remixed').removeAttr('disabled');
+
 }
 
 function init() {
@@ -84,7 +92,7 @@ function init() {
            ['remixed = new Array();',
             'var meter = parseInt(track.analysis.track.time_signature);',
             'for (var i=0; i < track.analysis.beats.length; i++) {',
-            '\tif (i % meter == 0)',
+            '\tif (i % meter == 0) {',
             '\t\tremixed.push(track.analysis.beats[i])', 
             '\t}', 
             '}', 
@@ -106,28 +114,6 @@ function init() {
 
                 wavesurfer.loadBuffer(track.buffer, track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
-
- 
-                 $("#info").text("Remixing...");
-
-                // our user code goes from here...
-                remixed = new Array();
-                // Extract the first beat of every bar.
-                var meter = parseInt(track.analysis.track.time_signature);
-                for (var i=0; i < track.analysis.beats.length; i++) {
-                    if (i % meter == 0) {
-                        remixed.push(track.analysis.beats[i])
-                    }
-                }
-                // ... to here
-
-
-                $("#info").text("Remix complete!");
-                remixedWavesurfer.loadBuffer(track.buffer, remixed);
-                remixer.saveRemixLocally(fs, remixed, function(saveURL) {
-                    $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
-                });
-                $('.btn-remixed').removeAttr('disabled');
 
             }
         });
