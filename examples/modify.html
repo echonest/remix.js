@@ -64,6 +64,7 @@ function beginRemix() {
 
 function init() {
     $('.btn').attr('disabled','disabled');
+    prettyPrint();
 
     wavesurfer.init({
         canvas: document.querySelector('#waveCanvas'),
@@ -162,8 +163,9 @@ window.onload = init;
 
         <div id="userCode">
 
-        <p><textarea id="userInput" width='600px' wrap="off" rows="8"></textarea>
-        </p>
+        <code class="prettyprint">
+        <p><textarea id="userInput" width='600px' wrap="off" rows="8"></textarea></p>
+        </code>
         <button class='btn btn-original' id='beginRemix' onClick="beginRemix()">Remix!</button>
 
         </div>
