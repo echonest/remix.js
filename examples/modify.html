@@ -70,27 +70,29 @@ function init() {
 
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
-        $("#info").text("Loading analysis data...");
+        
 
         // Update the placeholder input string
-        $("#userInput").placeholder("remixed = new Array();");
+        $("#userInput").attr("placeholder", "remixed = new Array();");
 
         // Wait for user input here?
         
 
+        $("#info").text("Loading analysis data...");
         remixer.remixTrackById(trackID, trackURL, function(t, percent) {
             track = t;
 
             $("#info").text(percent + "% of the track loaded...");
             if (percent == 100) {
-                $("#info").text(percent + "% of the track loaded, remixing...");
+                $("#info").text(percent + "% of the track loaded, ready to remix.");
             }
 
             if (track.status == 'ok') {
                 wavesurfer.loadBuffer(track.buffer, track.analysis.beats);
-
-
                 $('.btn-original').removeAttr('disabled');
+
+                // Or here?
+                 $("#info").text("Remixing...");
 
                 // our user code goes from here...
                 remixed = new Array();
