@@ -114,6 +114,7 @@ function init() {
            ].join('\n');
         $("#userInput").text(defaultText);
     
+
         prettyPrint();
 
 
@@ -167,6 +168,14 @@ window.onload = init;
         <div id="info"></div>
 
         <div id="userCode">
+        
+        <pre class="prettyprint">
+        // testing prettify
+        class Foo
+        {
+           public int Bar { get; set; }
+        }
+        </pre>
 
 
             <p><textarea id="userInput"class="prettyprint" width='600px' wrap="off" rows="8"></textarea></p>
