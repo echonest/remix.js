@@ -48,8 +48,7 @@ function beginRemix() {
     } catch(e) {
       var err = new Error();
       err.message = 'Error in remix code: ' + e.message;
-      console.log(e.lineNumber);
-      console.log(err.lineNumber);
+      $("#info").text(err.message );
       throw err;
 }
     
