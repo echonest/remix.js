@@ -42,7 +42,7 @@ var remixedWavesurfer = Object.create(WaveSurfer);
 var fs;
 
 function beginRemix() {
-    var theCode = $("#userInput").text();
+    var theCode = $("#userInput").value();
     console.log(theCode);
     eval(theCode);
 
@@ -158,7 +158,7 @@ window.onload = init;
 
         <div id="userCode">
 
-        <p><textarea id="userInput" placeholder="Remember, be nice!" width='600px' wrap="off" rows="8"></textarea>
+        <p><textarea id="userInput" width='600px' wrap="off" rows="8"></textarea>
         </p>
         <button class='btn btn-original' id='beginRemix' onClick="beginRemix()">Remix!</button>
 
