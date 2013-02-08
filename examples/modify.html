@@ -35,6 +35,12 @@ var remixer;
 var player;
 var track;
 var remixed;
+
+
+var wavesurfer = Object.create(WaveSurfer);
+var remixedWavesurfer = Object.create(WaveSurfer);
+
+
 function beginRemix() {
     var theCode = $("#userInput").text();
     console.log(theCode);
@@ -47,11 +53,12 @@ function beginRemix() {
     });
     $('.btn-remixed').removeAttr('disabled');
 
+
 }
 
 function init() {
     $('.btn').attr('disabled','disabled');
-    var wavesurfer = Object.create(WaveSurfer);
+
     wavesurfer.init({
         canvas: document.querySelector('#waveCanvas'),
         waveColor: '#888888',
@@ -60,7 +67,7 @@ function init() {
         cursorColor: '#888888'
     });
     
-    var remixedWavesurfer = Object.create(WaveSurfer);
+
     remixedWavesurfer.init({
         canvas: document.querySelector('#RemixedWaveCanvas'),
         waveColor: '#00ACEB',
@@ -114,6 +121,8 @@ function init() {
 
                 wavesurfer.loadBuffer(track.buffer, track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
+
+
 
             }
         });
