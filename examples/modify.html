@@ -73,6 +73,16 @@ function init() {
         
 
         // Update the placeholder input string
+        
+        defaultText = " remixed = new Array(); \
+                    var meter = parseInt(track.analysis.track.time_signature); \
+                    for (var i=0; i < track.analysis.beats.length; i++) { \
+                        if (i % meter == 0) { \
+                            remixed.push(track.analysis.beats[i]) \
+                        } \
+                    }"
+
+
         $("#userInput").text("remixed = new Array();");
 
         // Wait for user input here?
