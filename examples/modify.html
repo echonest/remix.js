@@ -44,11 +44,10 @@ function beginRemix() {
     
     theCode = theCode.split('\n')
 
-    lineIndex = 1;
-    for (line in theCode) {
-        console.log(line);
-        eval(line);
-        lineIndex = lineIndex + 1;
+
+    for (var i = 0; i < theCode.length; i++) {
+        console.log(theCode[i]);
+        eval(theCode[i]);
     }
     
     
