@@ -39,7 +39,7 @@ var remixed;
 
 var wavesurfer = Object.create(WaveSurfer);
 var remixedWavesurfer = Object.create(WaveSurfer);
-
+var fs;
 
 function beginRemix() {
     var theCode = $("#userInput").text();
@@ -81,7 +81,7 @@ function init() {
             + " support it. Try the latest version of Chrome");
     } else {
         var context = new webkitAudioContext();
-        var fs;
+        
         window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
         window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
             fs = filesystem;
