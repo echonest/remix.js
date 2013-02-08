@@ -41,15 +41,17 @@ var fs;
 function beginRemix() {
     $("#info").text("Remixing...");
     var theCode = $("#userInput").val();
-    
-    theCode = theCode.split('\n')
 
 
-    for (var i = 0; i < theCode.length; i++) {
-        var line = theCode[i].replace('\t', '');
-        console.log(line);
-        eval(line);
-    }
+    try {
+        eval(theCode);
+    } catch(e) {
+      var err = new Error();
+      err.message = 'Error in remix code: ' + e.message;
+      console.log(e.lineNumber);
+      console.log(err.lineNumber);
+      throw err;
+}
     
     
     
