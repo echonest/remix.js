@@ -67,7 +67,7 @@ function beginRemix() {
 
 function init() {
     $('.btn').attr('disabled','disabled');
-    prettyPrint();
+    
 
     wavesurfer.init({
         canvas: document.querySelector('#waveCanvas'),
@@ -113,6 +113,8 @@ function init() {
             '}', 
            ].join('\n');
         $("#userInput").text(defaultText);
+    
+        prettyPrint();
 
 
         $("#info").text("Loading analysis data...");
