@@ -102,25 +102,19 @@ function init() {
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
 
-        // Begin the codemirroring
-        var myCodeMirror = CodeMirror(document.body, {
-          value: "function myScript(){return 100;}\n",
-          mode:  "javascript"
-        });
-
-
         // Update the placeholder input string
         var defaultText = 
            ['remixed = new Array();',
             'var meter = parseInt(track.analysis.track.time_signature);',
             'for (var i=0; i < track.analysis.beats.length; i++) {',
-            '\tif (i % meter == 0) {',
-            '\t\tremixed.push(track.analysis.beats[i]);', 
-            '\t}', 
+            '  if (i % meter == 0) {',
+            '    remixed.push(track.analysis.beats[i]);', 
+            '  }', 
             '}', 
            ].join('\n');
         $("#userInput").text(defaultText);
 
+        // Convert to a codemirror
         var theTextArea =  document.getElementById('userInput');
         var myOtherCodeMirror = CodeMirror.fromTextArea(theTextArea, {
             mode: "javascript",
