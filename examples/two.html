@@ -92,7 +92,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                wavesurfer.loadBuffer(track.buffer, track.analysis.beats);
+                wavesurfer.loadBuffer([track.buffer], track.analysis.beats);
 
                 remixer.remixTrackById(trackID2, trackURL2, function(t, percent) {
                     track2 = t;
@@ -102,7 +102,7 @@ function init() {
                     }
 
                     if (track2.status == 'ok') {
-                        wavesurfer2.loadBuffer(track2.buffer, track2.analysis.beats);
+                        wavesurfer2.loadBuffer([track2.buffer], track2.analysis.beats);
                         $('.btn-original').removeAttr('disabled');
                         // Extract the first and third beats of track 1 with the second and fourth beats of track 2.
                         remixed = new Array();
@@ -118,7 +118,7 @@ function init() {
                         $("#info").text("Remix complete!");
             
                         // This will be tricky tricky tricky
-                        remixedWavesurfer.loadBuffer(track.buffer, remixed);
+                        remixedWavesurfer.loadBuffer([track.buffer, track2.buffer], remixed);
 
                         // Only use the filesystem if we have access to it.
                         if (fs) {
@@ -159,7 +159,7 @@ window.onload = init;
         <div class="hero-unit">
             <h1>remix.js:  two.html<h1>
             <div id="theCode">
-                <pre><code>// Weave two tracks together.
+                <pre><code>// Remix two tracks at once.  
 // Extract the first and third beats of track 1 with the second and fourth beats of track 2.
 remixed = new Array();
 var meter = parseInt(track.analysis.track.time_signature);
