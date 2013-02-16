@@ -40,7 +40,7 @@ var remixed;
 var wavesurfer = Object.create(WaveSurfer);
 var remixedWavesurfer = Object.create(WaveSurfer);
 var fs;
-var theCodeMirror
+var theCodeMirror;
 
 function beginRemix() {
     $("#info").text("Remixing...");
@@ -53,11 +53,9 @@ function beginRemix() {
       err.message = 'Error in remix code: ' + e.message;
       $("#info").text(err.message );
       throw err;
-}
+    }
     
-
     remixedWavesurfer.loadBuffer(track.buffer, remixed);
-
     // Only use the filesystem if we have access to it..
     if (fs) {
         remixer.saveRemixLocally(fs, remixed, function(saveURL) {
@@ -71,7 +69,6 @@ function beginRemix() {
 
 function init() {
     $('.btn').attr('disabled','disabled');
-    
 
     wavesurfer.init({
         canvas: document.querySelector('#waveCanvas'),
@@ -80,7 +77,6 @@ function init() {
         loadingColor: '#000000',
         cursorColor: '#888888'
     });
-    
 
     remixedWavesurfer.init({
         canvas: document.querySelector('#RemixedWaveCanvas'),
@@ -95,7 +91,6 @@ function init() {
             + " support it. Try the latest version of Chrome");
     } else {
         var context = new webkitAudioContext();
-
 
         // Only use the filesystem if we have access to it.
         if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
@@ -126,8 +121,7 @@ function init() {
             lineNumbers: true,
             tabSize: 2,
           });
-
-            
+    
         $("#info").text("Loading analysis data...");
         remixer.remixTrackById(trackID, trackURL, function(t, percent) {
             track = t;
@@ -169,7 +163,7 @@ window.onload = init;
     <div class="container">
         <div class="hero-unit">
             <h1>remix.js:  modify.html</h1>
-            <p>Modify the below code to create your own remix!</p>
+            <p>Modify the below code to create your own remix.</p>
         </div>
 
         <div id="info"></div>
@@ -202,5 +196,4 @@ window.onload = init;
     </div> <!-- /container -->
 </body>
 </html>
-
 
