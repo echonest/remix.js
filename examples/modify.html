@@ -60,7 +60,7 @@ function beginRemix() {
     remixedWavesurfer.loadBuffer(track.buffer, remixed);
 
     // Only use the filesystem if we have access to it..
-    if (window.File && window.FileReader && window.FileList && window.Blob) {
+    if (window.File && window.FileReader && window.FileList && window.Blob && window.requestFileSystem) {
         remixer.saveRemixLocally(fs, remixed, function(saveURL) {
             $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
         });
@@ -99,7 +99,7 @@ function init() {
 
 
         // only use the filesystem if we have access to it.
-        if (window.File && window.FileReader && window.FileList && window.Blob) {
+        if (window.File && window.FileReader && window.FileList && window.Blob && window.requestFileSystem) {
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
             window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
                 fs = filesystem;
