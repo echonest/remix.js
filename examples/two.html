@@ -24,7 +24,7 @@
 
 <script type="text/javascript">
 
-// Weave two files together.
+// Remix two tracks at once.
 var apiKey = 'FILDTEOIK2HBORODV';
 var trackID = 'TRCYWPQ139279B3308';
 var trackURL = 'audio/1451_-_D.mp3'
@@ -86,9 +86,9 @@ function init() {
 
         remixer.remixTrackById(trackID, trackURL, function(t, percent) {
             track = t;
-            $("#info").text(percent + "% of the track loaded...");
+            $("#info").text(percent + "% of the first track loaded...");
             if (percent == 100) {
-                $("#info").text(percent + "% of the track loaded, checking status and loading visuals...");
+                $("#info").text(percent + "% of the first track loaded, checking status and preparing for second track...");
             }
 
             if (track.status == 'ok') {
@@ -98,13 +98,12 @@ function init() {
                     track2 = t;
                     $("#info").text(percent + "% of the second track loaded...");
                     if (percent == 100) {
-                        $("#info").text(percent + "% of the track loaded, remixing...");
+                        $("#info").text(percent + "% of both tracks loaded, remixing...");
                     }
 
                     if (track2.status == 'ok') {
                         wavesurfer2.loadBuffer(track2.buffer, track2.analysis.beats);
                         $('.btn-original').removeAttr('disabled');
-                        // Weave two tracks together.
                         // Extract the first and third beats of track 1 with the second and fourth beats of track 2.
                         remixed = new Array();
                         var meter = parseInt(track.analysis.track.time_signature);
@@ -161,17 +160,17 @@ window.onload = init;
             <h1>remix.js:  two.html<h1>
             <div id="theCode">
                 <pre><code>// Weave two tracks together.
-                        // Extract the first and third beats of track 1 with the second and fourth beats of track 2.
-                        remixed = new Array();
-                        var meter = parseInt(track.analysis.track.time_signature);
-                        var numberOfBeats = Math.min(track.analysis.beats.length, track2.analysis.beats.length);
-                        for (var i=0; i < numberOfBeats; i++) {
-                            if (i % meter == 0 || i % meter == 2) {
-                                remixed.push(track.analysis.beats[i])
-                            } else if (i % meter == 1 || i % meter == 3) {
-                                remixed.push(track2.analysis.beats[i])
-                            }
-                        }
+// Extract the first and third beats of track 1 with the second and fourth beats of track 2.
+remixed = new Array();
+var meter = parseInt(track.analysis.track.time_signature);
+var numberOfBeats = Math.min(track.analysis.beats.length, track2.analysis.beats.length);
+for (var i=0; i < numberOfBeats; i++) {
+    if (i % meter == 0 || i % meter == 2) {
+        remixed.push(track.analysis.beats[i])
+    } else if (i % meter == 1 || i % meter == 3) {
+        remixed.push(track2.analysis.beats[i])
+    }
+}
 </code></pre>
             </div>
         </div>
