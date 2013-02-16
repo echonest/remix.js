@@ -82,7 +82,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                wavesurfer.loadBuffer(track.buffer, track.analysis.beats);
+                wavesurfer.loadBuffer(track.analysis.beats);
 
                 $('.btn-original').removeAttr('disabled');
                 remixed = new Array();
@@ -95,7 +95,7 @@ function init() {
                 }
                 $("#info").text("Remix complete!");
 
-                remixedWavesurfer.loadBuffer(track.buffer, remixed);
+                remixedWavesurfer.loadBuffer(remixed);
 
                 // Only use the filesystem if we have access to it.
                 if (fs) {

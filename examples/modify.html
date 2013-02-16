@@ -55,7 +55,7 @@ function beginRemix() {
       throw err;
     }
     
-    remixedWavesurfer.loadBuffer(track.buffer, remixed);
+    remixedWavesurfer.loadBuffer(remixed);
     // Only use the filesystem if we have access to it..
     if (fs) {
         remixer.saveRemixLocally(fs, remixed, function(saveURL) {
@@ -134,7 +134,7 @@ function init() {
                 $("#info").text("Ready to remix!");
                 $('#beginRemix').removeAttr('disabled');
 
-                wavesurfer.loadBuffer(track.buffer, track.analysis.beats);
+                wavesurfer.loadBuffer(track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
             }
         });
