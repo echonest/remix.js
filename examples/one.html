@@ -61,7 +61,7 @@ function init() {
         var context = new webkitAudioContext();
         var fs;
         // Only use the filesystem if we have access to it.
-        if (window.File && window.FileReader && window.FileList && window.Blob && window.requestFileSystem) {
+        if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
             window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
                 fs = filesystem;
@@ -98,7 +98,7 @@ function init() {
                 remixedWavesurfer.loadBuffer(track.buffer, remixed);
 
                 // Only use the filesystem if we have access to it.
-                if (window.File && window.FileReader && window.FileList && window.Blob && window.requestFileSystem) {
+                if (fs) {
                     remixer.saveRemixLocally(fs, remixed, function(saveURL) {
                         $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
                     });
