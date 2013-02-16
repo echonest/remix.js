@@ -56,12 +56,16 @@ function beginRemix() {
       throw err;
 }
     
-    
-    
+
     remixedWavesurfer.loadBuffer(track.buffer, remixed);
-    remixer.saveRemixLocally(fs, remixed, function(saveURL) {
-        $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
-    });
+
+    // Only use the filesystem if we have access to it..
+    if (window.File && window.FileReader && window.FileList && window.Blob) {
+        remixer.saveRemixLocally(fs, remixed, function(saveURL) {
+            $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
+        });
+    }
+
     $('.btn-remixed').removeAttr('disabled');
     $("#info").text("Remix complete!");
 }
@@ -92,12 +96,15 @@ function init() {
             + " support it. Try the latest version of Chrome");
     } else {
         var context = new webkitAudioContext();
-        
-        window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-        window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
-            fs = filesystem;
-        }, fileErrorHandler);
 
+
+        // only use the filesystem if we have access to it.
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+            window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+            window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
+                fs = filesystem;
+            }, fileErrorHandler);
+        }
 
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
