@@ -121,7 +121,7 @@ function init() {
            ].join('\n');
         $("#userInput").text(defaultText);
 
-        var theTextArea = $("#userInput");
+        var theTextArea =  document.getElementById('userInput');
         var myOtherCodeMirror = CodeMirror.fromTextArea(theTextArea, {
             mode: "javascript",
             lineNumbers: true,
