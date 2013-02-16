@@ -121,6 +121,8 @@ function init() {
            ].join('\n');
         $("#userInput").text(defaultText);
 
+        var myCodeMirror = CodeMirror.fromTextArea($("#userInput"), {mode:'javascript'});
+
             
         $("#info").text("Loading analysis data...");
         remixer.remixTrackById(trackID, trackURL, function(t, percent) {
