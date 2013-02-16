@@ -92,7 +92,7 @@ function init() {
 
             $("#info").text(percent + "% of the track loaded...");
             if (percent == 100) {
-                $("#info").text(percent + "% of the track loaded.");
+                $("#info").text(percent + "% of the track loaded, checking status and loading visuals...");
             }
 
             if (track.status == 'ok') {
@@ -103,7 +103,7 @@ function init() {
 
                     $("#info").text(percent + "% of the second track loaded...");
                     if (percent == 100) {
-                        $("#info").text(percent + "% of the track loaded.");
+                        $("#info").text(percent + "% of the track loaded, remixing...");
                     }
 
                     if (track2.status == 'ok') {
@@ -111,12 +111,14 @@ function init() {
                         $('.btn-original').removeAttr('disabled');
 
                         remixed = new Array();
-                        // Extract the first and third beats of track1, and the second and fourth beats of track 2
+                        // Extract the first and third beats of track1 with the second and fourth beats of track 2
                         var meter = parseInt(track.analysis.track.time_signature);
-                        for (var i=0; i < track.analysis.beats.length; i++) {
-                            if (i % meter == 1) {
+                        var numberOfBeats = Math.min(track.analysis.beats.length, track2.analysis.beats.length);
+                        for (var i=0; i < numberOfBeats; i++) {
+                            if (i % meter == 0 || i % meter == 2) {
                                 remixed.push(track.analysis.beats[i])
-                                remixed.push(track2.analysis.beats[i - 1])
+                            } else if (i % meter == 1 || i % meter == 3)
+                                remixed.push(track2.analysis.beats[i])
                             }
                         }
                         $("#info").text("Remix complete!");
@@ -126,6 +128,7 @@ function init() {
 
                         // Only use the filesystem if we have access to it.
                         if (fs) {
+                            // This will be tricky tricky tricky too.
                             remixer.saveRemixLocally(fs, remixed, function(saveURL) {
                                 $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
                             });
