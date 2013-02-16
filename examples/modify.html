@@ -121,7 +121,11 @@ function init() {
            ].join('\n');
         $("#userInput").text(defaultText);
 
-        var myCodeMirror = CodeMirror.fromTextArea($("#userInput"));
+        var theTextArea = $("#userInput");
+        var myOtherCodeMirror = CodeMirror.fromTextArea(theTextArea, {
+            mode: "javascript",
+            lineNumbers: true,
+          });
 
             
         $("#info").text("Loading analysis data...");
