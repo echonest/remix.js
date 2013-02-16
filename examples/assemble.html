@@ -76,8 +76,7 @@ function init() {
             if (track.status == 'ok') {
                 wavesurfer.loadBuffer(track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
-                var barText = "The track has " + track.analysis.bars.length + " bars and " track.analysis.beats.length + " beats";
-                $("#info").text("Remix complete! " + barText);
+                $("#info").text("Remix complete! The track has " + track.analysis.bars.length + " bars and " track.analysis.beats.length + " beats");
             }
         });
     }
