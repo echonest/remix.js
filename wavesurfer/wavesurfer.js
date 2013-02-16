@@ -7,10 +7,10 @@ var WaveSurfer = {
         this.drawer.init(params);
     },
 
-    loadBuffer: function(buffers, quanta) {
+    loadBuffer: function(quanta) {
         var my = this;
         my.drawer.remixedData = quanta;
-        my.drawer.drawBuffer(buffers)
+        my.drawer.drawBuffer()
     },
 
 };

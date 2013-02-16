@@ -33,11 +33,11 @@ WaveSurfer.Drawer = {
         }
     },
 
-    getPeaks: function (buffers, remixedData) {
+    getPeaks: function (remixedData) {
         var my = this;
 
         // k is the samples per pixel
-        var k = buffers[0].getChannelData(0).length / this.width;
+        var k = remixedData[0].track.buffer.getChannelData(0).length / this.width;
         var slice = Array.prototype.slice;
         var sums = [];
         var currentBuffer;
@@ -66,20 +66,6 @@ WaveSurfer.Drawer = {
             }
         
         }
-        // This is the old, normal visualization code.
-        else {
-            for (var i = 0; i < this.width; i++) {
-                var sum = 0;
-                for (var c = 0; c < buffer.numberOfChannels; c++) {
-                    var chan = buffer.getChannelData(c);
-                    var vals = slice.call(chan, i * k, (i + 1) * k);
-                    var peak = Math.max.apply(Math, vals.map(Math.abs));
-                    sum += peak;
-                }
-                sums[i] = sum;
-            }
-        }
-
         return sums;
     },
 
@@ -88,8 +74,8 @@ WaveSurfer.Drawer = {
         this.redraw();
     },
 
-    drawBuffer: function (buffers) {
-        this.peaks = this.getPeaks(buffers, this.remixedData);
+    drawBuffer: function () {
+        this.peaks = this.getPeaks(this.remixedData);
         this.maxPeak = Math.max.apply(Math, this.peaks);
         this.progress(0);
     },
