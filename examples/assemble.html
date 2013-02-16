@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<meta charset=utf-8>
+  <head>
+    <meta charset="utf-8">
+	<title>Echo Nest Remix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Echo Nest Remix:  The Internet Synthesizer">
+    <meta name="author" content="Brian Whitman / Thor Kell">
+
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 </head>
 
 <body>
+<script src="assets/js/bootstrap.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
-<script type="text/javascript">
+<script src="../wavesurfer/wavesurfer.js"></script>
+<script src="../wavesurfer/drawer.js"></script>
 
+<script type="text/javascript">
 // Add beats or bars of a track to a live queue.
 // You will need to supply your Echo Nest API key, the trackID, and a URL to the track.
 // The supplied track can be found in the audio subdirectory.
@@ -61,8 +75,46 @@ function init() {
 window.onload = init;
 </script>
 
-Welcome to Assemble.html
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="index.html">Echo Nest Remix</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="http://echonest.github.com/remix/python.html">Python</a></li>
+              <li><a href="http://echonest.github.com/remix/javascript.html">JavaScript</a></li>
+              <li><a href="http://echonest.github.com/remix/examples.html">Examples</a></li>
+              <li><a href="http://echonest.github.com/remix/who.html">Who</a></li>
+            </ul>
+          </div> <!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>  <!--/.navbar -->
+
+    <div class="container">
+        <div class="hero-unit">
+            <h1>remix.js:  assemble.html<h1>
+            <div id="theCode">
+                <pre><code>// Add bars and beats to a live queue.
+// put more code here
+</code></pre>
+            </div>
+        </div>
 <div id='info'> </div>
+
+        <section>
+            <div id='waveform'>
+            <h2>Original Track</h2>
+            <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
+            <br />
+            <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play Original</button>
+            <button class='btn btn-original' onClick="player.stop()">Stop Original</button>
+            </div>
+
+            <div id='newWaveform'>
+            some kind of clever visuals here
+            </div>
+        </section>
 
 <div id='bars'> </div>
 <div id='beats'> </div>
