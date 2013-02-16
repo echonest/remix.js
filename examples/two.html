@@ -106,7 +106,7 @@ function init() {
                         $("#info").text(percent + "% of the track loaded.");
                     }
 
-                    if (track.status == 'ok') {
+                    if (track2.status == 'ok') {
                         wavesurfer2.loadBuffer(track2.buffer, track2.analysis.beats);
                         $('.btn-original').removeAttr('disabled');
 
@@ -114,13 +114,14 @@ function init() {
                         // Extract the first and third beats of track1, and the second and fourth beats of track 2
                         var meter = parseInt(track.analysis.track.time_signature);
                         for (var i=0; i < track.analysis.beats.length; i++) {
-                            if (i % meter == 0) {
+                            if (i % meter == 1) {
                                 remixed.push(track.analysis.beats[i])
+                                remixed.push(track2.analysis.beats[i - 1])
                             }
                         }
                         $("#info").text("Remix complete!");
             
-                        // This will be tricky
+                        // This will be tricky tricky tricky
                         remixedWavesurfer.loadBuffer(track.buffer, remixed);
 
                         // Only use the filesystem if we have access to it.
@@ -159,9 +160,9 @@ window.onload = init;
     
     <div class="container">
         <div class="hero-unit">
-            <h1>remix.js:  one.html<h1>
+            <h1>remix.js:  two.html<h1>
             <div id="theCode">
-                <pre><code>// Extract the first beat of every bar.
+                <pre><code>// Weave two tracks together.
 var meter = parseInt(track.analysis.track.time_signature);
 for (var i=0; i < track.analysis.beats.length; i++) {
     if (i % meter == 0) {
@@ -179,14 +180,14 @@ for (var i=0; i < track.analysis.beats.length; i++) {
             <h2>First Track</h2>
             <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
             <br />
-            <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play Original</button>
+            <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play First Track</button>
             <button class='btn btn-original' onClick="player.stop()">Stop First Track</button>
             </div>
 
             <h2>Second Track</h2>
             <canvas id='waveCanvas2' width='1024px' height='100px'></canvas>
             <br />
-            <button class='btn btn-inverse btn-original' onClick="player.play(0, track2.analysis.beats);">Play Original</button>
+            <button class='btn btn-inverse btn-original' onClick="player.play(0, track2.analysis.beats);">Play Second Track</button>
             <button class='btn btn-original' onClick="player.stop()">Stop Second Track</button>
             </div>
 
