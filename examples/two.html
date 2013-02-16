@@ -117,7 +117,7 @@ function init() {
                         for (var i=0; i < numberOfBeats; i++) {
                             if (i % meter == 0 || i % meter == 2) {
                                 remixed.push(track.analysis.beats[i])
-                            } else if (i % meter == 1 || i % meter == 3)
+                            } else if (i % meter == 1 || i % meter == 3) {
                                 remixed.push(track2.analysis.beats[i])
                             }
                         }
@@ -187,6 +187,7 @@ for (var i=0; i < track.analysis.beats.length; i++) {
             <button class='btn btn-original' onClick="player.stop()">Stop First Track</button>
             </div>
 
+            <div id='waveform2'>
             <h2>Second Track</h2>
             <canvas id='waveCanvas2' width='1024px' height='100px'></canvas>
             <br />
