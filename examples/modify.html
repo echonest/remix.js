@@ -121,7 +121,7 @@ function init() {
            ].join('\n');
         $("#userInput").text(defaultText);
 
-        var myCodeMirror = CodeMirror.fromTextArea($("#userInput"), {mode:'javascript'});
+        var myCodeMirror = CodeMirror.fromTextArea($("#userInput"));
 
             
         $("#info").text("Loading analysis data...");
@@ -175,7 +175,7 @@ window.onload = init;
 
         <div id="userCode">
 
-            <p><textarea id="userInput"class="prettyprint" width='600px' wrap="off" rows="8"></textarea></p>
+            <p><textarea id="userInput" width='600px' wrap="off" rows="8"></textarea></p>
 
             <button class='btn btn-original' id='beginRemix' onClick="beginRemix()">Remix!</button>
 
