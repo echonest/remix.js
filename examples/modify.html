@@ -120,6 +120,7 @@ function init() {
             mode: "javascript",
             lineNumbers: true,
             tabSize: 2,
+            viewportMargin: 5,
           });
 
             
@@ -137,9 +138,6 @@ function init() {
 
                 wavesurfer.loadBuffer(track.buffer, track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
-
-
-
             }
         });
     }
@@ -173,11 +171,8 @@ window.onload = init;
         <div id="info"></div>
 
         <div id="userCode">
-
             <p><textarea id="userInput"></textarea></p>
-
             <button class='btn btn-original' id='beginRemix' onClick="beginRemix()">Remix!</button>
-
         </div>
 
         <section>
