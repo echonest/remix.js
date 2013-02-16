@@ -46,6 +46,16 @@ function addBeat() {
 }
 
 function init() {
+    $('.btn').attr('disabled','disabled');
+    var wavesurfer = Object.create(WaveSurfer);
+    wavesurfer.init({
+        canvas: document.querySelector('#waveCanvas'),
+        waveColor: '#888888',
+        progressColor: '#000000',
+        loadingColor: '#000000',
+        cursorColor: '#888888'
+    });
+
     if (window.webkitAudioContext === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
             + " support it. Try the latest version of Chrome");
@@ -64,9 +74,10 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                $("#bars").text("The track has " + track.analysis.bars.length + " bars");
-                $("#beats").text("The track has " + track.analysis.beats.length + " beats");
-                $("#info").text("Remix complete!");
+                wavesurfer.loadBuffer(track.analysis.beats);
+                $('.btn-original').removeAttr('disabled');
+                var barText = "The track has " + track.analysis.bars.length + " bars and " track.analysis.beats.length + " beats";
+                $("#info").text("Remix complete! " + barText);
             }
         });
     }
@@ -116,8 +127,6 @@ window.onload = init;
             </div>
         </section>
 
-<div id='bars'> </div>
-<div id='beats'> </div>
 <input type="text" id="indexBox">
 <button onClick="addBar()">Add bar from Track 1</button>
 <button onClick="addBeat()">Add beat from Track 1</button>
