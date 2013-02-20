@@ -76,6 +76,7 @@ function init() {
             if (track.status == 'ok') {
                 wavesurfer.loadBuffer(track.analysis.beats);
                 $("#info").text("Remix complete! " + "The track has " + track.analysis.bars.length + " bars and " + track.analysis.beats.length + " beats.");
+                $('.btn-original').removeAttr('disabled');
             }
         });
     }
@@ -128,7 +129,6 @@ window.onload = init;
 <input type="text" id="indexBox"> <br />
 <button class='btn btn-inverse btn-original' onClick="addBar()">Add bar from Track 1</button>
 <button class='btn btn-inverse btn-original' onClick="addBeat()">Add beat from Track 1</button>
-<br />
 <button class='btn btn-original' onClick="player.stop()">Stop!</button>
 </body>
 
