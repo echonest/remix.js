@@ -121,7 +121,6 @@ function init() {
 
                         // Only use the filesystem if we have access to it.
                         if (fs) {
-                            // This will be tricky tricky tricky too.
                             remixer.saveRemixLocally(fs, remixed, function(saveURL) {
                                 $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
                             });
