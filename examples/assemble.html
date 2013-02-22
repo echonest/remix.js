@@ -38,7 +38,7 @@ var queuesurfer;
 function addBar() {
     var index = $("#indexBox").val();
     player.queue(track.analysis.bars[index])
-    queuesurfer.loadBuffer(track.analysis.bars[index]);
+    queuesurfer.loadBuffer([track.analysis.bars[index]]);
 }
 
 function addBeat() {
