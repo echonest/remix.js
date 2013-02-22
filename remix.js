@@ -293,6 +293,10 @@ function createJRemixer(context, jquery, apiKey) {
                     return context.currentTime;
                 },
 
+                curQueue: function() {
+                    return currentlyQueued;
+                },
+
 
             }
             return player;
