@@ -221,6 +221,7 @@ function createJRemixer(context, jquery, apiKey) {
             var curAudioSource = null;
             var currentlyQueued = new Array();
             var curQ = null;
+            var triggerCallback = null;
             audioGain.gain.value = 1;
             audioGain.connect(context.destination);
 
@@ -233,6 +234,7 @@ function createJRemixer(context, jquery, apiKey) {
                     currentlyQueued.push(audioSource);
                     audioSource.noteOn(when);
                     console.log("" + when); // debugz;
+                    triggerCallback();
                     return when;
                 } else if ($.isArray(q)) {
                     // Correct for load times
@@ -243,6 +245,7 @@ function createJRemixer(context, jquery, apiKey) {
                         when = queuePlay(when, q[i]);
                     }
                     console.log(when); // debugz;
+                    triggerCallback();
                     return when;
                 } else if (isQuantum(q)) {
                     var audioSource = context.createBufferSource();
@@ -252,6 +255,7 @@ function createJRemixer(context, jquery, apiKey) {
                     currentlyQueued.push(audioSource);
                     audioSource.noteGrainOn(when, q.start, q.duration);
                     console.log(when); // debugz;
+                    triggerCallback();
                     return (when + parseFloat(q.duration));
                 } else {
                     error("can't play " + q);
@@ -269,7 +273,7 @@ function createJRemixer(context, jquery, apiKey) {
                 },
 
                 addCallback: function(callback) {
-                    callback();
+                    triggerCallback = callback();
                 },
 
                 queue: function(q) {
