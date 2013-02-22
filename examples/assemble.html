@@ -33,6 +33,8 @@ var player;
 var track;
 var remixed;
 
+var queuesurfer;
+
 function addBar() {
     var index = $("#indexBox").val();
     player.queue(track.analysis.bars[index])
@@ -55,7 +57,7 @@ function init() {
         cursorColor: '#888888'
     });
 
-    var queuesurfer = Object.create(WaveSurfer);
+    queuesurfer = Object.create(WaveSurfer);
     queuesurfer.init({
         canvas: document.querySelector('#queueCanvas'),
         waveColor: '#00ACEB',
