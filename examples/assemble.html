@@ -24,8 +24,6 @@
 
 <script type="text/javascript">
 // Add beats or bars of a track to a live queue.
-// You will need to supply your Echo Nest API key, the trackID, and a URL to the track.
-// The supplied track can be found in the audio subdirectory.
 var apiKey = 'FILDTEOIK2HBORODV';
 var trackID = 'TRCYWPQ139279B3308';
 var trackURL = 'audio/1451_-_D.mp3';
@@ -38,6 +36,7 @@ var remixed;
 function addBar() {
     var index = $("#indexBox").val();
     player.queue(track.analysis.bars[index])
+    queuesurfer.loadBuffer(track.analysis.bars[index]);
 }
 
 function addBeat() {
@@ -55,6 +54,16 @@ function init() {
         loadingColor: '#000000',
         cursorColor: '#888888'
     });
+
+    var queuesurfer = Object.create(WaveSurfer);
+    queuesurfer.init({
+        canvas: document.querySelector('#queueCanvas'),
+        waveColor: '#00ACEB',
+        progressColor: '#000000',
+        loadingColor: '#000000',
+        cursorColor: '#00ACEB'
+    });
+
 
     if (window.webkitAudioContext === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
@@ -130,9 +139,8 @@ function addBeat() {
             </div>
 
             <div id='newWaveform'>
-            some kind of clever visuals here
-            It would be nice to display what is in the queue, 
-            and then clear the 0th element when a new quanta plays
+            <canvas id='queueCanvas' width='1024px' height='100px'></canvas>
+
             </div>
         </section>
 
