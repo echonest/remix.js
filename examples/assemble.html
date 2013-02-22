@@ -52,14 +52,6 @@ function addBeat() {
     queuesurfer.loadBuffer(visualQueue);
 }
 
-function advanceQueue() {
-    visualQueue.shift();
-    queuesurfer.loadBuffer(visualQueue);
-}
-
-// ho ho ho
-setInterval(advanceQueue, 3000);
-
 function init() {
     $('.btn').attr('disabled','disabled');
     var wavesurfer = Object.create(WaveSurfer);
