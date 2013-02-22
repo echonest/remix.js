@@ -7,7 +7,6 @@
 <body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
-<script type="text/javascript" src='../watch/watch.js'></script>
 <script type="text/javascript">
 
 // Trigger an event when each chunk of audio is played
@@ -21,6 +20,10 @@ var remixer;
 var player;
 var track;
 var remixed;
+
+function trigger() {
+     $("#info").text($("#info").text +  $("#info").text);
+}
 
 function init() {
     if (window.webkitAudioContext === undefined) {
@@ -41,7 +44,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
-
+                player.addCallback(trigger);
                 remixed = track.analysis.beats;
                 $("#info").text("Remix complete!");
             }

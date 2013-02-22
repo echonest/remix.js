@@ -232,7 +232,7 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.connect(audioGain);
                     currentlyQueued.push(audioSource);
                     audioSource.noteOn(when);
-                    console.log(when); // debugz;
+                    console.log("" + when); // debugz;
                     return when;
                 } else if ($.isArray(q)) {
                     // Correct for load times
@@ -269,6 +269,7 @@ function createJRemixer(context, jquery, apiKey) {
                 },
 
                 addCallback: function(callback) {
+                    callback();
                 },
 
                 queue: function(q) {
