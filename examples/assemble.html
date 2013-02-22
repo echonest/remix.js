@@ -39,13 +39,13 @@ var visualQueue = [];
 function addBar() {
     var index = $("#indexBox").val();
     player.queue(track.analysis.bars[index])
-    queuesurfer.loadBuffer(player.curQueue);
+    queuesurfer.loadBuffer(player.curQueue());
 }
 
 function addBeat() {
     var index = $("#indexBox").val();
     player.queue(track.analysis.beats[index])
-    queuesurfer.loadBuffer(player.curQueue);
+    queuesurfer.loadBuffer(player.curQueue());
 }
 
 
