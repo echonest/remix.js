@@ -292,12 +292,6 @@ function createJRemixer(context, jquery, apiKey) {
                 curTime: function() {
                     return context.currentTime;
                 },
-
-                curQueue: function() {
-                    return currentlyQueued;
-                },
-
-
             }
             return player;
         },
