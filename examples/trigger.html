@@ -42,9 +42,6 @@ function init() {
 
             if (track.status == 'ok') {
 
-                setTimeout( function () { process(); }, 1000 * delta  - 10);
-
-
                 remixed = track.analysis.beats;
                 $("#info").text("Remix complete!");
             }
@@ -55,7 +52,7 @@ function init() {
 window.onload = init;
 </script>
 
-Welcome to One.html
+Welcome to Trigger.html
 <div id='info'> </div>
 <button onClick="player.play(0, remixed);">Play!</button>
 <button onClick="player.stop()">Stop!</button>
