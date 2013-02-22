@@ -38,18 +38,17 @@ var visualQueue = [];
 
 function addBar() {
     var index = $("#indexBox").val();
-    player.queue(track.analysis.bars[index])
+    player.queue(track.analysis.bars[index]);
 
-
-    visualQueue.push(track.analysis.bars[index])
+    visualQueue.push(track.analysis.bars[index]);
     queuesurfer.loadBuffer(visualQueue);
 }
 
 function addBeat() {
     var index = $("#indexBox").val();
-    player.queue(track.analysis.beats[index])
+    player.queue(track.analysis.beats[index]);
 
-    visualQueue.push(track.analysis.beats[index])
+    visualQueue.push(track.analysis.beats[index]);
     queuesurfer.loadBuffer(visualQueue);
 }
 
