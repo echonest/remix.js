@@ -22,8 +22,11 @@ var track;
 var remixed;
 
 // heh.  Close.  
+// OK, this just throws the last one at me.  
+// Something is wrong - should I put the set timeout up here?
 function trigger(theTime) {
-     $("#info").text("Playing a quantum: " + theTime);
+     setTimeout(function () {$("#info").text("Playing a quantum: " + theTime);}, theTime);
+     
 }
 
 function init() {
