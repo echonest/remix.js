@@ -21,9 +21,9 @@ var remixed;
 
 var beatCount = 0;
 
-function trigger(theTime) {
-     console.log(theTime);
-     $("#info").text("Playing beat " + theTime + ".");
+function trigger() {
+    beatCount = beatCount + 1;
+    $("#info").text("Playing beat " + theTime + ".");
      //setTimeout(function() {
      //   beatCount = beatCount + 1;
      //   $("#info").text("Playing beat " + beatCount + ".");
