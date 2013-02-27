@@ -19,14 +19,8 @@ var player;
 var track;
 var remixed;
 
-var beatCount = 0;
-var barCount = 0;
-
 function trigger(theTime) {
-     beatCount = beatCount + 1;
-     meter = parseInt(track.analysis.track.time_signature);
-     barCount = parseInt(beatCount / meter);
-     $("#info").text("Playing beat " + beatCount + ", in bar " + barCount);
+     $("#info").text("Playing a quantum: " + theTime);
      
      
 }

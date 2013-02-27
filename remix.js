@@ -256,7 +256,7 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.noteGrainOn(when, q.start, q.duration);
                    if (triggerCallback != null) {
                         theTime = (when - context.currentTime) *  1000;
-                        setTimeout(triggerCallback(theTime), theTime);
+                        setTimeout(triggerCallback(), theTime);
                     }
                     return (when + parseFloat(q.duration));
                 } else {
