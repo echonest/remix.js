@@ -9,7 +9,8 @@
 <script type="text/javascript" src='../remix.js'></script>
 <script type="text/javascript">
 
-// Trigger an event when each chunk of audio is played
+// Trigger a function when each chunk of audio is played
+// Note that this may go out of sync if the user shifts focus away from the page.
 // You will need to supply your Echo Nest API key, the trackID, and a URL to the track.
 // The supplied track can be found in the audio subdirectory.
 var apiKey = 'YOUR_API_KEY';
@@ -20,6 +21,13 @@ var remixer;
 var player;
 var track;
 var remixed;
+
+var beatCount = 0;
+
+function trigger() {
+    beatCount = beatCount + 1;
+    $("#info").text("Playing beat " + beatCount + ".");
+}
 
 function init() {
     if (window.webkitAudioContext === undefined) {
@@ -40,6 +48,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
+                player.addCallback(trigger);
                 remixed = track.analysis.beats;
                 $("#info").text("Remix complete!");
             }
@@ -50,10 +59,10 @@ function init() {
 window.onload = init;
 </script>
 
-Welcome to One.html
+Welcome to Trigger.html
 <div id='info'> </div>
 <button onClick="player.play(0, remixed);">Play!</button>
-<button onClick="player.stop()">Stop!</button>
+<button onClick="player.stop(); beatCount = 0;">Stop!</button>
 </body>
 
 

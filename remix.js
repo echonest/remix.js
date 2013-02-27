@@ -221,6 +221,8 @@ function createJRemixer(context, jquery, apiKey) {
             var curAudioSource = null;
             var currentlyQueued = new Array();
             var curQ = null;
+            var triggerCallback = null;
+            var currentTriggers = new Array();
             audioGain.gain.value = 1;
             audioGain.connect(context.destination);
 
@@ -232,6 +234,10 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.connect(audioGain);
                     currentlyQueued.push(audioSource);
                     audioSource.noteOn(when);
+                    if (triggerCallback != null) {
+                        theTime = (when - context.currentTime) *  1000;
+                        currentTriggers.push(setTimeout(triggerCallback, theTime));
+                    }
                     return when;
                 } else if ($.isArray(q)) {
                     // Correct for load times
@@ -249,6 +255,10 @@ function createJRemixer(context, jquery, apiKey) {
                     q.audioSource = audioSource;
                     currentlyQueued.push(audioSource);
                     audioSource.noteGrainOn(when, q.start, q.duration);
+                   if (triggerCallback != null) {
+                        theTime = (when - context.currentTime) *  1000;
+                        currentTriggers.push(setTimeout(triggerCallback, theTime));
+                    }
                     return (when + parseFloat(q.duration));
                 } else {
                     error("can't play " + q);
@@ -266,6 +276,7 @@ function createJRemixer(context, jquery, apiKey) {
                 },
 
                 addCallback: function(callback) {
+                    triggerCallback = callback;
                 },
 
                 queue: function(q) {
@@ -287,13 +298,18 @@ function createJRemixer(context, jquery, apiKey) {
                         }
                     }
                     currentlyQueued = new Array();
+
+                    if (currentTriggers.length > 0) {
+                        for (var i = 0; i < currentTriggers.length; i++) {
+                            clearTimeout(currentTriggers[i])
+                        }
+                        currentTriggers = new Array();
+                    }
                 },
 
                 curTime: function() {
                     return context.currentTime;
                 },
-
-
             }
             return player;
         },
