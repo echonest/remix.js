@@ -24,10 +24,6 @@ var beatCount = 0;
 function trigger() {
     beatCount = beatCount + 1;
     $("#info").text("Playing beat " + beatCount + ".");
-     //setTimeout(function() {
-     //   beatCount = beatCount + 1;
-     //   $("#info").text("Playing beat " + beatCount + ".");
-    //}, theTime);
 }
 
 function init() {
@@ -63,7 +59,7 @@ window.onload = init;
 Welcome to Trigger.html
 <div id='info'> </div>
 <button onClick="player.play(0, remixed);">Play!</button>
-<button onClick="player.stop()">Stop!</button>
+<button onClick="player.stop(); beatCount = 0;">Stop!</button>
 </body>
 
 
