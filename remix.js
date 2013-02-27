@@ -233,7 +233,7 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.connect(audioGain);
                     currentlyQueued.push(audioSource);
                     audioSource.noteOn(when);
-                    console.log("" + when); // debugz;
+                    // console.log("" + when); // debugz;
                     triggerCallback();
                     return when;
                 } else if ($.isArray(q)) {
@@ -244,8 +244,7 @@ function createJRemixer(context, jquery, apiKey) {
                     for (var i = 0; i < q.length; i++) {
                         when = queuePlay(when, q[i]);
                     }
-                    console.log(when); // debugz;
-                    triggerCallback();
+                    // console.log(when); // debugz;
                     return when;
                 } else if (isQuantum(q)) {
                     var audioSource = context.createBufferSource();
@@ -254,7 +253,7 @@ function createJRemixer(context, jquery, apiKey) {
                     q.audioSource = audioSource;
                     currentlyQueued.push(audioSource);
                     audioSource.noteGrainOn(when, q.start, q.duration);
-                    console.log(when); // debugz;
+                    // console.log(when); // debugz;
                     triggerCallback();
                     return (when + parseFloat(q.duration));
                 } else {
