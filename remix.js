@@ -236,7 +236,7 @@ function createJRemixer(context, jquery, apiKey) {
                     if (triggerCallback != null) {
                         //console.log(when, context.currentTime);
                         theTime = (when - context.currentTime) *  1000;
-                        triggerCallback(theTime);
+                        setTimeout(triggerCallback(theTime), theTime);
                     }
                     return when;
                 } else if ($.isArray(q)) {
@@ -258,7 +258,7 @@ function createJRemixer(context, jquery, apiKey) {
                    if (triggerCallback != null) {
                         //console.log(when, context.currentTime);
                         theTime = (when - context.currentTime) *  1000;
-                        triggerCallback(theTime);
+                        setTimeout(triggerCallback(theTime), theTime);
                     }
                     return (when + parseFloat(q.duration));
                 } else {
