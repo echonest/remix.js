@@ -24,9 +24,8 @@ var beatCount = 0;
 function trigger(theTime) {
      setTimeout(function() {
         beatCount = beatCount + 1;
-        $("#info").text("Playing beat " + beatCount);
+        $("#info").text("Playing beat " + beatCount + ".");
     }, theTime);
-
 }
 
 function init() {
