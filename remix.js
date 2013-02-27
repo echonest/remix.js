@@ -235,7 +235,7 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.noteOn(when);
                     if (triggerCallback != null) {
                         //console.log(when, context.currentTime);
-                        theTime = when - (context.currentTime) *  1000;
+                        theTime = (when - context.currentTime) *  1000;
                         triggerCallback(theTime);
                     }
                     return when;
@@ -257,7 +257,7 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.noteGrainOn(when, q.start, q.duration);
                    if (triggerCallback != null) {
                         //console.log(when, context.currentTime);
-                        theTime = when - (context.currentTime) *  1000;
+                        theTime = (when - context.currentTime) *  1000;
                         triggerCallback(theTime);
                     }
                     return (when + parseFloat(q.duration));
