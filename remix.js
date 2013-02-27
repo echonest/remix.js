@@ -234,7 +234,7 @@ function createJRemixer(context, jquery, apiKey) {
                     currentlyQueued.push(audioSource);
                     audioSource.noteOn(when);
                     // console.log("" + when); // debugz;
-                    triggerCallback();
+                    triggerCallback(when);
                     return when;
                 } else if ($.isArray(q)) {
                     // Correct for load times
@@ -254,7 +254,7 @@ function createJRemixer(context, jquery, apiKey) {
                     currentlyQueued.push(audioSource);
                     audioSource.noteGrainOn(when, q.start, q.duration);
                     // console.log(when); // debugz;
-                    triggerCallback();
+                    triggerCallback(when);
                     return (when + parseFloat(q.duration));
                 } else {
                     error("can't play " + q);
