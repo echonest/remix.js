@@ -24,8 +24,10 @@ var remixed;
 // heh.  Close.  
 // OK, this just throws the last one at me.  
 // Something is wrong - should I put the set timeout up here?
+// But now there's a huge deallllaaay:  64-96 bears before it starts?
+// WAIT I AM CALCING TIME WRONG I BETCHA
 function trigger(theTime) {
-     setTimeout(function () {$("#info").text("Playing a quantum: " + theTime);}, theTime);
+     setTimeOut(function () {$("#info").text("Playing a quantum: " + theTime);}, theTime);
      
 }
 
