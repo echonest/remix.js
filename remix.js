@@ -222,6 +222,7 @@ function createJRemixer(context, jquery, apiKey) {
             var currentlyQueued = new Array();
             var curQ = null;
             var triggerCallback = null;
+            var currentTriggers = new Array();
             audioGain.gain.value = 1;
             audioGain.connect(context.destination);
 
@@ -235,7 +236,7 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.noteOn(when);
                     if (triggerCallback != null) {
                         theTime = (when - context.currentTime) *  1000;
-                        setTimeout(triggerCallback, theTime);
+                        currentTriggers.push(setTimeout(triggerCallback, theTime));
                     }
                     return when;
                 } else if ($.isArray(q)) {
@@ -256,7 +257,7 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.noteGrainOn(when, q.start, q.duration);
                    if (triggerCallback != null) {
                         theTime = (when - context.currentTime) *  1000;
-                        setTimeout(triggerCallback, theTime);
+                        currentTriggers.push(setTimeout(triggerCallback, theTime));
                     }
                     return (when + parseFloat(q.duration));
                 } else {
@@ -297,6 +298,13 @@ function createJRemixer(context, jquery, apiKey) {
                         }
                     }
                     currentlyQueued = new Array();
+
+                    if (currentTriggers.length > 0) {
+                        for (var i = 0; i < currentTriggers.length; i++) {
+                            clearTimeout(currentTriggers[i])
+                        }
+                        currentTriggers = new Array();
+                    }
                 },
 
                 curTime: function() {
