@@ -272,7 +272,7 @@ function createJRemixer(context, jquery, apiKey) {
                 },
 
                 addCallback: function(callback) {
-                    triggerCallback = callback;
+                    triggerCallback = callback(arguments);
                 },
 
                 queue: function(q) {
