@@ -22,10 +22,11 @@ var remixed;
 var beatCount = 0;
 
 function trigger(theTime) {
-     setTimeout(function() {
-        beatCount = beatCount + 1;
-        $("#info").text("Playing beat " + beatCount + ".");
-    }, theTime);
+     $("#info").text("Playing beat " + theTime + ".");
+     //setTimeout(function() {
+     //   beatCount = beatCount + 1;
+     //   $("#info").text("Playing beat " + beatCount + ".");
+    //}, theTime);
 }
 
 function init() {
