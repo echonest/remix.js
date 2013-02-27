@@ -20,9 +20,8 @@ var track;
 var remixed;
 
 function trigger(theTime) {
-     $("#info").text("Playing a quantum: " + theTime);
-     
-     
+     setTimeout(function() {$("#info").text("Playing a quantum: " + theTime);}, theTime;)
+
 }
 
 function init() {
