@@ -234,8 +234,9 @@ function createJRemixer(context, jquery, apiKey) {
                     currentlyQueued.push(audioSource);
                     audioSource.noteOn(when);
                     if (triggerCallback != null) {
-                        // theTime = when * 1000 - context.currentTime;
-                        triggerCallback(when * 1000);
+                        console.log(when, context.currentTime);
+                        theTime = when * 1000 - context.currentTime;
+                        triggerCallback(theTime);
                     }
                     return when;
                 } else if ($.isArray(q)) {
@@ -255,6 +256,7 @@ function createJRemixer(context, jquery, apiKey) {
                     currentlyQueued.push(audioSource);
                     audioSource.noteGrainOn(when, q.start, q.duration);
                    if (triggerCallback != null) {
+                        console.log(when, context.currentTime);
                         theTime = when * 1000 - context.currentTime;    
                         triggerCallback(theTime);
                     }
