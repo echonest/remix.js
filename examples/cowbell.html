@@ -60,6 +60,7 @@ function init() {
             if (track.status == 'ok') {
                 remixed = track.analysis.tatums;
                 for (var i=0; i < remixed.length; i++) {
+                    break;
                     if (i % 2 == 1) {
                         remixed[i].syncBuffer = cowbellBuffer;
                     }
