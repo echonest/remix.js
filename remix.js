@@ -260,6 +260,15 @@ function createJRemixer(context, jquery, apiKey) {
                     q.audioSource = audioSource;
                     currentlyQueued.push(audioSource);
                     audioSource.noteGrainOn(when, q.start, q.duration);
+
+                    if ("syncBuffer" in q) {
+                        var audioSource = context.createBufferSource();
+                        audioSource.buffer = q.syncBuffer;
+                        audioSource.connect(audioGain);
+                        currentlyQueued.push(audioSource);
+                        audioSource.noteOn(when);
+                    }
+
                     if (onPlayCallback != null) {
                         theTime = (when - context.currentTime) *  1000;
                         currentTriggers.push(setTimeout(onPlayCallback, theTime));

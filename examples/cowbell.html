@@ -22,17 +22,7 @@ var remixer;
 var player;
 var track;
 var remixed;
-var cowbells;
 
-// can I just use this?  
-// It feels like a bad idea to use the shitty sync here
-function cowbellTrigger() {
-
-  var source = context.createBufferSource(); // creates a sound source
-  source.buffer = cowbellBuffer;                    // tell the source which sound to play
-  source.connect(context.destination);       // connect the source to the context's destination (the speakers)
-  source.noteOn(0);         
-}
 
 
 function init() {
@@ -70,14 +60,10 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                remixed = track.analysis.beats;
-                cowbells = new Array();
-                for (var i=0; i < track.analysis.beats.length; i++) {
-                    if (i % 4 == 0) {
-                        cowbells.push(cowbellBuffer);
-                    }
-                else {
-                    cowbells.push({'isSilence': true, 'duration': track.analysis.beats[i].duration});
+                remixed = track.analysis.tatums;
+                for (var i=0; i < remixed; i++) {
+                    if (i % 2 == 1) {
+                        remixed[i].syncBuffer = cowbellBuffer;
                     }
                 }
                 $("#info").text("Remix complete!");
@@ -91,7 +77,7 @@ window.onload = init;
 
 Welcome to Cowbell.html
 <div id='info'> </div>
-<button onClick="player.play(0, remixed); player.play(0, cowbells);">Play!</button>
+<button onClick="player.play(0, remixed);">Play!</button>
 <button onClick="player.stop();">Stop!</button>
 <button onClick="">Cowbell</button>
 </body>
