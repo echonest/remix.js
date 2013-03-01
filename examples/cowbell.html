@@ -41,6 +41,20 @@ function init() {
             + " support it. Try the latest version of Chrome");
     } else {
         context = new webkitAudioContext();
+
+        // Load cowbell
+        var request = new XMLHttpRequest();
+        request.open('GET', cowbellURL, true);
+        request.responseType = 'arraybuffer';
+
+        request.onload = function() {
+        context.decodeAudioData(request.response, function(buffer) {
+            cowbellBuffer = buffer;
+        });
+        }
+        request.send();
+
+
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
         $("#info").text("Loading analysis data...");
@@ -52,17 +66,6 @@ function init() {
             if (percent == 100) {
                 $("#info").text(percent + "% of the track loaded, remixing...");
 
-                // Load cowbell
-                var request = new XMLHttpRequest();
-                  request.open('GET', cowbellURL, true);
-                  request.responseType = 'arraybuffer';
-
-                  request.onload = function() {
-                    context.decodeAudioData(request.response, function(buffer) {
-                      cowbellBuffer = buffer;
-                    });
-                  }
-                  request.send();
 
             }
 
