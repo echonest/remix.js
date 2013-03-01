@@ -38,6 +38,7 @@ var visualQueue = [];
 
 function removeBar() {
     visualQueue.shift();
+    console.log(visualQueue);
     if (visualQueue.length != 0) {
         queuesurfer.loadBuffer(visualQueue);    
     }
