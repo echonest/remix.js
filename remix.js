@@ -221,7 +221,8 @@ function createJRemixer(context, jquery, apiKey) {
             var curAudioSource = null;
             var currentlyQueued = new Array();
             var curQ = null;
-            var triggerCallback = null;
+            var onPlayCallback = null;
+            var afterPlayCallback = null;
             var currentTriggers = new Array();
             audioGain.gain.value = 1;
             audioGain.connect(context.destination);
