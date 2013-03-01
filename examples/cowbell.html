@@ -60,12 +60,14 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                remixed = track.analysis.tatums;
+                remixed = track.analysis.beats;
                 for (var i=0; i < remixed; i++) {
                     if (i % 2 == 1) {
                         remixed[i].syncBuffer = cowbellBuffer;
+                        console.log(remixed[i].syncBuffer);
                     }
                 }
+                console.log(remixed[1].syncBuffer);
                 $("#info").text("Remix complete!");
             }
         });
