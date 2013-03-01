@@ -38,7 +38,6 @@ var visualQueue = [];
 
 function removeBar() {
     visualQueue.shift();
-    console.log(visualQueue);
     if (visualQueue.length != 0) {
         queuesurfer.loadBuffer(visualQueue);    
     }
@@ -52,7 +51,6 @@ function addBar() {
     player.queue(track.analysis.bars[index]);
 
     visualQueue.push(track.analysis.bars[index]);
-    console.log(visualQueue);
     queuesurfer.loadBuffer(visualQueue);
 }
 

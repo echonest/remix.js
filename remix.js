@@ -267,7 +267,6 @@ function createJRemixer(context, jquery, apiKey) {
                     }
                     if (afterPlayCallback != null) {
                         theTime = (when - context.currentTime + parseFloat(q.duration)) *  1000;
-                        console.log(when, context.currentTime, parseFloat(q.duration), theTime);
                         currentTriggers.push(setTimeout(afterPlayCallback, theTime));
                     }
                     return (when + parseFloat(q.duration));
