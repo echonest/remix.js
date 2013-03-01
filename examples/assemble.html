@@ -38,8 +38,12 @@ var visualQueue = [];
 
 function removeBar() {
     visualQueue.shift();
-    console.log(visualQueue.length);
-    queuesurfer.loadBuffer(visualQueue);
+    if (visualQueue.length != 0) {
+        queuesurfer.loadBuffer(visualQueue);    
+    }
+    else {
+        queuesurfer.drawer.clear();
+    }
 }
 
 function addBar() {
