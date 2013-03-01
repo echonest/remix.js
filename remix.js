@@ -243,8 +243,7 @@ function createJRemixer(context, jquery, apiKey) {
                         theTime = (when - context.currentTime + parseFloat(q.duration)) *  1000;
                         currentTriggers.push(setTimeout(afterPlayCallback, theTime));
                     }
-
-                    return when;
+                    return when + parseFloat(q.duration);
                 } else if ($.isArray(q)) {
                     // Correct for load times
                     if (when == 0) {
