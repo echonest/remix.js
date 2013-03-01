@@ -36,6 +36,11 @@ var remixed;
 var queuesurfer;
 var visualQueue = [];
 
+function removeBar() {
+    visualQueue.shift();
+    queuesurfer.loadBuffer(visualQueue);
+}
+
 function addBar() {
     var index = $("#indexBox").val();
     player.queue(track.analysis.bars[index]);
@@ -91,6 +96,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
+                player.addCallback(removeBar);
                 wavesurfer.loadBuffer(track.analysis.beats);
                 $("#info").text("Remix complete! " + "The track has " + track.analysis.bars.length + " bars and " + track.analysis.beats.length + " beats.");
                 $('.btn-original').removeAttr('disabled');
