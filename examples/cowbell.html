@@ -59,7 +59,7 @@ function init() {
                   request.onload = function() {
                     context.decodeAudioData(request.response, function(buffer) {
                       cowbellBuffer = buffer;
-                    }, onError);
+                    });
                   }
                   request.send();
 
@@ -81,6 +81,7 @@ Welcome to Cowbell.html
 <div id='info'> </div>
 <button onClick="player.play(0, remixed);">Play!</button>
 <button onClick="player.stop();">Stop!</button>
+<button onClick="cowbellTrigger();">Cowbell</button>
 </body>
 
 
