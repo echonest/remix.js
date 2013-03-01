@@ -61,7 +61,7 @@ function init() {
 
             if (track.status == 'ok') {
                 remixed = track.analysis.beats;
-                for (var i=0; i < remixed; i++) {
+                for (var i=0; i < remixed.length; i++) {
                     if (i % 2 == 1) {
                         remixed[i].syncBuffer = cowbellBuffer;
                         console.log(remixed[i].syncBuffer);
