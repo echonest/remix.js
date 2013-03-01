@@ -262,6 +262,7 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.noteGrainOn(when, q.start, q.duration);
 
                     if ("syncBuffer" in q) {
+                        console.log(when);
                         var audioSource = context.createBufferSource();
                         audioSource.buffer = q.syncBuffer;
                         audioSource.connect(audioGain);
