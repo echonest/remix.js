@@ -22,9 +22,13 @@ var remixed;
 
 var beatCount = 0;
 
-function trigger() {
+function onTrigger() {
+    $("#onInfo").text("Playing beat " + beatCount + 1 + ".");
+}
+
+function offTrigger() {
     beatCount = beatCount + 1;
-    $("#info").text("Playing beat " + beatCount + ".");
+    $("#offInfo").text("Played " + beatCount + " beat.");
 }
 
 function init() {
@@ -46,7 +50,8 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                player.addOnPlayCallback(trigger);
+                player.addOnPlayCallback(onTrigger);
+                player.addAfterPlayCallback(offTrigger);
                 remixed = track.analysis.beats;
                 $("#info").text("Remix complete!");
             }
@@ -59,6 +64,8 @@ window.onload = init;
 
 Welcome to Trigger.html
 <div id='info'> </div>
+<div id='onInfo'> </div>
+<div id='offInfo'> </div>
 <button onClick="player.play(0, remixed);">Play!</button>
 <button onClick="player.stop(); beatCount = 0;">Stop!</button>
 </body>
