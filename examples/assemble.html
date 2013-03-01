@@ -101,7 +101,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                player.addCallback(removeBar);
+                player.addOnPlayCallback(removeBar);
                 wavesurfer.loadBuffer(track.analysis.beats);
                 $("#info").text("Remix complete! " + "The track has " + track.analysis.bars.length + " bars and " + track.analysis.beats.length + " beats.");
                 $('.btn-original').removeAttr('disabled');

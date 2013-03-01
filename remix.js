@@ -236,7 +236,7 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.noteOn(when);
                     if (triggerCallback != null) {
                         theTime = (when - context.currentTime) *  1000;
-                        currentTriggers.push(setTimeout(triggerCallback, theTime));
+                        currentTriggers.push(setTimeout(onPlayCallback, theTime));
                     }
                     return when;
                 } else if ($.isArray(q)) {
@@ -257,7 +257,7 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.noteGrainOn(when, q.start, q.duration);
                    if (triggerCallback != null) {
                         theTime = (when - context.currentTime) *  1000;
-                        currentTriggers.push(setTimeout(triggerCallback, theTime));
+                        currentTriggers.push(setTimeout(onPlayCallback, theTime));
                     }
                     return (when + parseFloat(q.duration));
                 } else {
@@ -275,7 +275,11 @@ function createJRemixer(context, jquery, apiKey) {
                     return queuePlay(0, q);
                 },
 
-                addCallback: function(callback) {
+                addOnPlayCallback: function(callback) {
+                    onPlayCallback = callback;
+                },
+        
+                addAfterPlayCallback: function(callback) {
                     triggerCallback = callback;
                 },
 

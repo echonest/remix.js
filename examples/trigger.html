@@ -46,7 +46,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                player.addCallback(trigger);
+                player.addOnPlayCallback(trigger);
                 remixed = track.analysis.beats;
                 $("#info").text("Remix complete!");
             }
