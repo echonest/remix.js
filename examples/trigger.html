@@ -23,7 +23,8 @@ var remixed;
 var beatCount = 0;
 
 function onTrigger() {
-    $("#onInfo").text("Playing beat " + beatCount + 1 + ".");
+    var tempCount = beatCount + 1
+    $("#onInfo").text("Playing beat " + tempCount + ".");
 }
 
 function offTrigger() {
