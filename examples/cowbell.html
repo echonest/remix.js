@@ -77,7 +77,7 @@ function init() {
                         cowbells.push(cowbellBuffer);
                     }
                 else {
-                    cowbells.push({'isSilence': true, 'duration': track.analysis.tatums[i]});
+                    cowbells.push({'isSilence': true, 'duration': track.analysis.tatums[i].duration});
                     }
                 }
                 $("#info").text("Remix complete!");
