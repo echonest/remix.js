@@ -238,6 +238,11 @@ function createJRemixer(context, jquery, apiKey) {
                         theTime = (when - context.currentTime) *  1000;
                         currentTriggers.push(setTimeout(onPlayCallback, theTime));
                     }
+                    if (afterPlayCallback != null) {
+                        theTime = (when - context.currentTime + q.duration) *  1000;
+                        currentTriggers.push(setTimeout(afterPlayCallback, theTime));
+                    }
+
                     return when;
                 } else if ($.isArray(q)) {
                     // Correct for load times
@@ -255,9 +260,13 @@ function createJRemixer(context, jquery, apiKey) {
                     q.audioSource = audioSource;
                     currentlyQueued.push(audioSource);
                     audioSource.noteGrainOn(when, q.start, q.duration);
-                   if (onPlayCallback != null) {
+                    if (onPlayCallback != null) {
                         theTime = (when - context.currentTime) *  1000;
                         currentTriggers.push(setTimeout(onPlayCallback, theTime));
+                    }
+                    if (afterPlayCallback != null) {
+                        theTime = (when - context.currentTime + q.duration) *  1000;
+                        currentTriggers.push(setTimeout(afterPlayCallback, theTime));
                     }
                     return (when + parseFloat(q.duration));
                 } else {
@@ -280,7 +289,7 @@ function createJRemixer(context, jquery, apiKey) {
                 },
         
                 addAfterPlayCallback: function(callback) {
-                    triggerCallback = callback;
+                    afterPlayCallback = callback;
                 },
 
                 queue: function(q) {
