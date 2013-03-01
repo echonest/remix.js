@@ -74,8 +74,10 @@ function init() {
                 cowbells = new Array();
                 for (var i=0; i < track.analysis.tatums.length; i++) {
                     if (i % 2 == 1) {
-                        console.log(cowbellBuffer);
                         cowbells.push(cowbellBuffer);
+                    }
+                else {
+                    cowbells.push({'isSilence' = true, 'duration' = track.analysis.tatums[i]});
                     }
                 }
                 $("#info").text("Remix complete!");

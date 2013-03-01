@@ -269,7 +269,11 @@ function createJRemixer(context, jquery, apiKey) {
                         currentTriggers.push(setTimeout(afterPlayCallback, theTime));
                     }
                     return (when + parseFloat(q.duration));
-                } else {
+                } 
+                else if (isSilence(q)) {
+                    return (when + parseFloat(q.duration));
+                }
+                else {
                     error("can't play " + q);
                     return when;
                 }
@@ -373,6 +377,10 @@ function createJRemixer(context, jquery, apiKey) {
 
     function isAudioBuffer(a) {
         return 'getChannelData' in a;
+    }
+
+    function isSilence(a) {
+        return 'isSilence' in a;
     }
 
     function trace(text) {
