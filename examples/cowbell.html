@@ -70,14 +70,14 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                remixed = track.analysis.tatums;
+                remixed = track.analysis.beats;
                 cowbells = new Array();
-                for (var i=0; i < track.analysis.tatums.length; i++) {
-                    if (i % 2 == 1) {
+                for (var i=0; i < track.analysis.beats.length; i++) {
+                    if (i % 4 == 0) {
                         cowbells.push(cowbellBuffer);
                     }
                 else {
-                    cowbells.push({'isSilence': true, 'duration': track.analysis.tatums[i].duration});
+                    cowbells.push({'isSilence': true, 'duration': track.analysis.beats[i].duration});
                     }
                 }
                 $("#info").text("Remix complete!");
