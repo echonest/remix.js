@@ -70,7 +70,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                remixed = track.analysis.beats;
+                remixed = track.analysis.tatums;
                 cowbells = new Array();
                 for (var i=0; i < track.analysis.tatums.length; i++) {
                     if (i % 2 == 1) {
