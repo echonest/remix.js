@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset=utf-8>
+</head>
+
+<body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src='../remix.js'></script>
+<script type="text/javascript">
+
+// Plays a cowbell on every beat
+var apiKey = 'FILDTEOIK2HBORODV';
+var trackID = 'TRCYWPQ139279B3308';
+var trackURL = 'audio/1451_-_D.mp3'
+var cowbellURL = 'audio/cowbell.wav'
+
+var remixer;
+var player;
+var track;
+var remixed;
+
+// can I just use this?  
+// It feels like a bad idea to use the shitty sync here
+function onTrigger() {
+
+}
+
+
+function init() {
+    if (window.webkitAudioContext === undefined) {
+        error("Sorry, this app needs advanced web audio. Your browser doesn't"
+            + " support it. Try the latest version of Chrome");
+    } else {
+        var context = new webkitAudioContext();
+        remixer = createJRemixer(context, $, apiKey);
+        player = remixer.getPlayer();
+        $("#info").text("Loading analysis data...");
+
+        remixer.remixTrackById(trackID, trackURL, function(t, percent) {
+            track = t;
+
+            $("#info").text(percent + "% of the track loaded");
+            if (percent == 100) {
+                $("#info").text(percent + "% of the track loaded, remixing...");
+            }
+
+            if (track.status == 'ok') {
+                remixed = track.analysis.beats;
+                $("#info").text("Remix complete!");
+            }
+        });
+    }
+}
+
+window.onload = init;
+</script>
+
+Welcome to Cowbell.html
+<div id='info'> </div>
+<button onClick="player.play(0, remixed);">Play!</button>
+<button onClick="player.stop();">Stop!</button>
+</body>
+
+
+
+</html>
