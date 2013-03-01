@@ -261,8 +261,8 @@ function createJRemixer(context, jquery, apiKey) {
                     currentlyQueued.push(audioSource);
                     audioSource.noteGrainOn(when, q.start, q.duration);
 
+                    // I need to clean up all these ifs
                     if ("syncBuffer" in q) {
-                        console.log(when);
                         var audioSource = context.createBufferSource();
                         audioSource.buffer = q.syncBuffer;
                         audioSource.connect(audioGain);

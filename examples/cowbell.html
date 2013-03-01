@@ -55,19 +55,15 @@ function init() {
             $("#info").text(percent + "% of the track loaded");
             if (percent == 100) {
                 $("#info").text(percent + "% of the track loaded, remixing...");
-
-
             }
 
             if (track.status == 'ok') {
-                remixed = track.analysis.beats;
+                remixed = track.analysis.tatums;
                 for (var i=0; i < remixed.length; i++) {
                     if (i % 2 == 1) {
                         remixed[i].syncBuffer = cowbellBuffer;
-                        console.log(remixed[i].syncBuffer);
                     }
                 }
-                console.log(remixed[1].syncBuffer);
                 $("#info").text("Remix complete!");
             }
         });
