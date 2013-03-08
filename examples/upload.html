@@ -28,15 +28,14 @@
 var apiKey = 'FILDTEOIK2HBORODV';
 // We'll need to update these
 var trackID;
-
-//var trackURL = 'audio/1451_-_D.mp3';
+var trackURL;
 
 var remixer;
 var player;
 var track;
 var remixed;
 
-
+// Ends with
 function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
@@ -95,8 +94,7 @@ function analyzeAudio(audio, tag, callback) {
 
 
 function init() {
-
-    // Read the URL query string
+    // Read the URL query string to decide what to do
     var params = {};
     var q = document.URL.split('?')[1];
     if(q != undefined){
@@ -109,54 +107,86 @@ function init() {
         }
     }
 
-    // Paul has a three-version of this:  
-    // trid means that we have the track and the analysis
-    // 'key' appears to mean that we have the track but not the analysis?
-    // which for me means that we need to make sure that I can get the analysis 
-    // when I pass in my trackID and trackURL to remix.js
-    // Does Paul's analyzer send things to the main analysis dump? I sure hope so...
-    // tricky
-
     if ('key' in params) {
         console.log("Be patient while we run the analysis");
         $("#select-track").hide();
 
-        // This gets the URL, but there may not be a way to save it.
+        // should show
+        $("#play-remix").show();
 
-        var url = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
-        console.log(url)
+
         $("#info").text("Analyzing audio...");
-
+        trackUrl = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
+        console.log(trackUrl)
         
         // this gets me the track id too!!!
-         analyzeAudio(url, 'tag', 
-            function(data) {
+         analyzeAudio(trackUrl, 'tag', function(data) {
                 if (data.status === 'done') {
+                    console.log("Ready to remix");
                     // do amazing things
+                    trackID = data.trid;
+                    console.log(trackID);
 
-                    $("#info").text("We got it");
+                    var context = new webkitAudioContext();
+                    var fs;
+                    // Only use the filesystem if we have access to it.
+                    if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
+                        window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+                        window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
+                            fs = filesystem;
+                        }, fileErrorHandler);
+                    }
+
+                    remixer = createJRemixer(context, $, apiKey);
+                    player = remixer.getPlayer();
+                    $("#info").text("Loading analysis data...");
+
+                    remixer.remixTrackById(trackID, trackURL, function(t, percent) {
+                        track = t;
+
+                        $("#info").text(percent + "% of the track loaded...");
+                        if (percent == 100) {
+                            $("#info").text(percent + "% of the track loaded, remixing...");
+                        }
+
+                        if (track.status == 'ok') {
+                            wavesurfer.loadBuffer(track.analysis.beats);
+
+                            $('.btn-original').removeAttr('disabled');
+                            remixed = new Array();
+                            // Extract the first beat of every bar.
+                            var meter = parseInt(track.analysis.track.time_signature);
+                            for (var i=0; i < track.analysis.beats.length; i++) {
+                                if (i % meter == 0) {
+                                    remixed.push(track.analysis.beats[i])
+                                }
+                            }
+                            $("#info").text("Remix complete!");
+
+                            remixedWavesurfer.loadBuffer(remixed);
+
+                            // Only use the filesystem if we have access to it.
+                            if (fs) {
+                                remixer.saveRemixLocally(fs, remixed, function(saveURL) {
+                                    $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
+                                });
+                            }
+                            $('.btn-remixed').removeAttr('disabled');
+
+                        }
+                    });
                 } else {
                     $("#info").text("Trouble analyzing that track " + data.message);
                 }
             }
         );
-
-
-
     }
-
-    else if ('trid' in params) {
-        console.log("remix based on trid");
-        $("#select-track").hide();
-
-        trackID = params['trid'];
-        // Must get the trackURL here
-
 
     } else  {
         console.log("Prepare for the user to upload somethig");
-        $("#redirect-url").attr('value', document.URL);
 
+        $("#play-remix").hide();
+        $("#redirect-url").attr('value', document.URL);
         $("#f-filename").attr('value', 'audio2/' + randomName() + '.mp3');
 
         $("#file").change( 
@@ -173,9 +203,7 @@ function init() {
         );
         fetchSignature();
         fetchQinfo();
-    
     }
-
 }
 
 window.onload = init;
@@ -231,7 +259,7 @@ window.onload = init;
         </div>
         </section>
 
-        <section>
+        <section id='play-remix'>
             <div id='waveform'>
             <h2>Original Track</h2>
             <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
