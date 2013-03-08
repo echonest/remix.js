@@ -96,13 +96,31 @@ function init() {
     // when I pass in my trackID and trackURL to remix.js
     // Does Paul's analyzer send things to the main analysis dump? I sure hope so...
     // tricky
-    if ('trid' in params) {
+
+    if ('key' in params) {
+        console.log("Be patient while we run the analysis");
+        $("#select-track").hide();
+
+        var url = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
+        console.log(url)
+        $("#info").text("Analyzing audio...");
+
+        // I can literally just use this as a timer, right?  But I still need the track ID...
+        // analyzeAudio(url, 'tag', function(data) {
+
+
+
+    }
+
+    else if ('trid' in params) {
         console.log("remix based on trid");
+        $("#select-track").hide();
+
         trackID = params['trid'];
         // Must get the trackURL here
 
 
-    } else {
+    } else  {
         console.log("Prepare for the user to upload somethig");
         $("#redirect-url").attr('value', document.URL);
 
