@@ -73,6 +73,11 @@ function fetchQinfo() {
     });
 }
 
+// Cleaner URL decode
+function urldecode(str) {
+   return decodeURIComponent((str+'').replace(/\+/g, '%20'));
+}
+
 
 function init() {
 
