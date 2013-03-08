@@ -54,7 +54,6 @@ function fixFileName(name) {
 function fetchSignature() {
     var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
     $.getJSON(url, {}, function(data) {
-        console.log(url);
         policy = data.policy;
         signature = data.signature;
         $('#f-policy').val(data.policy);
@@ -97,7 +96,7 @@ function init() {
     if ('trid' in params) {
         console.log("remix based on trid");
         trackID = params['trid'];
-        // Must get the tracURL here
+        // Must get the trackURL here
 
 
     } else {
@@ -165,8 +164,9 @@ window.onload = init;
               <input id='f-policy' type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
               <input id='f-signature' type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
               <input type="hidden" name="Content-Type" value="audio/mpeg">
-              <!-- You MUST put your Echo Nest API Key here! -->
+              <!-- You MUST put your Echo Nest API Key here! 
               <input id='f-apikey' type="hidden" name="key" value="FILDTEOIK2HBORODV">
+              -->
               Select an <b>MP3</b> to upload : <input  id="file" name="file" type="file"> 
               <br>
               <input class="btn btn-primary btn-default" id='upload' type="submit" value="Upload MP3"> 
