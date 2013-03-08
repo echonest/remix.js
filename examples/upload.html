@@ -110,14 +110,13 @@ function init() {
     if ('key' in params) {
         console.log("Be patient while we run the analysis");
         $("#select-track").hide();
-
-        // should show
         $("#play-remix").show();
+        $('.btn').attr('disabled','disabled');
 
 
         $("#info").text("Analyzing audio...");
-        trackUrl = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
-        console.log(trackUrl)
+        trackURL = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
+        console.log(trackURL);
         
         // this gets me the track id too!!!
          analyzeAudio(trackUrl, 'tag', function(data) {
