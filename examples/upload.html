@@ -104,6 +104,7 @@ function init() {
 
     } else {
         console.log("Prepare for the user to upload somethig");
+        $("#redirect-url").attr('value', document.URL);
 
         $("#f-filename").attr('value', 'audio2/' + randomName() + '.mp3');
 
@@ -163,8 +164,8 @@ window.onload = init;
               <input id='f-filename' type="hidden" name="key" value="audio2/${filename}">
               <input id='f-key' type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY"> 
               <input type="hidden" name="acl" value="public-read"> 
-              <input type="hidden" name="success_action_redirect"
-                  value="echonest.github.com/remix.js/examples/upload.html">
+              <input id='redirect-url' type="hidden" name="success_action_redirect"
+                  value="YOUR_URL">
               <input id='f-policy' type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
               <input id='f-signature' type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
               <input type="hidden" name="Content-Type" value="audio/mpeg">
