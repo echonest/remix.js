@@ -24,9 +24,8 @@
 
 <script type="text/javascript">
 
-// First-beat extraction and assembly
+// Remix with any track
 var apiKey = 'FILDTEOIK2HBORODV';
-// We'll need to update these
 var trackID;
 var trackURL;
 
@@ -135,6 +134,24 @@ function init() {
                             fs = filesystem;
                         }, fileErrorHandler);
                     }
+
+                    var wavesurfer = Object.create(WaveSurfer);
+                    wavesurfer.init({
+                        canvas: document.querySelector('#waveCanvas'),
+                        waveColor: '#888888',
+                        progressColor: '#000000',
+                        loadingColor: '#000000',
+                        cursorColor: '#888888'
+                    });
+                    
+                    var remixedWavesurfer = Object.create(WaveSurfer);
+                    remixedWavesurfer.init({
+                        canvas: document.querySelector('#RemixedWaveCanvas'),
+                        waveColor: '#00ACEB',
+                        progressColor: '#000000',
+                        loadingColor: '#000000',
+                        cursorColor: '#00ACEB'
+                    });
 
                     remixer = createJRemixer(context, $, apiKey);
                     player = remixer.getPlayer();
