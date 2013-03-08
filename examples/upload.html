@@ -78,6 +78,21 @@ function urldecode(str) {
    return decodeURIComponent((str+'').replace(/\+/g, '%20'));
 }
 
+// Get the analysis, or keep trying to get it
+function analyzeAudio(audio, tag, callback) {
+    var url = 'http://labs.echonest.com/Uploader/qanalyze?callback=?'
+    $.getJSON(url, { url:audio, tag:tag}, function(data) {
+        if (data.status === 'done' || data.status === 'error') {
+            callback(data);
+        } else {
+            $("#info").text(data.status + ' - ready in about ' + data.estimated_wait + ' secs. ');
+            setTimeout(function() { analyzeAudio(audio, tag, callback); }, 8000);
+        } 
+    });
+}
+
+
+
 
 function init() {
 
@@ -106,12 +121,25 @@ function init() {
         console.log("Be patient while we run the analysis");
         $("#select-track").hide();
 
+        // This gets the URL, but there may not be a way to save it.
+
         var url = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
         console.log(url)
         $("#info").text("Analyzing audio...");
 
-        // I can literally just use this as a timer, right?  But I still need the track ID...
-        // analyzeAudio(url, 'tag', function(data) {
+        
+        // this gets me the track id too!!!
+         analyzeAudio(url, 'tag', 
+            function(data) {
+                if (data.status === 'done') {
+                    // do amazing things
+
+                    $("#info").text("We got it");
+                } else {
+                    $("#info").text("Trouble analyzing that track " + data.message);
+                }
+            }
+        );
 
 
 
