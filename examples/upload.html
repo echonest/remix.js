@@ -28,6 +28,7 @@
 var apiKey = 'FILDTEOIK2HBORODV';
 // We'll need to update these
 var trackID;
+
 //var trackURL = 'audio/1451_-_D.mp3';
 
 var remixer;
@@ -35,8 +36,45 @@ var player;
 var track;
 var remixed;
 
+
+
+// Generate a random name for the file so people can't pirate things
+function randomName() {
+    return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
+}
+
+// Correct forced filenames
+function fixFileName(name) {
+    name = name.replace(/c:\\fakepath\\/i, '');
+    name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
+    return 'audio2/' + new Date().getTime() + '/' + name;
+}
+
+// Get amazon credentials
+function fetchSignature() {
+    var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
+    $.getJSON(url, {}, function(data) {
+        console.log(url);
+        policy = data.policy;
+        signature = data.signature;
+        $('#f-policy').val(data.policy);
+        $('#f-signature').val(data.signature);
+        $('#f-key').val(data.key);
+    });
+}
+
+// Get an estimation of analysis time
+function fetchQinfo() {
+    var url = 'http://labs.echonest.com/Uploader/qinfo?callback=?'
+    $.getJSON(url, {}, function(data) {
+        info("Estimated analysis time: " + Math.floor(data.estimated_wait * 1.2) + " seconds.");
+    });
+}
+
+
 function init() {
-    // ?trid=TRSBVUT12F87DF0212
+
+    // Read the URL query string
     var params = {};
     var q = document.URL.split('?')[1];
     if(q != undefined){
@@ -49,10 +87,41 @@ function init() {
         }
     }
 
+    // Paul has a three-version of this:  
+    // trid means that we have the track and the analysis
+    // 'key' appears to mean that we have the track but not the analysis?
+    // which for me means that we need to make sure that I can get the analysis 
+    // when I pass in my trackID and trackURL to remix.js
+    // Does Paul's analyzer send things to the main analysis dump? I sure hope so...
+    // tricky
     if ('trid' in params) {
         console.log("remix based on trid");
+        trackID = params['trid'];
+        // How do I get the filename?
+        trackURL = 
+
+
+
     } else {
-        console.log("wait for the user to upload somethig");
+        console.log("Prepare for the user to upload somethig");
+
+        $("#f-filename").attr('value', 'audio2/' + randomName() + '.mp3');
+
+        $("#file").change( 
+            function() {
+                var filename = $("#file").val();
+                if (endsWith(filename.toLowerCase(), ".mp3")) {
+                    $("#f-filename").attr('value', fixFileName(filename));
+                    $("#upload").removeAttr('disabled');
+                } else {
+                    alert('Sorry, this app only supports MP3s');
+                    $("#upload").attr('disabled', 'disabled');
+                }
+            }
+        );
+        fetchSignature();
+        fetchQinfo();
+    
     }
 
 
@@ -174,11 +243,11 @@ for (var i=0; i < track.analysis.beats.length; i++) {
               <input id='f-key' type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY"> 
               <input type="hidden" name="acl" value="public-read"> 
               <input type="hidden" name="success_action_redirect"
-                  value="http://echonest.github.com/remix.js/examples/upload.html">
+                  value="http://static.echonest.com/bonhamizer/go.html">
               <input id='f-policy' type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
               <input id='f-signature' type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
               <input type="hidden" name="Content-Type" value="audio/mpeg">
-              <!-- Include any additional input fields here -->
+              <!-- You MUST put your Echo Nest API Key here! -->
               <input id='f-apikey' type="hidden" name="key" value="FILDTEOIK2HBORODV">
               Select an <b>MP3</b> to upload : <input  id="file" name="file" type="file"> 
               <br>
