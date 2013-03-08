@@ -37,6 +37,9 @@ var track;
 var remixed;
 
 
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
 
 // Generate a random name for the file so people can't pirate things
 function randomName() {
