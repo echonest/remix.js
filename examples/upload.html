@@ -157,13 +157,14 @@ window.onload = init;
 
         <div id="info"></div>
 
+        <section>
         <div id='select-track'>
             <form action="https://s3.amazonaws.com/static.echonest.com" method="post" enctype="multipart/form-data">
               <input id='f-filename' type="hidden" name="key" value="audio2/${filename}">
               <input id='f-key' type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY"> 
               <input type="hidden" name="acl" value="public-read"> 
               <input type="hidden" name="success_action_redirect"
-                  value="http://static.echonest.com/bonhamizer/go.html">
+                  value="echonest.github.com/remix.js/examples/upload.html">
               <input id='f-policy' type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
               <input id='f-signature' type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
               <input type="hidden" name="Content-Type" value="audio/mpeg">
@@ -175,7 +176,7 @@ window.onload = init;
               <input class="btn btn-primary btn-default" id='upload' type="submit" value="Upload MP3"> 
             </form> 
         </div>
-
+        </section>
 
         <section>
             <div id='waveform'>
