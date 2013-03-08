@@ -34,24 +34,24 @@ var player;
 var track;
 var remixed;
 
-// Ends with
+
 function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
-// Generate a random name for the file so people can't pirate things
+
 function randomName() {
     return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
 }
 
-// Correct forced filenames
+
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
     name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
     return 'audio2/' + new Date().getTime() + '/' + name;
 }
 
-// Get amazon credentials
+
 function fetchSignature() {
     var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
     $.getJSON(url, {}, function(data) {
@@ -90,8 +90,6 @@ function analyzeAudio(audio, tag, callback) {
 }
 
 
-
-
 function init() {
     // Read the URL query string to decide what to do
     var params = {};
@@ -107,87 +105,82 @@ function init() {
     }
 
     if ('key' in params) {
-        console.log("Be patient while we run the analysis");
         $("#select-track").hide();
         $("#play-remix").show();
         $('.btn').attr('disabled','disabled');
 
-
         $("#info").text("Analyzing audio...");
         trackURL = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
-        console.log(trackURL);
         
-        // this gets me the track id too!!!
-         analyzeAudio(trackURL, 'tag', function(data) {
-                if (data.status === 'done') {
-                    console.log("Ready to remix");
-                    // do amazing things
-                    trackID = data.trid;
-                    console.log(trackID);
 
-                    var context = new webkitAudioContext();
-                    var fs;
-                    // Only use the filesystem if we have access to it.
-                    if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
-                        window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-                        window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
-                            fs = filesystem;
-                        }, fileErrorHandler);
+        analyzeAudio(trackURL, 'tag', function(data) {
+            if (data.status === 'done') {
+                console.log("Ready to remix");
+                trackID = data.trid;
+
+                var context = new webkitAudioContext();
+                var fs;
+                // Only use the filesystem if we have access to it.
+                if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
+                    window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+                    window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
+                        fs = filesystem;
+                    }, fileErrorHandler);
+                }
+
+                var wavesurfer = Object.create(WaveSurfer);
+                wavesurfer.init({
+                    canvas: document.querySelector('#waveCanvas'),
+                    waveColor: '#888888',
+                    progressColor: '#000000',
+                    loadingColor: '#000000',
+                    cursorColor: '#888888'
+                });
+                
+                var remixedWavesurfer = Object.create(WaveSurfer);
+                remixedWavesurfer.init({
+                    canvas: document.querySelector('#RemixedWaveCanvas'),
+                    waveColor: '#00ACEB',
+                    progressColor: '#000000',
+                    loadingColor: '#000000',
+                    cursorColor: '#00ACEB'
+                });
+
+                remixer = createJRemixer(context, $, apiKey);
+                player = remixer.getPlayer();
+                $("#info").text("Loading analysis data...");
+
+                remixer.remixTrackById(trackID, trackURL, function(t, percent) {
+                    track = t;
+
+                    $("#info").text(percent + "% of the track loaded...");
+                    if (percent == 100) {
+                        $("#info").text(percent + "% of the track loaded, remixing...");
                     }
 
-                    var wavesurfer = Object.create(WaveSurfer);
-                    wavesurfer.init({
-                        canvas: document.querySelector('#waveCanvas'),
-                        waveColor: '#888888',
-                        progressColor: '#000000',
-                        loadingColor: '#000000',
-                        cursorColor: '#888888'
-                    });
-                    
-                    var remixedWavesurfer = Object.create(WaveSurfer);
-                    remixedWavesurfer.init({
-                        canvas: document.querySelector('#RemixedWaveCanvas'),
-                        waveColor: '#00ACEB',
-                        progressColor: '#000000',
-                        loadingColor: '#000000',
-                        cursorColor: '#00ACEB'
-                    });
+                    if (track.status == 'ok') {
+                        wavesurfer.loadBuffer(track.analysis.beats);
 
-                    remixer = createJRemixer(context, $, apiKey);
-                    player = remixer.getPlayer();
-                    $("#info").text("Loading analysis data...");
-
-                    remixer.remixTrackById(trackID, trackURL, function(t, percent) {
-                        track = t;
-
-                        $("#info").text(percent + "% of the track loaded...");
-                        if (percent == 100) {
-                            $("#info").text(percent + "% of the track loaded, remixing...");
+                        $('.btn-original').removeAttr('disabled');
+                        remixed = new Array();
+                        // Extract the first beat of every bar.
+                        var meter = parseInt(track.analysis.track.time_signature);
+                        for (var i=0; i < track.analysis.beats.length; i++) {
+                            if (i % meter == 0) {
+                                remixed.push(track.analysis.beats[i])
+                            }
                         }
+                        $("#info").text("Remix complete!");
 
-                        if (track.status == 'ok') {
-                            wavesurfer.loadBuffer(track.analysis.beats);
+                        remixedWavesurfer.loadBuffer(remixed);
 
-                            $('.btn-original').removeAttr('disabled');
-                            remixed = new Array();
-                            // Extract the first beat of every bar.
-                            var meter = parseInt(track.analysis.track.time_signature);
-                            for (var i=0; i < track.analysis.beats.length; i++) {
-                                if (i % meter == 0) {
-                                    remixed.push(track.analysis.beats[i])
-                                }
-                            }
-                            $("#info").text("Remix complete!");
-
-                            remixedWavesurfer.loadBuffer(remixed);
-
-                            // Only use the filesystem if we have access to it.
-                            if (fs) {
-                                remixer.saveRemixLocally(fs, remixed, function(saveURL) {
-                                    $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
-                                });
-                            }
-                            $('.btn-remixed').removeAttr('disabled');
+                        // Only use the filesystem if we have access to it.
+                        if (fs) {
+                            remixer.saveRemixLocally(fs, remixed, function(saveURL) {
+                                $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
+                            });
+                        }
+                        $('.btn-remixed').removeAttr('disabled');
 
                         }
                     });
@@ -197,7 +190,6 @@ function init() {
             }
         );
     } else {
-        console.log("Prepare for the user to upload somethig");
 
         $("#play-remix").hide();
         $("#redirect-url").attr('value', document.URL);
