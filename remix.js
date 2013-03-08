@@ -221,7 +221,8 @@ function createJRemixer(context, jquery, apiKey) {
             var curAudioSource = null;
             var currentlyQueued = new Array();
             var curQ = null;
-            var triggerCallback = null;
+            var onPlayCallback = null;
+            var afterPlayCallback = null;
             var currentTriggers = new Array();
             audioGain.gain.value = 1;
             audioGain.connect(context.destination);
@@ -234,11 +235,15 @@ function createJRemixer(context, jquery, apiKey) {
                     audioSource.connect(audioGain);
                     currentlyQueued.push(audioSource);
                     audioSource.noteOn(when);
-                    if (triggerCallback != null) {
+                    if (onPlayCallback != null) {
                         theTime = (when - context.currentTime) *  1000;
-                        currentTriggers.push(setTimeout(triggerCallback, theTime));
+                        currentTriggers.push(setTimeout(onPlayCallback, theTime));
                     }
-                    return when;
+                    if (afterPlayCallback != null) {
+                        theTime = (when - context.currentTime + parseFloat(q.duration)) *  1000;
+                        currentTriggers.push(setTimeout(afterPlayCallback, theTime));
+                    }
+                    return when + parseFloat(q.duration);
                 } else if ($.isArray(q)) {
                     // Correct for load times
                     if (when == 0) {
@@ -255,12 +260,30 @@ function createJRemixer(context, jquery, apiKey) {
                     q.audioSource = audioSource;
                     currentlyQueued.push(audioSource);
                     audioSource.noteGrainOn(when, q.start, q.duration);
-                   if (triggerCallback != null) {
+
+                    // I need to clean up all these ifs
+                    if ("syncBuffer" in q) {
+                        var audioSource = context.createBufferSource();
+                        audioSource.buffer = q.syncBuffer;
+                        audioSource.connect(audioGain);
+                        currentlyQueued.push(audioSource);
+                        audioSource.noteOn(when);
+                    }
+
+                    if (onPlayCallback != null) {
                         theTime = (when - context.currentTime) *  1000;
-                        currentTriggers.push(setTimeout(triggerCallback, theTime));
+                        currentTriggers.push(setTimeout(onPlayCallback, theTime));
+                    }
+                    if (afterPlayCallback != null) {
+                        theTime = (when - context.currentTime + parseFloat(q.duration)) *  1000;
+                        currentTriggers.push(setTimeout(afterPlayCallback, theTime));
                     }
                     return (when + parseFloat(q.duration));
-                } else {
+                } 
+                else if (isSilence(q)) {
+                    return (when + parseFloat(q.duration));
+                }
+                else {
                     error("can't play " + q);
                     return when;
                 }
@@ -275,8 +298,12 @@ function createJRemixer(context, jquery, apiKey) {
                     return queuePlay(0, q);
                 },
 
-                addCallback: function(callback) {
-                    triggerCallback = callback;
+                addOnPlayCallback: function(callback) {
+                    onPlayCallback = callback;
+                },
+        
+                addAfterPlayCallback: function(callback) {
+                    afterPlayCallback = callback;
                 },
 
                 queue: function(q) {
@@ -360,6 +387,10 @@ function createJRemixer(context, jquery, apiKey) {
 
     function isAudioBuffer(a) {
         return 'getChannelData' in a;
+    }
+
+    function isSilence(a) {
+        return 'isSilence' in a;
     }
 
     function trace(text) {
