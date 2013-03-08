@@ -48,7 +48,7 @@ function randomName() {
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
     name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
-    return 'audio2/' + new Date().getTime() + '/' + name;
+    return 'remix_audio/' + apiKey + '/' + new Date().getTime() + '/' + name;
 }
 
 
@@ -246,7 +246,7 @@ window.onload = init;
         <section>
         <div id='select-track'>
             <form action="https://s3.amazonaws.com/static.echonest.com" method="post" enctype="multipart/form-data">
-              <input id='f-filename' type="hidden" name="key" value="audio2/${filename}">
+              <input id='f-filename' type="hidden" name="key" value="remix_audio/${apiKey}/${filename}">
               <input id='f-key' type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY"> 
               <input type="hidden" name="acl" value="public-read"> 
               <input id='redirect-url' type="hidden" name="success_action_redirect"
