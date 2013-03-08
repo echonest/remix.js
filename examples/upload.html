@@ -67,12 +67,13 @@ function fetchSignature() {
 function fetchQinfo() {
     var url = 'http://labs.echonest.com/Uploader/qinfo?callback=?'
     $.getJSON(url, {}, function(data) {
-        info("Estimated analysis time: " + Math.floor(data.estimated_wait * 1.2) + " seconds.");
+        $("#info").text("Estimated analysis time: " + Math.floor(data.estimated_wait * 1.2) + " seconds.");
     });
 }
 
 
 function init() {
+
     // Read the URL query string
     var params = {};
     var q = document.URL.split('?')[1];
@@ -120,6 +121,7 @@ function init() {
         fetchQinfo();
     
     }
+
 }
 
 window.onload = init;
