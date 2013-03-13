@@ -95,6 +95,7 @@ function analyzeAudio(audio, tag, callback) {
 
 function init() {
     // Read the URL query string to decide what to do
+        // should check for webaudio here too
     var params = {};
     var q = document.URL.split('?')[1];
     if(q != undefined){
@@ -107,7 +108,7 @@ function init() {
         }
     }
 
-    // should check for webaudio here
+
 
     if ('key' in params) {
         // We just uploaded a track. 
@@ -163,7 +164,8 @@ function init() {
                     xhr.onreadystatechange = showRemixPage;
                     xhr.send(referenceForm);
                 });
-        );
+            }
+        });
     } 
     else if ('trid' in params) {
         // We were passed a trackID directly in the url.
