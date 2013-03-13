@@ -45,8 +45,7 @@ function randomName() {
     return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
 }
 
-// We could randomize this even more.  Current is /audio2/EN_API_KEY/blah/name.mp3
-// Better might be /audio2/EN_API_KEY/blah/blahblah.mp3 ?
+// Need to make this remix_audio, ideally...
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
     name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
@@ -94,8 +93,12 @@ function analyzeAudio(audio, tag, callback) {
 
 
 function init() {
+    if (window.webkitAudioContext === undefined) {
+        error("Sorry, this app needs advanced web audio. Your browser doesn't"
+            + " support it. Try the latest version of Chrome");
+    }
+
     // Read the URL query string to decide what to do
-        // should check for webaudio here too
     var params = {};
     var q = document.URL.split('?')[1];
     if(q != undefined){
@@ -137,7 +140,8 @@ function init() {
                 console.log("finished the analysis");
                 var referenceJson = {'trid': trackID, 'trackURL': trackURL}; 
                 // Will need to update this to our new folder
-                var key = "audio2/" + trackID + ".json";
+                var key = "remix_refs/" + trackID + ".json";
+                // Or something
                 var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
                 $.getJSON(url, {}, function(data) {
                     console.log("got the policy");
@@ -154,8 +158,6 @@ function init() {
                     referenceForm.append('file', referenceJson);
 
                     var xhr = new XMLHttpRequest();  
-                    // the url in the HTML form is https://s3.amazonaws.com/static.echonest.com
-                    // I may have to change this URL tho
                     xhr.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
                             var url = location.protocol + "//" + location.host + location.pathname + "?trid=" + trackID;
@@ -166,6 +168,7 @@ function init() {
                     console.log("about to launch the form");
                     console.log(xhr);
                     console.log(referenceForm);
+
                     xhr.open('POST', 'https://static.echonest.com.s3.amazonaws.com/', true);
                     xhr.send(referenceForm);
                 });
