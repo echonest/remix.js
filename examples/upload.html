@@ -44,10 +44,12 @@ function randomName() {
     return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
 }
 
-
+// We could randomize this even more.  Current is /audio2/EN_API_KEY/blah/name.mp3
+// Better might be /audio2/EN_API_KEY/blah/blahblah.mp3 ?
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
     name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
+    name = Math.floor(Math.random(10000) * 10000) + ".mp3";
     return 'audio2/' + apiKey + '/' + new Date().getTime() + '/' + name;
 }
 
@@ -211,7 +213,6 @@ function init() {
             function() {
                 var filename = $("#file").val();
                 if (endsWith(filename.toLowerCase(), ".mp3")) {
-                    // should I add our EN API key in here?  Instead of further down?
                     $("#f-filename").attr('value', fixFileName(filename));
                     $("#upload").removeAttr('disabled');
                 } else {
