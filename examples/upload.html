@@ -48,7 +48,7 @@ function randomName() {
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
     name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
-    return 'remix_audio/' + apiKey + '/' + new Date().getTime() + '/' + name;
+    return 'audio2/' + apiKey + '/' + new Date().getTime() + '/' + name;
 }
 
 
@@ -105,6 +105,7 @@ function init() {
     }
 
     if ('key' in params) {
+        // We just uploaded a track
         $("#select-track").hide();
         $("#play-remix").show();
         $('.btn').attr('disabled','disabled');
@@ -115,6 +116,10 @@ function init() {
 
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
+
+                // This is where I can write my JSON file so that we can access the track again
+                // {'trid': trackID, 'trackURL': trackUrl}
+        
                 console.log("Ready to remix");
                 trackID = data.trid;
 
@@ -189,8 +194,15 @@ function init() {
                 }
             }
         );
-    } else {
+    } 
+    else if ('trid' in params) {
+        // We were passed a trackID directly in the url.
+        trackID = params['trid'];
+        // Get the trackURL from our hypothetical JSON file here
+    }
 
+    else {
+        // We're waiting for an upload
         $("#play-remix").hide();
         $("#redirect-url").attr('value', document.URL);
         $("#f-filename").attr('value', 'audio2/' + randomName() + '.mp3');
@@ -199,6 +211,7 @@ function init() {
             function() {
                 var filename = $("#file").val();
                 if (endsWith(filename.toLowerCase(), ".mp3")) {
+                    // should I add our EN API key in here?  Instead of further down?
                     $("#f-filename").attr('value', fixFileName(filename));
                     $("#upload").removeAttr('disabled');
                 } else {
@@ -246,7 +259,7 @@ window.onload = init;
         <section>
         <div id='select-track'>
             <form action="https://s3.amazonaws.com/static.echonest.com" method="post" enctype="multipart/form-data">
-              <input id='f-filename' type="hidden" name="key" value="remix_audio/${apiKey}/${filename}">
+              <input id='f-filename' type="hidden" name="key" value="remix_audio/${filename}">
               <input id='f-key' type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY"> 
               <input type="hidden" name="acl" value="public-read"> 
               <input id='redirect-url' type="hidden" name="success_action_redirect"
@@ -254,7 +267,7 @@ window.onload = init;
               <input id='f-policy' type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
               <input id='f-signature' type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
               <input type="hidden" name="Content-Type" value="audio/mpeg">
-              <!-- I am currently getting errors when I send in the API key:  may need to change our 'policy', 
+              <!-- I am currently getting errors when I send in the EN API key:  may need to change our 'policy', 
                     whatever that is.
               <input id='f-apikey' type="hidden" name="apikey" value="FILDTEOIK2HBORODV">
               -->
