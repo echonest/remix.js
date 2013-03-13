@@ -25,6 +25,7 @@
 <script type="text/javascript">
 
 // Remix with any track
+// I should move some of these things into remix.js itself...
 var apiKey = 'FILDTEOIK2HBORODV';
 var trackID;
 var trackURL;
@@ -107,10 +108,10 @@ function init() {
     }
 
     if ('key' in params) {
-        // We just uploaded a track
+        // We just uploaded a track. 
+        // We need to log the trackID and the URL to S3, and then redirect
         $("#select-track").hide();
-        $("#play-remix").show();
-        $('.btn').attr('disabled','disabled');
+        $("#play-remix").hide();
 
         $("#info").text("Analyzing audio...");
         trackURL = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
@@ -119,11 +120,56 @@ function init() {
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
 
-                // This is where I can write my JSON file so that we can access the track again
-                // {'trid': trackID, 'trackURL': trackUrl}
-        
-                console.log("Ready to remix");
                 trackID = data.trid;
+
+                // This is where I can write my JSON file so that we can access the track via trackID
+
+                // or can I move this to our servers?  Hrmrmrmr.  
+
+                // save this to remix_refs/trid.json
+                // or save to remix_refs/EN_API_KEY/trid.json
+                // This will mean that only tracks that a user has uploaded can be used by the user
+                // Which is better for 'security', but worse for time-saving
+                // because what I'd like to be able to eventually do is do CLIENT-SIDE fingerprinting to get trackIDs
+                // and then just throw people to the right trackID
+
+                function showRemixPage() {
+                  // check that we're good, then do the below
+                    if (xhr.readyState==4 && xhr.status==200) {
+                        var url = location.protocol + "//" + location.host + location.pathname + "?trid=" + trackID;
+                        location.href = url;
+                    }
+                }
+
+                var referenceJson = {'trid': trackID, 'trackURL': trackURL}; 
+                // Will need to update this to our new folder
+                var key = "audio2/" + trackID + ".json";
+                var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
+                $.getJSON(url, {}, function(data) {
+                    policy = data.policy;
+                    signature = data.signature;
+                    referenceForm = new FormData();
+
+                    fd.append('key', data.key);
+                    fd.append('policy', data.policy);
+                    fd.append('signature', data.signature);
+                    fd.append('acl', 'public-read');
+                    fd.append('Content-Type', 'application/json')
+                    fd.append('file', referenceJson);
+
+                    var xhr = new XMLHttpRequest();  
+                    xhr.open('POST', 'https://s3.amazonaws.com/static.echonest.com', true);
+                    xhr.onreadystatechange = showRemixPage;
+                    xhr.send(formdata);
+                });
+
+
+
+
+
+                // this is going to move to the ?trid version
+                console.log("Ready to remix");
+                
 
                 var context = new webkitAudioContext();
                 var fs;
