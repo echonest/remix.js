@@ -126,6 +126,10 @@ function init() {
             if (data.status === 'done') {
                 trackID = data.trid;
 
+                // Go looking for the trackURL
+
+                // only do this if I can't FIND the trid
+
                 // This is where I can write my JSON file so that we can access the track via trackID
 
                 // or can I move this to our servers?  Or hide it in remix.js?
@@ -136,6 +140,8 @@ function init() {
                 // Which is better for 'security', but worse for time-saving
                 // because what I'd like to be able to eventually do is do CLIENT-SIDE fingerprinting to get trackIDs
                 // and then just throw people to the right trackID
+
+                
 
                 console.log("finished the analysis");
                 var referenceJson = {'trid': trackID, 'trackURL': trackURL}; 
