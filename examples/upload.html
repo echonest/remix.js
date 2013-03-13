@@ -136,13 +136,6 @@ function init() {
                 // because what I'd like to be able to eventually do is do CLIENT-SIDE fingerprinting to get trackIDs
                 // and then just throw people to the right trackID
 
-                function showRemixPage() {
-                  // check that we're good, then do the below
-                    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
-                        var url = location.protocol + "//" + location.host + location.pathname + "?trid=" + trackID;
-                        location.href = url;
-                    }
-                }
 
                 var referenceJson = {'trid': trackID, 'trackURL': trackURL}; 
                 // Will need to update this to our new folder
@@ -164,8 +157,14 @@ function init() {
                     var xhr = new XMLHttpRequest();  
                     // the url in the HTML form is https://s3.amazonaws.com/static.echonest.com
                     // I may have to change this URL tho
+                    xhr.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            var url = location.protocol + "//" + location.host + location.pathname + "?trid=" + trackID;
+                            location.href = url;
+                        }
+                    }
                     xhr.open('POST', 'https://s3.amazonaws.com/static.echonest.com', true);
-                    xhr.onreadystatechange = showRemixPage;
+                    
                     xhr.send(referenceForm);
                 });
             }
