@@ -121,7 +121,8 @@ function init() {
         
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
-
+                
+                console.log(data);
                 trackID = data.trid;
 
                 // This is where I can write my JSON file so that we can access the track via trackID
@@ -147,6 +148,7 @@ function init() {
                 // Will need to update this to our new folder
                 var key = "audio2/" + trackID + ".json";
                 var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
+                console.log(url);
                 $.getJSON(url, {}, function(data) {
                     policy = data.policy;
                     signature = data.signature;
