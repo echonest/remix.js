@@ -153,16 +153,19 @@ function init() {
                     referenceForm.append('Content-Type', 'application/json')
                     referenceForm.append('file', referenceJson);
 
-                    var xhr = new XMLHttpRequest();  
+                    var xhr = new getXMLHTTPObject();  
                     // the url in the HTML form is https://s3.amazonaws.com/static.echonest.com
                     // I may have to change this URL tho
-                    xhr.onreadystatechange = function() {
-                        if (this.readyState == 4 && this.status == 200) {
+                    uploadComplete = function() {
+                            console.log("got it!");
                             var url = location.protocol + "//" + location.host + location.pathname + "?trid=" + trackID;
-                            location.href = url;
-                        }
+                            console.log(url);                            
+                            // location.href = url;
                     }
+                    xhr.addEventListener("load", uploadComplete, false);
+
                     console.log("about to launch the form");
+                    console.log(xhr);
                     xhr.open('POST', 'https://static.echonest.com.s3.amazonaws.com/', true);
                     xhr.send(referenceForm);
                 });
