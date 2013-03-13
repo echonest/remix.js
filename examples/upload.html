@@ -153,7 +153,7 @@ function init() {
                     referenceForm.append('Content-Type', 'application/json')
                     referenceForm.append('file', referenceJson);
 
-                    var xhr = new getXMLHTTPObject();  
+                    var xhr = getXMLHTTPObject(); 
                     // the url in the HTML form is https://s3.amazonaws.com/static.echonest.com
                     // I may have to change this URL tho
                     uploadComplete = function() {
