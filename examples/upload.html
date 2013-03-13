@@ -121,8 +121,6 @@ function init() {
         
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
-                
-                console.log(data);
                 trackID = data.trid;
 
                 // This is where I can write my JSON file so that we can access the track via trackID
@@ -141,13 +139,13 @@ function init() {
                 // Will need to update this to our new folder
                 var key = "audio2/" + trackID + ".json";
                 var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
-                console.log(url);
                 $.getJSON(url, {}, function(data) {
                     policy = data.policy;
                     signature = data.signature;
                     referenceForm = new FormData();
 
-                    referenceForm.append('key', data.key);
+                    referenceForm.append('key', key);
+                    referenceForm.append('AWSAccessKeyId', data.key);
                     referenceForm.append('policy', data.policy);
                     referenceForm.append('signature', data.signature);
                     referenceForm.append('acl', 'public-read');
@@ -163,8 +161,8 @@ function init() {
                             location.href = url;
                         }
                     }
-                    xhr.open('POST', 'https://s3.amazonaws.com/static.echonest.com', true);
-                    
+                    console.log(referenceForm);
+                    xhr.open('POST', 'https://static.echonest.com.s3.amazonaws.com/', true);
                     xhr.send(referenceForm);
                 });
             }
