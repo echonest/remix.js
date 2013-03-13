@@ -138,7 +138,7 @@ function init() {
 
                 function showRemixPage() {
                   // check that we're good, then do the below
-                    if (xhr.readyState==4 && xhr.status==200) {
+                    if (xmlhttp.readyState==4 && xmlhttp.status==200) {
                         var url = location.protocol + "//" + location.host + location.pathname + "?trid=" + trackID;
                         location.href = url;
                     }
@@ -165,7 +165,7 @@ function init() {
                     // the url in the HTML form is https://s3.amazonaws.com/static.echonest.com
                     // I may have to change this URL tho
                     xhr.open('POST', 'https://s3.amazonaws.com/static.echonest.com', true);
-                    xhr.onreadystatechange = showRemixPage();
+                    xhr.onreadystatechange = showRemixPage;
                     xhr.send(referenceForm);
                 });
             }
