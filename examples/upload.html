@@ -134,12 +134,13 @@ function init() {
                 // because what I'd like to be able to eventually do is do CLIENT-SIDE fingerprinting to get trackIDs
                 // and then just throw people to the right trackID
 
-
+                console.log("finished the analysis");
                 var referenceJson = {'trid': trackID, 'trackURL': trackURL}; 
                 // Will need to update this to our new folder
                 var key = "audio2/" + trackID + ".json";
                 var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
                 $.getJSON(url, {}, function(data) {
+                    console.log("got the policy");
                     policy = data.policy;
                     signature = data.signature;
                     referenceForm = new FormData();
@@ -161,7 +162,7 @@ function init() {
                             location.href = url;
                         }
                     }
-                    console.log(referenceForm);
+                    console.log("about to launch the form");
                     xhr.open('POST', 'https://static.echonest.com.s3.amazonaws.com/', true);
                     xhr.send(referenceForm);
                 });
