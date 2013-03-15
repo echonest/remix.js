@@ -134,14 +134,7 @@ function init() {
                 // save this to remix_refs/trid.json  (How much of this can I hide in remix.js?)
                 console.log("finished the analysis");
                 var referenceJson = {'trid': trackID, 'trackURL': trackURL}; 
-                
-                // why not?
-                BlobBuilder = window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder;
-                var bb = new BlobBuilder();  
-                bb.append(barray);   
-                bb.append(referenceJson);
-                var blob = bb.getBlob();  
-
+                var blob = new Blob([referenceJson]); //  maybe, the blob
 
 
                 // Will need to update this to our new folder and new policy, but let's try it for now.
