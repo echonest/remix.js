@@ -130,12 +130,14 @@ function init() {
                 // only do this if I can't FIND the trid
                 // If I can find a trid, then I just redirect to the trid
                 var url = 'http://static.echonest.com/remix_refs/' + trackID;
-                $.getJSON(url, {}, function(data) {
+                var jqxhr = $.getJSON(url, {}, function(data) {
                     console.log(data);
                     // if I 404, then I do the rest
                     // of course, indications are that $.getJSON may not handle 404s.  Adorable
                     
                 });
+                jqxhr.error(function() { console.log("Could't find a track ID"); });
+                jqxhr.success(function() { console.log("found a trackID and URL"); });
 
                 // This is where I can write my JSON file to S3 so that we can access the track via trackID
                 // save this to remix_refs/trid.json  (How much of this can I hide in remix.js?)
