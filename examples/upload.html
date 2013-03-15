@@ -136,6 +136,7 @@ function init() {
                 var referenceJson = {'trid': trackID, 'trackURL': trackURL}; 
                 
                 // why not?
+                BlobBuilder = window.MozBlobBuilder || window.WebKitBlobBuilder || window.BlobBuilder;
                 var bb = new BlobBuilder();  
                 bb.append(barray);   
                 bb.append(referenceJson);
