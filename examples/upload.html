@@ -129,24 +129,16 @@ function init() {
                 // Go looking for the trackURL
 
                 // only do this if I can't FIND the trid
+                // If I can find a trid, then I just redirect to the trid
 
                 // This is where I can write my JSON file so that we can access the track via trackID
-
-                // or can I move this to our servers?  Or hide it in remix.js?
-
-                // save this to remix_refs/trid.json
-                // or save to remix_refs/EN_API_KEY/trid.json
-                // This will mean that only tracks that a user has uploaded can be used by the user
-                // Which is better for 'security', but worse for time-saving
-                // because what I'd like to be able to eventually do is do CLIENT-SIDE fingerprinting to get trackIDs
-                // and then just throw people to the right trackID
-
-                
+                // save this to remix_refs/trid.json  (How much of this can I hide in remix.js?)
 
                 console.log("finished the analysis");
                 var referenceJson = {'trid': trackID, 'trackURL': trackURL}; 
-                // Will need to update this to our new folder
-                var key = "remix_refs/" + trackID + ".json";
+                // Will need to update this to our new folder and new policy, but let's try it for now.
+                // OK, I am going to lie about the content type too, because of the policy. 
+                var key = "audio2/" + trackID + ".json";
                 // Or something
                 var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
                 $.getJSON(url, {}, function(data) {
@@ -160,12 +152,13 @@ function init() {
                     referenceForm.append('policy', data.policy);
                     referenceForm.append('signature', data.signature);
                     referenceForm.append('acl', 'public-read');
-                    referenceForm.append('Content-Type', 'application/json')
-                    referenceForm.append('file', referenceJson);
+                    referenceForm.append('Content-Type', 'audio/mpeg'); // Will need to change this!
+                    referenceForm.append('file', referenceJson); // And this might just be plain wrong
 
                     var xhr = new XMLHttpRequest();  
                     xhr.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
+                            console.log("Just posted a key of: " + key);
                             var url = location.protocol + "//" + location.host + location.pathname + "?trid=" + trackID;
                             console.log(url);
                             //location.href = url;
@@ -187,7 +180,7 @@ function init() {
         console.log(trackID);
         $("#play-remix").show();
         // Get the trackURL from our hypothetical JSON file here and begin to remix
-        // I may have broken the layout here, but I will fix it later
+        // I may have broken the actual remixing code here, but I will fix it later
 
         console.log("Ready to remix");
 
