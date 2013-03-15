@@ -134,6 +134,15 @@ function init() {
                 // save this to remix_refs/trid.json  (How much of this can I hide in remix.js?)
                 console.log("finished the analysis");
                 var referenceJson = {'trid': trackID, 'trackURL': trackURL}; 
+                
+                // why not?
+                var bb = new BlobBuilder();  
+                bb.append(barray);   
+                bb.append(referenceJson);
+                var blob = bb.getBlob();  
+
+
+
                 // Will need to update this to our new folder and new policy, but let's try it for now.
                 // OK, I am going to lie about the content type too, because of the policy. 
                 // AND THE FILE NAME
@@ -152,7 +161,7 @@ function init() {
                     referenceForm.append('signature', data.signature);
                     referenceForm.append('acl', 'public-read');
                     referenceForm.append('Content-Type', 'audio/mpeg'); // Will need to change this!
-                    referenceForm.append('file', referenceJson); // And this might just be plain wrong
+                    referenceForm.append('file', blob);
 
                     var xhr = new XMLHttpRequest();  
                     xhr.onreadystatechange = function() {
