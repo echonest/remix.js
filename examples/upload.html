@@ -121,6 +121,7 @@ function init() {
 
         $("#info").text("Analyzing audio...");
         trackURL = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
+        console.log(trackID, trackURL);
         
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
@@ -129,7 +130,11 @@ function init() {
                 // Go looking for the trackURL
                 // only do this if I can't FIND the trid
                 // If I can find a trid, then I just redirect to the trid
+                // My test trackID is:  
                 var url = 'http://static.echonest.com/remix_refs/' + trackID;
+
+
+                
                 var jqxhr = $.getJSON(url, {}, function(data) {
                     console.log(data);
                     // if I 404, then I do the rest
@@ -137,7 +142,7 @@ function init() {
                     
                 });
                 jqxhr.error(function() { console.log("Could't find a track ID"); });
-                jqxhr.success(function() { console.log("found a trackID and URL"); });
+                jqxhr.success(function() { console.log("found a trackID and URL "); });
 
                 // This is where I can write my JSON file to S3 so that we can access the track via trackID
                 // save this to remix_refs/trid.json  (How much of this can I hide in remix.js?)
@@ -148,8 +153,7 @@ function init() {
 
                 // Will need to update this to our new folder and new policy, but let's try it for now.
                 // OK, I am going to lie about the content type too, because of the policy. 
-                // AND THE FILE NAME
-                var key = "audio2/" + trackID + "-json.mp3";
+                var key = "audio2/" + trackID + "-json.json";
                 // Or something
                 var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
                 $.getJSON(url, {}, function(data) {
@@ -163,7 +167,7 @@ function init() {
                     referenceForm.append('policy', data.policy);
                     referenceForm.append('signature', data.signature);
                     referenceForm.append('acl', 'public-read');
-                    referenceForm.append('Content-Type', 'audio/mpeg'); // Will need to change this!
+                    referenceForm.append('Content-Type', 'application/json');
                     referenceForm.append('file', blob);
 
                     var xhr = new XMLHttpRequest();  
