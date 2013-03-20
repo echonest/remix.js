@@ -195,6 +195,8 @@ function init() {
         // We were passed a trackID directly in the url.
         trackID = params['trid'];
         console.log(trackID);
+        $("#play-remix").show();
+        $("#select-track").hide();
 
 
         var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
@@ -203,78 +205,74 @@ function init() {
             console.log(data.trid, data.trackURL);
             trackURL = data.trackURL;
             // then make everything else happen after this..
-        });
 
-        $("#play-remix").show();
-        // Get the trackURL from our hypothetical JSON file here and begin to remix
-        // I may have broken the actual remixing code here, but I will fix it later
+            console.log("Ready to remix");
 
-        console.log("Ready to remix");
-
-        var context = new webkitAudioContext();
-        var fs;
-        // Only use the filesystem if we have access to it.
-        if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
-            window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-            window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
-                fs = filesystem;
-            }, fileErrorHandler);
-        }
-
-        var wavesurfer = Object.create(WaveSurfer);
-        wavesurfer.init({
-            canvas: document.querySelector('#waveCanvas'),
-            waveColor: '#888888',
-            progressColor: '#000000',
-            loadingColor: '#000000',
-            cursorColor: '#888888'
-        });
-        
-        var remixedWavesurfer = Object.create(WaveSurfer);
-        remixedWavesurfer.init({
-            canvas: document.querySelector('#RemixedWaveCanvas'),
-            waveColor: '#00ACEB',
-            progressColor: '#000000',
-            loadingColor: '#000000',
-            cursorColor: '#00ACEB'
-        });
-
-        remixer = createJRemixer(context, $, apiKey);
-        player = remixer.getPlayer();
-        $("#info").text("Loading analysis data...");
-
-        remixer.remixTrackById(trackID, trackURL, function(t, percent) {
-            track = t;
-
-            $("#info").text(percent + "% of the track loaded...");
-            if (percent == 100) {
-                $("#info").text(percent + "% of the track loaded, remixing...");
+            var context = new webkitAudioContext();
+            var fs;
+            // Only use the filesystem if we have access to it.
+            if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
+                window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+                window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
+                    fs = filesystem;
+                }, fileErrorHandler);
             }
 
-            if (track.status == 'ok') {
-                wavesurfer.loadBuffer(track.analysis.beats);
+            var wavesurfer = Object.create(WaveSurfer);
+            wavesurfer.init({
+                canvas: document.querySelector('#waveCanvas'),
+                waveColor: '#888888',
+                progressColor: '#000000',
+                loadingColor: '#000000',
+                cursorColor: '#888888'
+            });
+            
+            var remixedWavesurfer = Object.create(WaveSurfer);
+            remixedWavesurfer.init({
+                canvas: document.querySelector('#RemixedWaveCanvas'),
+                waveColor: '#00ACEB',
+                progressColor: '#000000',
+                loadingColor: '#000000',
+                cursorColor: '#00ACEB'
+            });
 
-                $('.btn-original').removeAttr('disabled');
-                remixed = new Array();
-                // Extract the first beat of every bar.
-                var meter = parseInt(track.analysis.track.time_signature);
-                for (var i=0; i < track.analysis.beats.length; i++) {
-                    if (i % meter == 0) {
-                        remixed.push(track.analysis.beats[i])
+            remixer = createJRemixer(context, $, apiKey);
+            player = remixer.getPlayer();
+            $("#info").text("Loading analysis data...");
+
+            remixer.remixTrackById(trackID, trackURL, function(t, percent) {
+                track = t;
+
+                $("#info").text(percent + "% of the track loaded...");
+                if (percent == 100) {
+                    $("#info").text(percent + "% of the track loaded, remixing...");
+                }
+
+                if (track.status == 'ok') {
+                    wavesurfer.loadBuffer(track.analysis.beats);
+
+                    $('.btn-original').removeAttr('disabled');
+                    remixed = new Array();
+                    // Extract the first beat of every bar.
+                    var meter = parseInt(track.analysis.track.time_signature);
+                    for (var i=0; i < track.analysis.beats.length; i++) {
+                        if (i % meter == 0) {
+                            remixed.push(track.analysis.beats[i])
+                        }
                     }
-                }
-                $("#info").text("Remix complete!");
+                    $("#info").text("Remix complete!");
 
-                remixedWavesurfer.loadBuffer(remixed);
+                    remixedWavesurfer.loadBuffer(remixed);
 
-                // Only use the filesystem if we have access to it.
-                if (fs) {
-                    remixer.saveRemixLocally(fs, remixed, function(saveURL) {
-                        $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
-                    });
+                    // Only use the filesystem if we have access to it.
+                    if (fs) {
+                        remixer.saveRemixLocally(fs, remixed, function(saveURL) {
+                            $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
+                        });
+                    }
+                    $('.btn-remixed').removeAttr('disabled');
                 }
-                $('.btn-remixed').removeAttr('disabled');
-            }
+            });
         });
     } else {
         // We're waiting for an upload
