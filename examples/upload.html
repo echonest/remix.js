@@ -136,15 +136,11 @@ function init() {
                 // and  my target is http://static.echonest.com/remix_refs/TRPTEMD13D4B7A7733.json 
                 var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
                 var jqxhr = $.getJSON(url, {}, function(data) {
-                    console.log(data);
-                    // if I 404, then I do the rest
-                    // of course, indications are that $.getJSON may not handle 404s.  Adorable
-                    trackID = data.trid;
-                    trackURL = data.trackURL;
-                    console.log(trackID, trackURL);
-                    // redirect!
-                    
+                    var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
+                    console.log(data.trid, data.trackURL, newUrl);
+                    location.href = newUrl;
                 });
+                // If we 404 on that file, we make it ourselves
                 jqxhr.error(function() { 
                     console.log("Could't find a saved JSON file"); 
                     // This is where I can write my JSON file to S3 so that we can access the track via trackID
@@ -187,13 +183,10 @@ function init() {
 
                         xhr.open('POST', 'https://static.echonest.com.s3.amazonaws.com/', true);
                         xhr.send(referenceForm);
-                        // redirect?  Or can we check agains things?
+                        // redirect?  Or can/should we check agains things?
                     });
 
 
-                });
-                jqxhr.success(function() { 
-                    console.log("found a trackID and URL "); 
                 });
             }
         });
@@ -202,6 +195,16 @@ function init() {
         // We were passed a trackID directly in the url.
         trackID = params['trid'];
         console.log(trackID);
+
+
+        var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
+        var jqxhr = $.getJSON(url, {}, function(data) {
+            console.log("got it!!");
+            console.log(data.trid, data.trackURL);
+            trackURL = data.trackURL;
+            // then make everything else happen after this..
+        });
+
         $("#play-remix").show();
         // Get the trackURL from our hypothetical JSON file here and begin to remix
         // I may have broken the actual remixing code here, but I will fix it later
