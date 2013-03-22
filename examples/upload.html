@@ -281,6 +281,7 @@ function init() {
                 var filename = $("#file").val();
                 if (endsWith(filename.toLowerCase(), ".mp3")) {
                     $("#f-filename").attr('value', fixFileName(filename));
+                    console.log($("#f-filename"));
                     $("#upload").removeAttr('disabled');
                 } else {
                     alert('Sorry, this app only supports MP3s');
