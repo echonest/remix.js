@@ -45,11 +45,6 @@ function randomName() {
     return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
 }
 
-
-function fixFileName(name) {
-    return 'remix_refs/
-}
-
 // Wil need to put a proper ip or URL in here
 function fetchSignature() {
     var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=ref'
