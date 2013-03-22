@@ -55,7 +55,7 @@ function fixFileName(name) {
 
 
 function fetchSignature() {
-    var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
+    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?'
     $.getJSON(url, {}, function(data) {
         policy = data.policy;
         signature = data.signature;
@@ -181,7 +181,7 @@ function init() {
 
                         xhr.open('POST', 'https://static.echonest.com.s3.amazonaws.com/', true);
                         xhr.send(referenceForm);
-                        // redirect?  Or can/should we check agains things?
+                        // redirect?  Or can/should we check against things?
                     });
 
 
@@ -193,7 +193,6 @@ function init() {
     else if ('trid' in params) {
         // We were passed a trackID directly in the url.
         trackID = params['trid'];
-        console.log(trackID);
         $("#play-remix").show();
         $("#select-track").hide();
 
