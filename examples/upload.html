@@ -145,11 +145,8 @@ function init() {
                     // save this to remix_refs/trid.json  (How much of this can I hide in remix.js?)
                     var referenceJson = {"trid": trackID, "trackURL": trackURL}; 
                     var blob = new Blob([referenceJson]); //  maybe, the blob
-                    // Will need to update this to our new folder and new policy, but let's try it for now.
-                    var key = "TESTremix_refs/" + trackID + "-json.json";
-                    // Or something
+                    var key = "remix_refs/" + trackID + ".json";
                     var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=ref'
-                    // var url = 'http://labs.echonest.com/Uploader/policy?callback=?' // old
                     $.getJSON(url, {}, function(data) {
                         console.log("got the policy");
                         policy = data.policy;
@@ -162,7 +159,7 @@ function init() {
                         referenceForm.append('signature', data.signature);
                         referenceForm.append('acl', 'public-read');
                         referenceForm.append('Content-Type', 'application/json');
-                        referenceForm.append('file', blob);
+                        referenceForm.append('file', referenceJson);
 
                         var xhr = new XMLHttpRequest();  
                         xhr.onreadystatechange = function() {
@@ -281,7 +278,6 @@ function init() {
                 var filename = $("#file").val();
                 if (endsWith(filename.toLowerCase(), ".mp3")) {
                     $("#f-filename").attr('value', fixFileName(filename));
-                    console.log($("#f-filename"));
                     $("#upload").removeAttr('disabled');
                 } else {
                     alert('Sorry, this app only supports MP3s');
