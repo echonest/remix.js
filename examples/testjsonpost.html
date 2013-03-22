@@ -99,8 +99,8 @@ function init() {
                 console.log("Could't find a saved JSON file"); 
 
                 // Bleh.  Am stuck on getting the JSON file to create and post
-                var referenceJson = {"trid": trackID, "trackURL": trackURL}; 
-                var blob = new Blob([referenceJson]); //  maybe, the blob
+                var referenceJson = {"trid": trackID, "trackURL": "wombat"}; 
+                var blob = new Blob([JSON.stringify(referenceJson)); //  maybe, the blob
                 blob.type = 'application/json';
                 var key = 'remix_refs/' + trackID + '.json';
                 var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=ref'
@@ -116,7 +116,7 @@ function init() {
                     referenceForm.append('AWSAccessKeyId', data.key);
                     referenceForm.append('acl', 'public-read');
                     referenceForm.append('Content-Type', 'application/json');
-                    referenceForm.append('file', JSON.stringify(referenceJson));
+                    referenceForm.append('file', blov);
 
                     var xhr = new XMLHttpRequest();  
                     xhr.onreadystatechange = function() {
