@@ -125,7 +125,10 @@ function init() {
                             var url = location.protocol + "//" + location.host + location.pathname + "?trid=" + trackID;
                             console.log(url);
                             //location.href = url;
-                        }
+                        } else if (this.readyState == 4) {
+                            console.log("post failed");
+                            console.log(this);
+                        }       
                     }
                     console.log("about to launch the form");
                     console.log(blob);
