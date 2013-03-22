@@ -55,7 +55,7 @@ function fixFileName(name) {
 
 
 function fetchSignature() {
-    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?'
+    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=audio'
     $.getJSON(url, {}, function(data) {
         policy = data.policy;
         signature = data.signature;
@@ -148,7 +148,8 @@ function init() {
                     // Will need to update this to our new folder and new policy, but let's try it for now.
                     var key = "remix_refs/" + trackID + "-json.json";
                     // Or something
-                    var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
+                    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=ref'
+                    // var url = 'http://labs.echonest.com/Uploader/policy?callback=?' // old
                     $.getJSON(url, {}, function(data) {
                         console.log("got the policy");
                         policy = data.policy;
