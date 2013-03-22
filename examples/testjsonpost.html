@@ -47,7 +47,7 @@ function randomName() {
 
 
 function fixFileName(name) {
-    return 'remix_refs/TRTESTTEST.json'
+    return 'remix_refs/
 }
 
 // Wil need to put a proper ip or URL in here
@@ -146,7 +146,7 @@ function init() {
                     console.log(xhr);
                     console.log(referenceForm);
 
-                    xhr.open('POST', 'https://s3.amazonaws.com/static.echonest.com', true);
+                    xhr.open('POST', 'https://static.echonest.com.s3.amazonaws.com/', true);
                     xhr.send(referenceForm);
                 });
             });
@@ -155,9 +155,8 @@ function init() {
 window.onload = init;
 </script>
 
-
     <img src="http://the.echonest.com/media/images/logos/250x80_lt.gif" />
-    </div> <!-- /container -->
+
 </body>
 </html>
 
