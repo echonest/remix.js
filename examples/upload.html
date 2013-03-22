@@ -50,7 +50,7 @@ function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
     name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
     name = Math.floor(Math.random(10000) * 10000) + ".mp3";
-    return 'audio2/' + apiKey + '/' + new Date().getTime() + '/' + name;
+    return 'remix_audio/' + apiKey + '/' + new Date().getTime() + '/' + name;
 }
 
 
@@ -146,8 +146,7 @@ function init() {
                     var referenceJson = {"trid": trackID, "trackURL": trackURL}; 
                     var blob = new Blob([referenceJson]); //  maybe, the blob
                     // Will need to update this to our new folder and new policy, but let's try it for now.
-                    // OK, I am going to lie about the content type too, because of the policy. 
-                    var key = "audio2/" + trackID + "-json.json";
+                    var key = "remix_refs/" + trackID + "-json.json";
                     // Or something
                     var url = 'http://labs.echonest.com/Uploader/policy?callback=?'
                     $.getJSON(url, {}, function(data) {
