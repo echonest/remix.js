@@ -45,7 +45,7 @@ function randomName() {
     return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
 }
 
-// Need to make this remix_audio, ideally...
+
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
     name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
@@ -53,7 +53,7 @@ function fixFileName(name) {
     return 'remix_audio/' + apiKey + '/' + new Date().getTime() + '/' + name;
 }
 
-
+// Wil need to put a proper ip or URL in here
 function fetchSignature() {
     var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=audio'
     $.getJSON(url, {}, function(data) {
@@ -93,7 +93,8 @@ function analyzeAudio(audio, tag, callback) {
 
 
 function init() {
-
+        $("#select-track").hide();
+        $("#play-remix").hide();
             console.log("finished the analysis");
             trackID = "TRTESTTEST";
             // Go looking for the trackURL
@@ -117,7 +118,8 @@ function init() {
                 // save this to remix_refs/trid.json  (How much of this can I hide in remix.js?)
                 var referenceJson = {"trid": trackID, "trackURL": trackURL}; 
                 var blob = new Blob([referenceJson]); //  maybe, the blob
-                var key = "remix_refs/" + trackID + ".json";
+                blob.type = 'application/json';
+                var key = 'remix_refs/' + trackID + '.json';
                 var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=ref'
                 $.getJSON(url, {}, function(data) {
                     console.log("got the policy");
@@ -126,9 +128,9 @@ function init() {
                     referenceForm = new FormData();
 
                     referenceForm.append('key', key);
-                    referenceForm.append('AWSAccessKeyId', data.key);
                     referenceForm.append('policy', data.policy);
                     referenceForm.append('signature', data.signature);
+                    referenceForm.append('AWSAccessKeyId', data.key);
                     referenceForm.append('acl', 'public-read');
                     referenceForm.append('Content-Type', 'application/json');
                     referenceForm.append('file', blob);
