@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<title>Echo Nest Remix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Echo Nest Remix:  The Internet Synthesizer">
+    <meta name="author" content="Brian Whitman / Thor Kell">
+
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src='../remix.js'></script>
+<script src="../wavesurfer/wavesurfer.js"></script>
+<script src="../wavesurfer/drawer.js"></script>
+
+<script type="text/javascript">
+
+// Remix with any track
+// I should move some of these things into remix.js itself...
+var apiKey = 'FILDTEOIK2HBORODV';
+var trackID;
+var trackURL;
+
+var remixer;
+var player;
+var track;
+var remixed;
+
+
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+
+function randomName() {
+    return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
+}
+
+// Need to make this remix_audio, ideally...
+function fixFileName(name) {
+    name = name.replace(/c:\\fakepath\\/i, '');
+    name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
+    name = Math.floor(Math.random(10000) * 10000) + ".mp3";
+    return 'remix_audio/' + apiKey + '/' + new Date().getTime() + '/' + name;
+}
+
+
+function fetchSignature() {
+    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=audio'
+    $.getJSON(url, {}, function(data) {
+        policy = data.policy;
+        signature = data.signature;
+        $('#f-policy').val(data.policy);
+        $('#f-signature').val(data.signature);
+        $('#f-key').val(data.key);
+    });
+}
+
+// Get an estimation of analysis time
+function fetchQinfo() {
+    var url = 'http://labs.echonest.com/Uploader/qinfo?callback=?'
+    $.getJSON(url, {}, function(data) {
+        $("#info").text("Estimated analysis time: " + Math.floor(data.estimated_wait * 1.2) + " seconds.");
+    });
+}
+
+// Cleaner URL decode
+function urldecode(str) {
+   return decodeURIComponent((str+'').replace(/\+/g, '%20'));
+}
+
+// Get the analysis, or keep trying to get it
+function analyzeAudio(audio, tag, callback) {
+    var url = 'http://labs.echonest.com/Uploader/qanalyze?callback=?'
+    $.getJSON(url, { url:audio, tag:tag}, function(data) {
+        if (data.status === 'done' || data.status === 'error') {
+            callback(data);
+        } else {
+            $("#info").text(data.status + ' - ready in about ' + data.estimated_wait + ' secs. ');
+            setTimeout(function() { analyzeAudio(audio, tag, callback); }, 8000);
+        } 
+    });
+}
+
+
+function init() {
+
+            console.log("finished the analysis");
+            trackID = "TRTESTTEST";
+            // Go looking for the trackURL
+            var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
+            var urlXHR = $.getJSON(url, {}, function(data) {
+                var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
+                console.log(data.trid, data.trackURL, newUrl);
+                location.href = newUrl;
+            });
+            // If we 404 on that file, we make it ourselves
+            urlXHR.error(function() { 
+                console.log("Could't find a saved JSON file"); 
+
+            // only do this if I can't FIND the trid
+            // If I can find a trid, then I just redirect to the trid
+            // My test trackID is:  TRPTEMD13D4B7A7733 
+            // and the url is http://static.echonest.com/audio2/FILDTEOIK2HBORODV/1363785559460/2012.mp3
+            // and  my target is http://static.echonest.com/remix_refs/TRPTEMD13D4B7A7733.json 
+
+                // This is where I can write my JSON file to S3 so that we can access the track via trackID
+                // save this to remix_refs/trid.json  (How much of this can I hide in remix.js?)
+                var referenceJson = {"trid": trackID, "trackURL": trackURL}; 
+                var blob = new Blob([referenceJson]); //  maybe, the blob
+                var key = "remix_refs/" + trackID + ".json";
+                var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=ref'
+                $.getJSON(url, {}, function(data) {
+                    console.log("got the policy");
+                    policy = data.policy;
+                    signature = data.signature;
+                    referenceForm = new FormData();
+
+                    referenceForm.append('key', key);
+                    referenceForm.append('AWSAccessKeyId', data.key);
+                    referenceForm.append('policy', data.policy);
+                    referenceForm.append('signature', data.signature);
+                    referenceForm.append('acl', 'public-read');
+                    referenceForm.append('Content-Type', 'application/json');
+                    referenceForm.append('file', blob);
+
+                    var xhr = new XMLHttpRequest();  
+                    xhr.onreadystatechange = function() {
+                        if (this.readyState == 4 && this.status == 200) {
+                            console.log("Just posted a key of: " + key);
+                            var url = location.protocol + "//" + location.host + location.pathname + "?trid=" + trackID;
+                            console.log(url);
+                            //location.href = url;
+                        }
+                    }
+                    console.log("about to launch the form");
+                    console.log(blob);
+                    console.log(data);
+                    console.log(xhr);
+                    console.log(referenceForm);
+
+                    xhr.open('POST', 'https://static.echonest.com.s3.amazonaws.com/', true);
+                    xhr.send(referenceForm);
+                });
+            });
+
+}
+
+window.onload = init;
+</script>
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="index.html">Echo Nest Remix</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="http://echonest.github.com/remix/python.html">Python</a></li>
+              <li><a href="http://echonest.github.com/remix/javascript.html">JavaScript</a></li>
+              <li><a href="http://echonest.github.com/remix/examples.html">Examples</a></li>
+              <li><a href="http://echonest.github.com/remix/who.html">Who</a></li>
+            </ul>
+          </div> <!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>  <!--/.navbar -->
+    
+    <div class="container">
+        <div class="hero-unit">
+            <h1>remix.js:  upload.html<h1>
+            <div id="theCode">
+                <pre><code>// Remix any file.
+// Must decide what to put here...
+</code></pre>
+            </div>
+        </div>
+
+        <div id="info"></div>
+
+        <section>
+        <div id='select-track'>
+            <form action="https://s3.amazonaws.com/static.echonest.com" method="post" enctype="multipart/form-data">
+              <input id='f-filename' type="hidden" name="key" value="remix_audio/${filename}">
+              <input id='f-key' type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY"> 
+              <input type="hidden" name="acl" value="public-read"> 
+              <input id='redirect-url' type="hidden" name="success_action_redirect"
+                  value="YOUR_URL">
+              <input id='f-policy' type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
+              <input id='f-signature' type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
+              <input type="hidden" name="Content-Type" value="audio/mpeg">
+              <!-- I am currently getting errors when I send in the EN API key:  may need to change our 'policy', 
+                    whatever that is.
+              <input id='f-apikey' type="hidden" name="apikey" value="FILDTEOIK2HBORODV">
+              -->
+              Select an <b>MP3</b> to upload : <input  id="file" name="file" type="file"> 
+              <br>
+              <input class="btn btn-primary btn-default" id='upload' type="submit" value="Upload MP3"> 
+            </form> 
+        </div>
+        </section>
+
+        <section id='play-remix'>
+            <div id='waveform'>
+            <h2>Original Track</h2>
+            <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
+            <br />
+            <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play Original</button>
+            <button class='btn btn-original' onClick="player.stop()">Stop Original</button>
+            </div>
+
+            <div id='newWaveform'>
+            <h2>Remixed Track</h2>
+            <canvas id='RemixedWaveCanvas' width='1024px' height='100px'></canvas>
+            <br />
+            <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
+            <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
+            <span id='downloadButton'></a>
+            </div>
+        </section>
+
+    <img src="http://the.echonest.com/media/images/logos/250x80_lt.gif" />
+    </div> <!-- /container -->
+</body>
+</html>
+
+

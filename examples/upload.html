@@ -159,7 +159,7 @@ function init() {
                         referenceForm.append('signature', data.signature);
                         referenceForm.append('acl', 'public-read');
                         referenceForm.append('Content-Type', 'application/json');
-                        referenceForm.append('file', referenceJson);
+                        referenceForm.append('file', blob);
 
                         var xhr = new XMLHttpRequest();  
                         xhr.onreadystatechange = function() {
