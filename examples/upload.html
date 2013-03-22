@@ -146,7 +146,7 @@ function init() {
                     var referenceJson = {"trid": trackID, "trackURL": trackURL}; 
                     var blob = new Blob([referenceJson]); //  maybe, the blob
                     // Will need to update this to our new folder and new policy, but let's try it for now.
-                    var key = "remix_refs/" + trackID + "-json.json";
+                    var key = "TESTremix_refs/" + trackID + "-json.json";
                     // Or something
                     var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=ref'
                     // var url = 'http://labs.echonest.com/Uploader/policy?callback=?' // old
@@ -181,7 +181,6 @@ function init() {
 
                         xhr.open('POST', 'https://static.echonest.com.s3.amazonaws.com/', true);
                         xhr.send(referenceForm);
-                        // redirect?  Or can/should we check against things?
                     });
 
 
