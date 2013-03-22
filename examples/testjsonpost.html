@@ -55,7 +55,7 @@ function fixFileName(name) {
 
 // Wil need to put a proper ip or URL in here
 function fetchSignature() {
-    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=audio'
+    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=ref'
     $.getJSON(url, {}, function(data) {
         policy = data.policy;
         signature = data.signature;
@@ -93,7 +93,6 @@ function analyzeAudio(audio, tag, callback) {
 
 
 function init() {
-        $("#select-track").hide();
         $("#play-remix").hide();
             console.log("finished the analysis");
             trackID = "TRTESTTEST";
@@ -155,6 +154,23 @@ function init() {
                 });
             });
 
+
+// We're hijacking the form to post our JSON
+$("#redirect-url").attr('value', document.URL);
+$("#f-filename").attr('value', 'remix_refs/' + "TRTESTTEST" + .json');
+
+$("#file").change( 
+    function() {
+        var filename = $("#file").val();
+        if (endsWith(filename.toLowerCase(), ".json")) {
+            $("#upload").removeAttr('disabled');
+        }
+    }
+);
+fetchSignature();
+fetchQinfo();
+
+
 }
 
 window.onload = init;
@@ -191,7 +207,7 @@ window.onload = init;
         <section>
         <div id='select-track'>
             <form action="https://s3.amazonaws.com/static.echonest.com" method="post" enctype="multipart/form-data">
-              <input id='f-filename' type="hidden" name="key" value="remix_audio/${filename}">
+              <input id='f-filename' type="hidden" name="key" value="remix_refs/${filename}">
               <input id='f-key' type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY"> 
               <input type="hidden" name="acl" value="public-read"> 
               <input id='redirect-url' type="hidden" name="success_action_redirect"
@@ -199,10 +215,6 @@ window.onload = init;
               <input id='f-policy' type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
               <input id='f-signature' type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
               <input type="hidden" name="Content-Type" value="audio/mpeg">
-              <!-- I am currently getting errors when I send in the EN API key:  may need to change our 'policy', 
-                    whatever that is.
-              <input id='f-apikey' type="hidden" name="apikey" value="FILDTEOIK2HBORODV">
-              -->
               Select an <b>MP3</b> to upload : <input  id="file" name="file" type="file"> 
               <br>
               <input class="btn btn-primary btn-default" id='upload' type="submit" value="Upload MP3"> 
