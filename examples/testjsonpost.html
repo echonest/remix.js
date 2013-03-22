@@ -146,95 +146,15 @@ function init() {
                     console.log(xhr);
                     console.log(referenceForm);
 
-                    xhr.open('POST', 'https://static.echonest.com.s3.amazonaws.com/', true);
+                    xhr.open('POST', 'https://s3.amazonaws.com/static.echonest.com', true);
                     xhr.send(referenceForm);
                 });
             });
-
-
-// We're hijacking the form to post our JSON
-$("#redirect-url").attr('value', document.URL);
-$("#f-filename").attr('value', 'remix_refs/TRTESTTEST.json');
-
-$("#file").change( 
-    function() {
-        var filename = $("#file").val();
-        fixFileName(filename);
-        if (endsWith(filename.toLowerCase(), ".json")) {
-            $("#upload").removeAttr('disabled');
-        }
-    }
-);
-fetchSignature();
-fetchQinfo();
-
-
 }
 
 window.onload = init;
 </script>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand" href="index.html">Echo Nest Remix</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li><a href="http://echonest.github.com/remix/python.html">Python</a></li>
-              <li><a href="http://echonest.github.com/remix/javascript.html">JavaScript</a></li>
-              <li><a href="http://echonest.github.com/remix/examples.html">Examples</a></li>
-              <li><a href="http://echonest.github.com/remix/who.html">Who</a></li>
-            </ul>
-          </div> <!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>  <!--/.navbar -->
-    
-    <div class="container">
-        <div class="hero-unit">
-            <h1>remix.js:  upload.html<h1>
-            <div id="theCode">
-                <pre><code>// Remix any file.
-// Must decide what to put here...
-</code></pre>
-            </div>
-        </div>
-
-        <div id="info"></div>
-
-        <section>
-        <div id='select-track'>
-            <form action="https://s3.amazonaws.com/static.echonest.com" method="post" enctype="multipart/form-data">
-              <input id='f-filename' type="hidden" name="key" value="remix_refs/${filename}">
-              <input id='f-key' type="hidden" name="AWSAccessKeyId" value="YOUR_AWS_ACCESS_KEY"> 
-              <input type="hidden" name="acl" value="public-read"> 
-              <input id='f-policy' type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
-              <input id='f-signature' type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
-              Select an <b>MP3</b> to upload : <input  id="file" name="file" type="file"> 
-              <br>
-              <input class="btn btn-primary btn-default" id='upload' type="submit" value="Upload MP3"> 
-            </form> 
-        </div>
-        </section>
-
-        <section id='play-remix'>
-            <div id='waveform'>
-            <h2>Original Track</h2>
-            <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
-            <br />
-            <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play Original</button>
-            <button class='btn btn-original' onClick="player.stop()">Stop Original</button>
-            </div>
-
-            <div id='newWaveform'>
-            <h2>Remixed Track</h2>
-            <canvas id='RemixedWaveCanvas' width='1024px' height='100px'></canvas>
-            <br />
-            <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
-            <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
-            <span id='downloadButton'></a>
-            </div>
-        </section>
 
     <img src="http://the.echonest.com/media/images/logos/250x80_lt.gif" />
     </div> <!-- /container -->
