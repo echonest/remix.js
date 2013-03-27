@@ -90,14 +90,11 @@ function init() {
             // Go looking for the trackURL
             var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
             var urlXHR = $.getJSON(url, {}, function(data) {
-                console.log("We found it");
-                var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
-                console.log(data.trid, data.trackURL, newUrl);
-                //location.href = newUrl;
+
             });
 
             // If we 404 on that file, we make it ourselves
-            urlXHR.error(function() { 
+            urlXHR.fail(function() { 
                 console.log("Could't find a saved JSON file");
                 var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson?callback=?'
                 var trackURL = 'http://static.echonest.com/audio2/FILDTEOIK2HBORODV/1363785559460/2012.mp3'
@@ -107,6 +104,14 @@ function init() {
                     console.log(data);
                 });
             });
+            // If we find it, we leave
+            urlXHR.done(function() { 
+                console.log("We found it");
+                var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
+                console.log(data.trid, data.trackURL, newUrl);
+                //location.href = newUrl;
+            });
+
 }
 
 window.onload = init;
