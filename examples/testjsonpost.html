@@ -116,7 +116,7 @@ function init() {
                     referenceForm.append('AWSAccessKeyId', data.key);
                     referenceForm.append('acl', 'public-read');
                     referenceForm.append('Content-Type', 'application/json');
-                    referenceForm.append('file', blob);
+                    referenceForm.append('file', blob, key);
 
                     var xhr = new XMLHttpRequest();  
                     xhr.onreadystatechange = function() {
