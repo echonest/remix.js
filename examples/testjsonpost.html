@@ -88,31 +88,30 @@ function init() {
             console.log("finished the analysis");
             trackID = "thortest2";
             // Go looking for the trackURL
-            var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json?callback=?";
+            var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
             var urlXHR = $.getJSON(url, {}, function(data) {
-                console.log(data);
                 console.log("Got the saved json!!!");
             });
             // If we fail on that file, we make it ourselves
-            //urlXHR.fail(function() {
-            //    console.log(urlXHR);
-            //   console.log(data);
-            //    console.log("Could't find a saved JSON file");
-            //    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson?callback=?'
-            //    var trackURL = 'http://static.echonest.com/audio2/FILDTEOIK2HBORODV/1363785559460/2012.mp3'
-            //    // Doing it server side
-            //    $.getJSON(url, {trid: trackID, trackURL: trackURL}, function(data) {
-            //        console.log("Should be there now!");
-            //        console.log(data);
-            //    });
-           // });
+            urlXHR.fail(function() {
+                console.log(urlXHR);
+               console.log(data);
+                console.log("Could't find a saved JSON file");
+                var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson?callback=?'
+                var trackURL = 'http://static.echonest.com/audio2/FILDTEOIK2HBORODV/1363785559460/2012.mp3'
+                // Doing it server side
+                $.getJSON(url, {trid: trackID, trackURL: trackURL}, function(data) {
+                    console.log("Should be there now!");
+                    console.log(data);
+                });
+            });
             // If we find it, we leave
-            //urlXHR.done(function() { 
-            //    console.log("We found it");
-           //     var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
-           //     console.log(data.trid, data.trackURL, newUrl);
-           //     //location.href = newUrl;
-           // });
+            urlXHR.done(function() { 
+                console.log("We found it");
+                var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
+                console.log(data.trid, data.trackURL, newUrl);
+                //location.href = newUrl;
+            });
 
 }
 
