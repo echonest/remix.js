@@ -143,7 +143,7 @@ function init() {
                     // My magic server
                     var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson?callback=?'
                     // Dummy track URL
-                    var trackURL = 'http://static.echonest.com/audio2/FILDTEOIK2HBORODV/1363785559460/2012.mp3'
+                    console.log(trackURL);
                     // Doing it server side
                     $.getJSON(url, {trid: trackID, trackURL: trackURL}, function(data) {
                         console.log("Should be there now!");
