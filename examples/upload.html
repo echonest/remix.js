@@ -118,13 +118,11 @@ function init() {
 
         $("#info").text("Analyzing audio...");
         trackURL = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
-        
-        
+
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
                 console.log("finished the analysis");
                 trackID = data.trid;
-                trackURL = data.trackURL;
 
                 // Go looking for the trackURL
                 cacheFix = Math.floor(Math.random() * 10000);
