@@ -118,6 +118,18 @@ function init() {
                     referenceForm.append('Content-Type', 'application/json');
                     referenceForm.append('file', blob, key);
 
+
+                    console.log("Trying jquery's .ajax?");
+                    $.ajax({
+                        type: 'POST',
+                        url: 'https://static.echonest.com.s3.amazonaws.com/',
+                        data: referenceForm,
+                        processData: false,
+                        contentType: false
+                    }).done(function(data) {
+                           console.log(data);
+                    });
+
                     var xhr = new XMLHttpRequest();  
                     xhr.onreadystatechange = function() {
                         if (this.readyState == 4 && this.status == 200) {
