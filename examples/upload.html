@@ -112,37 +112,33 @@ function init() {
     }
 
     if ('key' in params) {
-        // We just uploaded a track - we need to log the trackID and the URL to S3, and then redirect
+        // We just uploaded a track.
+        // We need to log the trackID and the URL to S3, and then redirect.
+
         $("#select-track").hide();
         $("#play-remix").hide();
-
         $("#info").text("Analyzing audio...");
         trackURL = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
 
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
-                console.log("finished the analysis");
                 trackID = data.trid;
 
-                // Go looking for the trackURL
+                // Go looking for the reference file
                 cacheFix = Math.floor(Math.random() * 10000);
                 var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
                 var urlXHR = $.getJSON(url, {}, function(data) {
-                    console.log(urlXHR.status);
-                    console.log("Success")
+                    console.log("Found a saved JSON file")
                     var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
                     console.log(data.trid, data.trackURL, newUrl);
                     location.href = newUrl;
                 })
                 
-                // If we fail on that file, we make it ourselves
+                // If we fail to find the reference, we make it ourselves
                 urlXHR.fail(function() {
-                    console.log(urlXHR);
                     console.log("Could't find a saved JSON file");
                     // My magic server
                     var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson?callback=?'
-                    // Dummy track URL
-                    console.log(trackURL);
                     // Doing it server side
                     $.getJSON(url, {trid: trackID, trackURL: trackURL}, function(data) {
                         console.log("Should be there now!");
