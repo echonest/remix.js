@@ -132,7 +132,7 @@ function init() {
                     console.log("Success")
                     var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
                     console.log(data.trid, data.trackURL, newUrl);
-                    //location.href = newUrl;
+                    location.href = newUrl;
                 })
                 
                 // If we fail on that file, we make it ourselves
@@ -149,7 +149,7 @@ function init() {
                         console.log(data);
                         var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
                         console.log(data.trid, data.trackURL, newUrl);
-                        //location.href = newUrl;
+                        location.href = newUrl;
                     });
                 });
 
