@@ -99,10 +99,10 @@ function init() {
             // If we 404 on that file, we make it ourselves
             urlXHR.error(function() { 
                 console.log("Could't find a saved JSON file");
-                var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson?trid=?trackURL=?'
+                var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson'
                 var trackURL = 'http://static.echonest.com/audio2/FILDTEOIK2HBORODV/1363785559460/2012.mp3'
                 // Doing it server side
-                $.getJSON(url, {"trid": trackID, "trackURL": trackURL}, function(data) {
+                $.getJSON(url, {trid: trackID, trackURL: trackURL}, function(data) {
                     console.log("Should be there now!");
                     console.log(data);
                 });
