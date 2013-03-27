@@ -86,11 +86,16 @@ function analyzeAudio(audio, tag, callback) {
 function init() {
         $("#play-remix").hide();
             console.log("finished the analysis");
-            trackID = "TRPTEMD13D4B7A7733"; // will this one work?
+            // trackID = "TRPTEMD13D4B7A7733"; // will this one work - yes!  
+            // trackID = "TRthortest"; // will this one work - yes!  
             // Go looking for the trackURL
             var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
             var urlXHR = $.getJSON(url, {}, function(data) {
                 console.log(urlXHR.status);
+                console.log("Success")
+                var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
+                console.log(data.trid, data.trackURL, newUrl);
+                //location.href = newUrl;
             })
             
             // If we fail on that file, we make it ourselves
@@ -106,13 +111,6 @@ function init() {
                     console.log("Should be there now!");
                     console.log(data);
                 });
-            });
-            // If we find it, we leave
-            urlXHR.done(function() { 
-                console.log("We found it");
-                var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
-                console.log(data.trid, data.trackURL, newUrl);
-                //location.href = newUrl;
             });
 
 }
