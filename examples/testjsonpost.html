@@ -88,11 +88,11 @@ function init() {
             console.log("finished the analysis");
             trackID = "thortest2";
             // Go looking for the trackURL
-            var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json?callback=?";
+            var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
             var urlXHR = $.getJSON(url, {}, function(data) {
                 console.log("success");
             })
-            // If we 404 on that file, we make it ourselves
+            // If we fail on that file, we make it ourselves
             urlXHR.fail(function() {
                 console.log(urlXHR);
                 console.log(data);
