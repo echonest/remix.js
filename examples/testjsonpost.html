@@ -100,8 +100,8 @@ function init() {
 
                 // Bleh.  Am stuck on getting the JSON file to create and post
                 var referenceJson = {"trid": trackID, "trackURL": "wombat"}; 
-                var blob = new Blob([JSON.stringify(referenceJson)]); //  maybe, the blob
-                blob.type = 'application/json';
+                var blob = new Blob([JSON.stringify(referenceJson)], {type: 'application/json'});
+
                 var key = 'remix_refs/' + trackID + '.json';
                 var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=ref'
                 $.getJSON(url, {}, function(data) {
