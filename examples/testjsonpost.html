@@ -90,6 +90,7 @@ function init() {
             // Go looking for the trackURL
             var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json?callback=?";
             var urlXHR = $.getJSON(url, {}, function(data) {
+                console.log(data);
                 console.log("Got the saved json!!!");
             });
             // If we fail on that file, we make it ourselves
