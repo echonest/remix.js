@@ -91,10 +91,12 @@ function init() {
             var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json?callback=?";
             var urlXHR = $.getJSON(url, {}, function(data) {
                 console.log("Got the saved json!!!");
-            });
+            }).done(function(data) { console.log( "second success" ); })
+            .fail(function(data) { console.log( "error" ); })
+            
             // If we fail on that file, we make it ourselves
             urlXHR.fail(function() {
-                console.log(urlXHR);
+               console.log(urlXHR);
                 console.log("Could't find a saved JSON file");
                 var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson?callback=?'
                 var trackURL = 'http://static.echonest.com/audio2/FILDTEOIK2HBORODV/1363785559460/2012.mp3'
