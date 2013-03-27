@@ -148,6 +148,9 @@ function init() {
                     $.getJSON(url, {trid: trackID, trackURL: trackURL}, function(data) {
                         console.log("Should be there now!");
                         console.log(data);
+                        var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
+                        console.log(data.trid, data.trackURL, newUrl);
+                        location.href = newUrl;
                     });
                 });
 
