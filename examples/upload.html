@@ -24,8 +24,8 @@
 
 <script type="text/javascript">
 
-// Remix with any track
-// I should move some of these things into remix.js itself...
+// Remix with any track.
+// This uses the Echo Nest's backend servers.  
 var apiKey = 'FILDTEOIK2HBORODV';
 var trackID;
 var trackURL;
@@ -40,12 +40,10 @@ function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
-
 function randomName() {
     return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
 }
 
-// Need to make this remix_audio, ideally...
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
     name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
@@ -73,7 +71,6 @@ function fetchQinfo() {
     });
 }
 
-// Cleaner URL decode
 function urldecode(str) {
    return decodeURIComponent((str+'').replace(/\+/g, '%20'));
 }
@@ -97,7 +94,6 @@ function init() {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
             + " support it. Try the latest version of Chrome");
     }
-
     // Read the URL query string to decide what to do
     var params = {};
     var q = document.URL.split('?')[1];
@@ -114,7 +110,6 @@ function init() {
     if ('key' in params) {
         // We just uploaded a track.
         // We need to log the trackID and the URL to S3, and then redirect.
-
         $("#select-track").hide();
         $("#play-remix").hide();
         $("#info").text("Analyzing audio...");
@@ -123,34 +118,20 @@ function init() {
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
                 trackID = data.trid;
-
-                // Go looking for the reference file
                 cacheFix = Math.floor(Math.random() * 10000);
                 var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
                 var urlXHR = $.getJSON(url, {}, function(data) {
-                    console.log("Found a saved JSON file")
                     var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
-                    console.log(data.trid, data.trackURL, newUrl);
                     location.href = newUrl;
                 })
-                
-                // If we fail to find the reference, we make it ourselves
                 urlXHR.fail(function() {
-                    console.log("Could't find a saved JSON file");
                     // My magic server
                     var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson?callback=?'
-                    // Doing it server side
                     $.getJSON(url, {trid: trackID, trackURL: trackURL}, function(data) {
-                        console.log("Should be there now!");
-                        console.log(data);
                         var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
-                        console.log(data.trid, data.trackURL, newUrl);
                         location.href = newUrl;
                     });
                 });
-
-
-          
             }
         });
     } 
@@ -164,7 +145,6 @@ function init() {
         var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
         var urlXHR = $.getJSON(url, {}, function(data) {
             trackURL = data.trackURL;
-
             console.log("Ready to remix");
             var context = new webkitAudioContext();
             var fs;
@@ -240,7 +220,7 @@ function init() {
         // We're waiting for the user to pick a track and upload it
         $("#play-remix").hide();
         $("#redirect-url").attr('value', document.URL);
-        $("#f-filename").attr('value', 'remix_audio2/' + randomName() + '.mp3');
+        $("#f-filename").attr('value', 'remix_audio/' + randomName() + '.mp3');
 
         $("#file").change( 
             function() {
@@ -301,10 +281,6 @@ window.onload = init;
               <input id='f-policy' type="hidden" name="policy" value="YOUR_POLICY_DOCUMENT_BASE64_ENCODED">
               <input id='f-signature' type="hidden" name="signature" value="YOUR_CALCULATED_SIGNATURE">
               <input type="hidden" name="Content-Type" value="audio/mpeg">
-              <!-- I am currently getting errors when I send in the EN API key:  may need to change our 'policy', 
-                    whatever that is.
-              <input id='f-apikey' type="hidden" name="apikey" value="FILDTEOIK2HBORODV">
-              -->
               Select an <b>MP3</b> to upload : <input  id="file" name="file" type="file"> 
               <br>
               <input class="btn btn-primary btn-default" id='upload' type="submit" value="Upload MP3"> 
