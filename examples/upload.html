@@ -36,20 +36,7 @@ var track;
 var remixed;
 
 
-function endsWith(str, suffix) {
-    return str.indexOf(suffix, str.length - suffix.length) !== -1;
-}
 
-function randomName() {
-    return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
-}
-
-function fixFileName(name) {
-    name = name.replace(/c:\\fakepath\\/i, '');
-    name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
-    name = Math.floor(Math.random(10000) * 10000) + ".mp3";
-    return 'remix_audio/' + apiKey + '/' + new Date().getTime() + '/' + name;
-}
 
 
 function fetchSignature() {
