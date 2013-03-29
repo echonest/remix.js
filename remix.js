@@ -544,13 +544,18 @@ function fetchSignature() {
     });
 }
 
-function postReference(trid, trackURL, callback) {
+function postReference(trackID, trackURL, callback) {
     var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson?callback=?'
     $.getJSON(url, {trid: trackID, trackURL: trackURL}, callback); 
 }
 
 function urldecode(str) {
    return decodeURIComponent((str+'').replace(/\+/g, '%20'));
+}
+
+function getReferenceURL(trackID) {
+    cacheFix = Math.floor(Math.random() * 10000);
+    return 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
 }
 
 
