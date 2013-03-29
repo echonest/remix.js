@@ -44,7 +44,7 @@ function fetchQinfo() {
     });
 }
 
-// Get the analysis, or keep trying to get it
+// Get the analysis, if it is ready
 function analyzeAudio(audio, tag, callback) {
     var url = 'http://labs.echonest.com/Uploader/qanalyze?callback=?'
     $.getJSON(url, { url:audio, tag:tag}, function(data) {
@@ -78,7 +78,7 @@ function init() {
 
     if ('key' in params) {
         // We just uploaded a track.
-        // We need to log the trackID and the URL to S3, and then redirect.
+        // We need to log the trackID and the URL, and then redirect.
         $("#select-track").hide();
         $("#play-remix").hide();
         $("#info").text("Analyzing audio...");
@@ -94,9 +94,7 @@ function init() {
                     location.href = newUrl;
                 })
                 urlXHR.fail(function() {
-                    // My magic server
-                    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/postjson?callback=?'
-                    $.getJSON(url, {trid: trackID, trackURL: trackURL}, function(data) {
+                    postReference(trid, trackURL, function(data) {
                         var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
                         location.href = newUrl;
                     });
@@ -106,7 +104,8 @@ function init() {
     } 
 
     else if ('trid' in params) {
-        // We were passed a trackID directly in the url.
+        // We were passed a trackID directly in the url
+        // We can remix the track we get back!
         trackID = params['trid'];
         $("#play-remix").show();
         $("#select-track").hide();
