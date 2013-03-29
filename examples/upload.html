@@ -86,11 +86,10 @@ function init() {
 
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
-                var url = getReferenceURL(data.trid);
-                var urlXHR = $.getJSON(url, {}, function(data) {
+                var urlXHR = getReference(data.trid, function(data) {
                     var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
                     location.href = newUrl;
-                })
+                });
                 urlXHR.fail(function() {
                     postReference(data.trid, trackURL, function(data) {
                         var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
@@ -108,7 +107,6 @@ function init() {
         $("#play-remix").show();
         $("#select-track").hide();
 
-        // var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
         var urlXHR = getReference(trackID, function(data) {
             trackURL = data.trackURL;
             console.log("Ready to remix");

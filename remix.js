@@ -550,7 +550,8 @@ function postReference(trackID, trackURL, callback) {
 }
 
 function getReference(trackID, callback) {
-    var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
+    cacheFix = Math.floor(Math.random() * 10000);
+    var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
     return $.getJSON(url, callback); 
 }
 
@@ -558,6 +559,7 @@ function urldecode(str) {
    return decodeURIComponent((str+'').replace(/\+/g, '%20'));
 }
 
+// old
 function getReferenceURL(trackID) {
     cacheFix = Math.floor(Math.random() * 10000);
     return 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
