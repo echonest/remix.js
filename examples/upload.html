@@ -36,30 +36,12 @@ var track;
 var remixed;
 
 
-
-
-
-function fetchSignature() {
-    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=audio'
-    $.getJSON(url, {}, function(data) {
-        policy = data.policy;
-        signature = data.signature;
-        $('#f-policy').val(data.policy);
-        $('#f-signature').val(data.signature);
-        $('#f-key').val(data.key);
-    });
-}
-
 // Get an estimation of analysis time
 function fetchQinfo() {
     var url = 'http://labs.echonest.com/Uploader/qinfo?callback=?'
     $.getJSON(url, {}, function(data) {
         $("#info").text("Estimated analysis time: " + Math.floor(data.estimated_wait * 1.2) + " seconds.");
     });
-}
-
-function urldecode(str) {
-   return decodeURIComponent((str+'').replace(/\+/g, '%20'));
 }
 
 // Get the analysis, or keep trying to get it

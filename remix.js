@@ -533,6 +533,21 @@ function fixFileName(name) {
     return 'remix_audio/' + apiKey + '/' + new Date().getTime() + '/' + name;
 }
 
+function fetchSignature() {
+    var url = 'http://ec2-50-16-17-57.compute-1.amazonaws.com/Policy/verify?callback=?&v=audio'
+    $.getJSON(url, {}, function(data) {
+        policy = data.policy;
+        signature = data.signature;
+        $('#f-policy').val(data.policy);
+        $('#f-signature').val(data.signature);
+        $('#f-key').val(data.key);
+    });
+}
+
+function urldecode(str) {
+   return decodeURIComponent((str+'').replace(/\+/g, '%20'));
+}
+
 
 // Error handler for writing remixes to wav files
 function fileErrorHandler(e) {
