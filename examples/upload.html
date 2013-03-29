@@ -94,7 +94,7 @@ function init() {
                     location.href = newUrl;
                 })
                 urlXHR.fail(function() {
-                    postReference(trid, trackURL, function(data) {
+                    postReference(trackID, trackURL, function(data) {
                         var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
                         location.href = newUrl;
                     });
