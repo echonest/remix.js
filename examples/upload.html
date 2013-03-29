@@ -108,8 +108,8 @@ function init() {
         $("#play-remix").show();
         $("#select-track").hide();
 
-        var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
-        var urlXHR = $.getJSON(url, {}, function(data) {
+        // var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json";
+        var urlXHR = getReference(trackID, function(data) {
             trackURL = data.trackURL;
             console.log("Ready to remix");
             var context = new webkitAudioContext();
