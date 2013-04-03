@@ -517,6 +517,56 @@ function clusterSegments(track, numClusters, fieldName, vecName) {
     reportClusteringStats();
 }
 
+// Helper functions for handling uploads with Echo Nest support
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
+
+function randomName() {
+    return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
+}
+
+function fixFileName(name) {
+    name = name.replace(/c:\\fakepath\\/i, '');
+    name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
+    name = Math.floor(Math.random(10000) * 10000) + ".mp3";
+    return 'remix_audio/' + apiKey + '/' + new Date().getTime() + '/' + name;
+}
+
+function fetchSignature() {
+    var url = 'http://remix.echonest.com/Policy/verify?callback=?&v=audio'
+    $.getJSON(url, {}, function(data) {
+        policy = data.policy;
+        signature = data.signature;
+        $('#f-policy').val(data.policy);
+        $('#f-signature').val(data.signature);
+        $('#f-key').val(data.key);
+    });
+}
+
+function postReference(trackID, trackURL, callback) {
+    var url = 'http://remix.echonest.com/Policy/postjson?callback=?'
+    $.getJSON(url, {trid: trackID, trackURL: trackURL}, callback); 
+}
+
+function getReference(trackID, callback) {
+    cacheFix = Math.floor(Math.random() * 10000);
+    var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
+    return $.getJSON(url, callback); 
+}
+
+function urldecode(str) {
+   return decodeURIComponent((str+'').replace(/\+/g, '%20'));
+}
+
+// old
+function getReferenceURL(trackID) {
+    cacheFix = Math.floor(Math.random() * 10000);
+    return 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
+}
+
+
+
 
 // Error handler for writing remixes to wav files
 function fileErrorHandler(e) {

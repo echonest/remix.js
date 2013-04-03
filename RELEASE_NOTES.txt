@@ -1,2 +1,5 @@
+1.1.0 - April 2012
+- Support for uploading via Echo Nest servers
+
 1.0.0 - December 7 2012
 - First release!
