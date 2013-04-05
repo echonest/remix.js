@@ -39,7 +39,7 @@ var remixed;
 
 // Get an estimation of analysis time
 function fetchQinfo() {
-    var url = 'http://labs.echonest.com/Uploader/qinfo?callback=?'
+    var url = 'http://remix.echonest.com/Uploader/qinfo?callback=?'
     $.getJSON(url, {}, function(data) {
         $("#info").text("Estimated analysis time: " + Math.floor(data.estimated_wait * 1.2) + " seconds.");
     });
@@ -47,7 +47,7 @@ function fetchQinfo() {
 
 // Get the analysis, if it is ready
 function analyzeAudio(audio, tag, callback) {
-    var url = 'http://labs.echonest.com/Uploader/qanalyze?callback=?'
+    var url = 'http://remix.echonest.com/Uploader/qanalyze?callback=?'
     $.getJSON(url, { url:audio, tag:tag}, function(data) {
         if (data.status === 'done' || data.status === 'error') {
             callback(data);
@@ -85,6 +85,7 @@ function init() {
         $("#info").text("Analyzing audio...");
         trackURL = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
 
+        // Need to pass in the API key here too
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
                 var urlXHR = getReference(data.trid, function(data) {
