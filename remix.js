@@ -12,7 +12,6 @@ function createJRemixer(context, jquery, apiKey) {
             var url = 'http://developer.echonest.com/api/v4/track/profile?format=json&bucket=audio_summary'
             $.getJSON(url, {id:trackID, api_key:apiKey}, function(data) {
                 var analysisURL = data.response.track.audio_summary.analysis_url;
-                console.log(analysisURL);
                 track = data.response.track;
                 
                 // This call is proxied through the yahoo query engine.  
@@ -21,9 +20,7 @@ function createJRemixer(context, jquery, apiKey) {
                     { q: "select * from json where url=\"" + analysisURL + "\"", format: "json"}, 
                     function(data) {
                         if (data.query.results != null) {
-                            console.log("We got the data back");
-                            track.analysis = data.query.results.json;
-                            console.log(track);
+                             track.analysis = data.query.results.json;
                             remixer.remixTrack(track, trackURL, callback);   
                         }
                         else {
@@ -36,14 +33,12 @@ function createJRemixer(context, jquery, apiKey) {
 
         remixTrack : function(track, trackURL, callback) {
             function fetchAudio(url) {
-                console.log("top of remixTrack");
                 var request = new XMLHttpRequest();
                 trace("fetchAudio " + url);
                 track.buffer = null;
                 request.open("GET", url, true);
                 request.responseType = "arraybuffer";
                 this.request = request;
-                console.log("in remixTrack");
 
                 request.onload = function() {
                     trace('audio loaded');
@@ -73,7 +68,6 @@ function createJRemixer(context, jquery, apiKey) {
                     callback(track, percent);   
                 }
                 request.send();
-                console.log("Sent request");
             }
 
             function preprocessTrack(track) {
@@ -120,7 +114,6 @@ function createJRemixer(context, jquery, apiKey) {
                 connectAllOverlappingSegments(track, 'tatums');
 
                 filterSegments(track);
-                console.log("Done preprocess");
             }
 
             function filterSegments(track) {
@@ -219,8 +212,6 @@ function createJRemixer(context, jquery, apiKey) {
                 preprocessTrack(track);
                 fetchAudio(trackURL);
             } else {
-                console.log("Error")
-                console.log(track)
                 track.status = 'error: incomplete analysis';
             }
         },
@@ -541,7 +532,7 @@ function fixFileName(name) {
 }
 
 function fetchSignature() {
-    var url = 'http://remix.echonest.com/Uploader/verify?callback=?&v=audio'
+    var url = 'http://remix.echonest.com/Policy/verify?callback=?&v=audio'
     $.getJSON(url, {}, function(data) {
         policy = data.policy;
         signature = data.signature;
@@ -552,7 +543,7 @@ function fetchSignature() {
 }
 
 function postReference(trackID, trackURL, callback) {
-    var url = 'http://remix.echonest.com/Uploader/postjson?callback=?'
+    var url = 'http://remix.echonest.com/Policy/postjson?callback=?'
     $.getJSON(url, {trid: trackID, trackURL: trackURL}, callback); 
 }
 
