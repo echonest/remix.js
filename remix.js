@@ -23,6 +23,7 @@ function createJRemixer(context, jquery, apiKey) {
                         if (data.query.results != null) {
                             console.log("We got the data back");
                             track.analysis = data.query.results.json;
+                            console.log("Assigned the data");
                             remixer.remixTrack(track, trackURL, callback);   
                         }
                         else {
@@ -35,6 +36,7 @@ function createJRemixer(context, jquery, apiKey) {
 
         remixTrack : function(track, trackURL, callback) {
             function fetchAudio(url) {
+                console.log("top of remixTrack");
                 var request = new XMLHttpRequest();
                 trace("fetchAudio " + url);
                 track.buffer = null;
