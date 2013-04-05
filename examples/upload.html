@@ -179,6 +179,8 @@ function init() {
         });
         urlXHR.error(function() {
             $("#info").text("Error getting the track URL - please try again, or re-upload the file.");
+            $("#play-remix").hide();
+            $("#select-track").show();
         });    
 
     } else {
