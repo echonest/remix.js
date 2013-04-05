@@ -522,9 +522,6 @@ function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
-function randomName() {
-    return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
-}
 
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
