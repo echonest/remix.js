@@ -111,6 +111,7 @@ function init() {
 
         var urlXHR = getReference(trackID, function(data) {
             trackURL = data.trackURL;
+            console.log(trackID, trackURL);
             console.log("Ready to remix");
             var context = new webkitAudioContext();
             var fs;
