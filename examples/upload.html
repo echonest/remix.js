@@ -181,6 +181,23 @@ function init() {
             $("#info").text("Error getting the track URL - please try again, or re-upload the file.");
             $("#play-remix").hide();
             $("#select-track").show();
+
+            $("#redirect-url").attr('value', document.URL);
+
+            $("#file").change( 
+                function() {
+                    var filename = $("#file").val();
+                    if (endsWith(filename.toLowerCase(), ".mp3")) {
+                        $("#f-filename").attr('value', fixFileName(filename));
+                        $("#upload").removeAttr('disabled');
+                    } else {
+                        alert('Sorry, this app only supports MP3s');
+                        $("#upload").attr('disabled', 'disabled');
+                    }
+                }
+            );
+            fetchSignature();
+            fetchQinfo();
         });    
 
     } else {
