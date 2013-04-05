@@ -23,7 +23,7 @@ function createJRemixer(context, jquery, apiKey) {
                         if (data.query.results != null) {
                             console.log("We got the data back");
                             track.analysis = data.query.results.json;
-                            console.log("Assigned the data");
+                            console.log(track);
                             remixer.remixTrack(track, trackURL, callback);   
                         }
                         else {
@@ -219,6 +219,8 @@ function createJRemixer(context, jquery, apiKey) {
                 preprocessTrack(track);
                 fetchAudio(trackURL);
             } else {
+                console.log("Error")
+                console.log(track)
                 track.status = 'error: incomplete analysis';
             }
         },
