@@ -41,6 +41,7 @@ function createJRemixer(context, jquery, apiKey) {
                 request.open("GET", url, true);
                 request.responseType = "arraybuffer";
                 this.request = request;
+                console.log("in remixTrack");
 
                 request.onload = function() {
                     trace('audio loaded');
@@ -70,6 +71,7 @@ function createJRemixer(context, jquery, apiKey) {
                     callback(track, percent);   
                 }
                 request.send();
+                console.log("Sent request");
             }
 
             function preprocessTrack(track) {
