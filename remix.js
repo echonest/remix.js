@@ -12,6 +12,7 @@ function createJRemixer(context, jquery, apiKey) {
             var url = 'http://developer.echonest.com/api/v4/track/profile?format=json&bucket=audio_summary'
             $.getJSON(url, {id:trackID, api_key:apiKey}, function(data) {
                 var analysisURL = data.response.track.audio_summary.analysis_url;
+                console.log(analysisURL);
                 track = data.response.track;
                 
                 // This call is proxied through the yahoo query engine.  
@@ -20,6 +21,7 @@ function createJRemixer(context, jquery, apiKey) {
                     { q: "select * from json where url=\"" + analysisURL + "\"", format: "json"}, 
                     function(data) {
                         if (data.query.results != null) {
+                            console.log("We got the data back");
                             track.analysis = data.query.results.json;
                             remixer.remixTrack(track, trackURL, callback);   
                         }
