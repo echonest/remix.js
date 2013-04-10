@@ -88,16 +88,11 @@ function init() {
         // Need to pass in the API key here too
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
-                var urlXHR = getReference(data.trid, function(data) {
-                    var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
-                    location.href = newUrl;
-                });
-                urlXHR.fail(function() {
-                    postReference(data.trid, trackURL, function(data) {
-                        var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
-                        location.href = newUrl;
-                    });
-                });
+
+                // we can just redirect!
+                console.log('wooo!');
+                var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
+                location.href = newUrl;
             }
         });
     } 
