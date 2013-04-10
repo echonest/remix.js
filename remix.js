@@ -532,7 +532,7 @@ function fixFileName(name) {
 }
 
 function fetchSignature() {
-    var url = 'http://remix.echonest.com/Policy/verify?callback=?&v=audio'
+    var url = 'http://remix.echonest.com/Uploader/verify?callback=?&v=audio'
     $.getJSON(url, {}, function(data) {
         policy = data.policy;
         signature = data.signature;
@@ -543,7 +543,7 @@ function fetchSignature() {
 }
 
 function postReference(trackID, trackURL, callback) {
-    var url = 'http://remix.echonest.com/Policy/postjson?callback=?'
+    var url = 'http://remix.echonest.com/Uploader/postjson?callback=?'
     $.getJSON(url, {trid: trackID, trackURL: trackURL}, callback); 
 }
 
