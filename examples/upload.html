@@ -85,12 +85,8 @@ function init() {
         $("#info").text("Analyzing audio...");
         trackURL = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
 
-        // Need to pass in the API key here too
         analyzeAudio(trackURL, 'tag', function(data) {
             if (data.status === 'done') {
-
-                // we can just redirect!
-                console.log('wooo!');
                 var newUrl = location.protocol + "//" +  location.host + location.pathname + "?trid=" + data.trid;
                 location.href = newUrl;
             }

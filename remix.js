@@ -542,11 +542,6 @@ function fetchSignature() {
     });
 }
 
-function postReference(trackID, trackURL, callback) {
-    var url = 'http://remix.echonest.com/Uploader/postjson?callback=?'
-    $.getJSON(url, {trid: trackID, trackURL: trackURL}, callback); 
-}
-
 function getReference(trackID, callback) {
     cacheFix = Math.floor(Math.random() * 10000);
     var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
