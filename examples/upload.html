@@ -48,7 +48,7 @@ function fetchQinfo() {
 // Get the analysis, if it is ready
 function analyzeAudio(audio, tag, callback) {
     var url = 'http://remix.echonest.com/Uploader/qanalyze?callback=?'
-    $.getJSON(url, { url:audio, tag:tag}, function(data) {
+    $.getJSON(url, { url:audio, api_key:apiKey, tag:tag}, function(data) {
         if (data.status === 'done' || data.status === 'error') {
             callback(data);
         } else {
@@ -240,7 +240,8 @@ window.onload = init;
                 <pre><code>// Remix any file.
 // Uploads are supported by the Echo Nest's back-end servers.
 // Once a track has been uploaded, you can reference it by its Echo Nest track ID.
-// ?trid=TRPTEMD13D4B7A7733, for example.
+// echonest.github.com/remix/examples/upload.html?trid=TRPTEMD13D4B7A7733, for example.
+// (The remix for this example just extracts the first beat of each bar.)
 </code></pre>
             </div>
         </div>
