@@ -71,7 +71,6 @@ function createJRemixer(context, jquery, apiKey) {
             }
 
             function preprocessTrack(track) {
-                console.log("top of preprocess");
                 trace('preprocessTrack');
                 var types = ['sections', 'bars', 'beats', 'tatums', 'segments'];
 
