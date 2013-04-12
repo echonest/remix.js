@@ -541,10 +541,11 @@ function fetchSignature() {
     });
 }
 
-function getReference(trackID, callback) {
+// And this needs to change to get the URL back from the DB, not from our amazon refs
+function getProfile(trackID, callback) {
     cacheFix = Math.floor(Math.random() * 10000);
-    var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
-    return $.getJSON(url, callback); 
+    var url = 'http://remix.echonest.com/Uploader/profile';
+    return $.getJSON(url, {trid: trackID}, callback); 
 }
 
 function urldecode(str) {

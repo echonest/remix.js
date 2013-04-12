@@ -132,8 +132,11 @@ function init() {
         $("#play-remix").show();
         $("#select-track").hide();
 
-        var urlXHR = getReference(trackID, function(data) {
-            trackURL = data.trackURL;
+        var urlXHR = getProfile(trackID, function(data) {
+            console.log(data);
+            trackURL = data.url;
+            // Gotta make sure that I error properly on this.          
+
             console.log("Ready to remix");
             var context = new webkitAudioContext();
             // Only use the filesystem if we have access to it.
