@@ -271,8 +271,9 @@ window.onload = init;
     <div class="container">
         <div class="hero-unit">
             <h1>remix.js:  upload-mod.html<h1>
-             <p>Upload any file, then modify code to create your own remix of it.</p>
-             <p>Or, try <a href="modify.html">remixing our demo file</a>.</p>
+            <p>Upload any file, then modify code to create your own remix of it.
+            Or, try <a href="modify.html">remixing our demo file</a>.
+            </p>
         </div>
 
         <div id="info"></div>
@@ -296,12 +297,10 @@ window.onload = init;
         </section>
 
         <section id='play-remix'>
-
             <div id="userCode">
                 <p><textarea id="userInput"></textarea></p>
                 <button class='btn btn-original' id='beginRemix' onClick="beginRemix()">Remix!</button>
             </div>
-
             <div id='waveform'>
             <h2>Original Track</h2>
             <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
