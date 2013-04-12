@@ -41,6 +41,7 @@ var remixed;
 var theCodeMirror;
 var wavesurfer;
 var remixedWaveSurfer;
+var fs;
 
 function beginRemix() {
     $("#info").text("Remixing...");
@@ -135,7 +136,6 @@ function init() {
             trackURL = data.trackURL;
             console.log("Ready to remix");
             var context = new webkitAudioContext();
-            var fs;
             // Only use the filesystem if we have access to it.
             if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
                 window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
