@@ -105,7 +105,7 @@ function init() {
             // Gotta make sure that I error properly on this.  use "if data.status == false', and then go fromthere
             // Then I need copy this into upload-modify!
             console.log(data)
-            if (data.status == 'true') {
+            if (data.status == true) {
 
                 console.log("Ready to remix");
                 var context = new webkitAudioContext();
@@ -175,6 +175,7 @@ function init() {
                 });
             }
             else {
+                console.log("track id error");
                 $("#info").text("Error getting the track URL - please try again, or re-upload the file.");
                 $("#play-remix").hide();
                 $("#select-track").show();
