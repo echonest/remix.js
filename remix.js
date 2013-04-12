@@ -543,8 +543,7 @@ function fetchSignature() {
 
 // And this needs to change to get the URL back from the DB, not from our amazon refs
 function getProfile(trackID, callback) {
-    cacheFix = Math.floor(Math.random() * 10000);
-    var url = 'http://remix.echonest.com/Uploader/profile';
+    var url = 'http://remix.echonest.com/Uploader/profile?callback=?';
     return $.getJSON(url, {trid: trackID}, callback); 
 }
 
