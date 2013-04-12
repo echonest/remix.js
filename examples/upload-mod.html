@@ -191,7 +191,7 @@ function init() {
 
                 $("#info").text(percent + "% of the track loaded...");
                 if (percent == 100) {
-                    $("#info").text(percent + "% of the track loaded, remixing...");
+                    $("#info").text(percent + "% of the track loaded, preparing...");
                 }
 
                 if (track.status == 'ok') {
@@ -273,7 +273,6 @@ window.onload = init;
             <h1>remix.js:  upload-mod.html<h1>
              <p>Upload any file, then modify code to create your own remix.</p>
         </div>
-    </div>
 
         <div id="info"></div>
 
