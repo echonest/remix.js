@@ -102,11 +102,7 @@ function init() {
 
         var urlXHR = getProfile(trackID, function(data) {
             trackURL = data.url;
-            // Gotta make sure that I error properly on this.  use "if data.status == false', and then go fromthere
-            // Then I need copy this into upload-modify!
-            console.log(data)
             if (data.status == true) {
-
                 console.log("Ready to remix");
                 var context = new webkitAudioContext();
                 var fs;
