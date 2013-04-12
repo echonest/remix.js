@@ -175,16 +175,15 @@ function init() {
                 });
             }
             else {
-                console.log("track id error");
-               
+                console.log("Track id error.");
                 $("#play-remix").hide();
                 $("#select-track").show();
                 $("#info").text("Error getting the track URL - please try again, or re-upload the file.");
-
                 $("#redirect-url").attr('value', document.URL);
 
                 $("#file").change( 
                     function() {
+                        fetchQinfo();
                         var filename = $("#file").val();
                         if (endsWith(filename.toLowerCase(), ".mp3")) {
                             $("#f-filename").attr('value', fixFileName(filename));
@@ -196,11 +195,9 @@ function init() {
                     }
                 );
                 fetchSignature();
-                fetchQinfo();
             }
-
-            
         });
+
     } else {
         // We're waiting for the user to pick a track and upload it
         $("#play-remix").hide();
