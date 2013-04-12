@@ -176,9 +176,10 @@ function init() {
             }
             else {
                 console.log("track id error");
-                $("#info").text("Error getting the track URL - please try again, or re-upload the file.");
+               
                 $("#play-remix").hide();
                 $("#select-track").show();
+                $("#info").text("Error getting the track URL - please try again, or re-upload the file.");
 
                 $("#redirect-url").attr('value', document.URL);
 
