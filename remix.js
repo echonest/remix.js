@@ -1,5 +1,5 @@
 // Remix.js
-// Thor Kell & Paul Lamere, 12/2012
+// Thor Kell & Paul Lamere, 12/2012 - 4/2013
 // Based on Paul Lamere's Infinite Jukebox and assorted other javascript projects
 
 function createJRemixer(context, jquery, apiKey) {
@@ -20,7 +20,7 @@ function createJRemixer(context, jquery, apiKey) {
                     { q: "select * from json where url=\"" + analysisURL + "\"", format: "json"}, 
                     function(data) {
                         if (data.query.results != null) {
-                            track.analysis = data.query.results.json;
+                             track.analysis = data.query.results.json;
                             remixer.remixTrack(track, trackURL, callback);   
                         }
                         else {
@@ -522,9 +522,6 @@ function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
-function randomName() {
-    return new Date().getTime() + '-' + Math.floor(Math.random() * 100000000)
-}
 
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
@@ -534,7 +531,7 @@ function fixFileName(name) {
 }
 
 function fetchSignature() {
-    var url = 'http://remix.echonest.com/Policy/verify?callback=?&v=audio'
+    var url = 'http://remix.echonest.com/Uploader/verify?callback=?&v=audio'
     $.getJSON(url, {}, function(data) {
         policy = data.policy;
         signature = data.signature;
@@ -544,28 +541,15 @@ function fetchSignature() {
     });
 }
 
-function postReference(trackID, trackURL, callback) {
-    var url = 'http://remix.echonest.com/Policy/postjson?callback=?'
-    $.getJSON(url, {trid: trackID, trackURL: trackURL}, callback); 
-}
-
-function getReference(trackID, callback) {
-    cacheFix = Math.floor(Math.random() * 10000);
-    var url = 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
-    return $.getJSON(url, callback); 
+// And this needs to change to get the URL back from the DB, not from our amazon refs
+function getProfile(trackID, callback) {
+    var url = 'http://remix.echonest.com/Uploader/profile?callback=?';
+    return $.getJSON(url, {trid: trackID}, callback); 
 }
 
 function urldecode(str) {
    return decodeURIComponent((str+'').replace(/\+/g, '%20'));
 }
-
-// old
-function getReferenceURL(trackID) {
-    cacheFix = Math.floor(Math.random() * 10000);
-    return 'http://static.echonest.com/remix_refs/' + trackID + ".json" + "?_=" + cacheFix;
-}
-
-
 
 
 // Error handler for writing remixes to wav files
