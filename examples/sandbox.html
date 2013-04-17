@@ -202,7 +202,7 @@ function init() {
 
                         $('.btn-original').removeAttr('disabled');
                     }
-                    else {
+                    else if (track.status == 'error' ) {
                         $("#info").text("Error getting the track URL - please try again, or re-upload the file.");
                     }
 
