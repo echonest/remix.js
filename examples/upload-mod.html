@@ -133,7 +133,6 @@ function init() {
         $("#select-track").hide();
 
         var urlXHR = getProfile(trackID, function(data) {
-            console.log(data);
             trackURL = data.url;
 
             if (data.status == true) {
@@ -203,6 +202,10 @@ function init() {
 
                         $('.btn-original').removeAttr('disabled');
                     }
+                    else {
+                        $("#info").text("Error getting the track URL - please try again, or re-upload the file.");
+                    }
+
                 });
             }
             else {

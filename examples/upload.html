@@ -168,6 +168,10 @@ function init() {
                         }
                         $('.btn-remixed').removeAttr('disabled');
                     }
+                    else {
+                        $("#info").text("Error getting the track URL - please try again, or re-upload the file.");
+                    }
+
                 });
             }
             else {
