@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+   </head>
+
+    <body>
+<script type="text/javascript">
+function init() {
+    console.log("Begin");
+
+    document.querySelector('#files').onchange = function(e) {
+        console.log("File changed");
+        var files = e.target.files; // FileList of File objects.
+
+        for (var i = 0, f; f = files[i]; ++i) {
+            console.log(f.name, f.type, f.size, f.lastModifiedDate.toLocaleDateString());
+        }
+    }
+}
+</script>
+
+Load a local file to filesystem:
+<input type="file" id="files" multiple>
+
+  </body>
+</html>​
