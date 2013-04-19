@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
-  <head>
-   </head>
+<head>
+</head>
 
-    <body>
+<body>
 <script type="text/javascript">
 function init() {
     console.log("Begin");
 
     document.querySelector('#files').onchange = function(e) {
-        console.log("File changed");
+        alert("file changed");
         var files = e.target.files; // FileList of File objects.
 
         for (var i = 0, f; f = files[i]; ++i) {
@@ -22,5 +22,5 @@ function init() {
 Load a local file to filesystem:
 <input type="file" id="files" multiple>
 
-  </body>
+</body>
 </html>​
