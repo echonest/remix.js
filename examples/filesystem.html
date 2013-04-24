@@ -100,6 +100,8 @@ function init() {
         document.querySelector('#myfile').onchange = function(e) {
           var files = this.files;
 
+          // update the input things fields:  api key, trackURL, filetype, track
+
           window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
             // Duplicate each file the user selected to the app's fs.
             for (var i = 0, file; file = files[i]; ++i) {
@@ -161,7 +163,14 @@ window.onload = init;
 </script>
 
 
-<input type="file" id="myfile" multiple />
+<div id='select-track'>
+    <form id='upload-form' action="http://developer.echonest.com/api/v4/track/upload?" method="post" enctype="multipart/form-data">
+      Select an <b>MP3</b> to Remix : <input  id="myfile" name="file" type="file"> 
+      <br>
+      <input class="btn btn-primary btn-default" id='upload' type="submit" value="Go!"> 
+    </form> 
+</div>
+
 <div id="info"></div>
 <div>
 <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play Original</button>
