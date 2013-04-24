@@ -10,7 +10,7 @@
 
 <body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-
+<script type="text/javascript" src='../remix.js'></script>
 
 <script type="text/javascript">
 
@@ -42,45 +42,93 @@ function errorHandler(e) {
 }
 
 var fs;
-var theFile;
+
+
+var apiKey = 'FILDTEOIK2HBORODV';
+var trackID = 'TRBIBEW13936EB37C9';
+
+var trackURL;
+
+var remixer;
+var player;
+var track;
+var remixed;
 
 function init() {
     console.log("Ready");
 
+
+    if (window.webkitAudioContext === undefined) {
+            error("Sorry, this app needs advanced web audio. Your browser doesn't"
+                + " support it. Try the latest version of Chrome");
+        } else {
+            var context = new webkitAudioContext();
+
+
         // Only use the filesystem if we have access to it.
-    if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
-        window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-        window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
-            fs = filesystem;
-            console.log("We got our filesystem");
-        }, errorHandler);
-    }
-
-
-    document.querySelector('#myfile').onchange = function(e) {
-      var files = this.files;
-
-      window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
-        // Duplicate each file the user selected to the app's fs.
-        for (var i = 0, file; file = files[i]; ++i) {
-
-          // Capture current iteration's file in local scope for the getFile() callback.
-          (function(f) {
-            console.log(f.name)
-            fs.root.getFile(f.name, {create: true, exclusive: false}, function(fileEntry) {
-                fileEntry.createWriter(function(fileWriter) {
-                    fileWriter.write(f); // Note: write() can take a File or Blob object.
-                }, errorHandler);
-                console.log(fileEntry.toURL);
+        if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
+            window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+            window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
+                fs = filesystem;
+                console.log("We got our filesystem");
             }, errorHandler);
-          })(file);
-
         }
-      }, errorHandler);
 
-    };
+        document.querySelector('#myfile').onchange = function(e) {
+          var files = this.files;
+
+          window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
+            // Duplicate each file the user selected to the app's fs.
+            for (var i = 0, file; file = files[i]; ++i) {
+
+              // Capture current iteration's file in local scope for the getFile() callback.
+              (function(f) {
+                console.log(f.name)
+                fs.root.getFile(f.name, {create: true, exclusive: false}, function(fileEntry) {
+                    fileEntry.createWriter(function(fileWriter) {
+                        fileWriter.write(f); // Note: write() can take a File or Blob object.
+                    }, errorHandler);
+
+                    trackURL = fileEntry.toURL();
+
+                    remixer = createJRemixer(context, $, apiKey);
+                    player = remixer.getPlayer();
+
+                    remixer.remixTrackById(trackID, trackURL, function(t, percent) {
+                        track = t;
+
+                        $("#info").text(percent + "% of the track loaded...");
+                        if (percent == 100) {
+                            $("#info").text(percent + "% of the track loaded, remixing...");
+                        }
+
+                        if (track.status == 'ok') {
+                            $('.btn-original').removeAttr('disabled');
+                            remixed = new Array();
+                            // Extract the first beat of every bar.
+                            var meter = parseInt(track.analysis.track.time_signature);
+                            for (var i=0; i < track.analysis.beats.length; i++) {
+                                if (i % meter == 0) {
+                                    remixed.push(track.analysis.beats[i])
+                                }
+                            }
+                            $("#info").text("Remix complete!");
+                            $('.btn-remixed').removeAttr('disabled');
+
+                        }
+                    });
 
 
+                }, errorHandler);
+              })(file);
+            }
+          }, errorHandler);
+
+        };
+
+
+    
+    }
 }
 
 window.onload = init;
@@ -88,6 +136,16 @@ window.onload = init;
 
 
 <input type="file" id="myfile" multiple />
+<div id="info"></div>
+<div>
+<button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play Original</button>
+<button class='btn btn-original' onClick="player.stop()">Stop Original</button>
+</div>
+
+<div>
+<button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
+<button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
+</div>
 
 </body>
 </html>
