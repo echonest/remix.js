@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+	<title>Echo Nest Remix</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Echo Nest Remix:  The Internet Synthesizer">
+    <meta name="author" content="Brian Whitman / Paul Lamere / Thor Kell">
+</head>
+
+<body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+
+
+<script type="text/javascript">
+
+function errorHandler(e) {
+  var msg = '';
+
+  switch (e.code) {
+    case FileError.QUOTA_EXCEEDED_ERR:
+      msg = 'QUOTA_EXCEEDED_ERR';
+      break;
+    case FileError.NOT_FOUND_ERR:
+      msg = 'NOT_FOUND_ERR';
+      break;
+    case FileError.SECURITY_ERR:
+      msg = 'SECURITY_ERR';
+      break;
+    case FileError.INVALID_MODIFICATION_ERR:
+      msg = 'INVALID_MODIFICATION_ERR';
+      break;
+    case FileError.INVALID_STATE_ERR:
+      msg = 'INVALID_STATE_ERR';
+      break;
+    default:
+      msg = 'Unknown Error';
+      break;
+  };
+
+  console.log('Error: ' + msg);
+}
+
+function init() {
+    document.querySelector('#myfile').onchange = function(e) {
+      var files = this.files;
+
+      window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
+        // Duplicate each file the user selected to the app's fs.
+        for (var i = 0, file; file = files[i]; ++i) {
+
+          // Capture current iteration's file in local scope for the getFile() callback.
+          (function(f) {
+            fs.root.getFile(f.name, {create: true, exclusive: true}, function(fileEntry) {
+              console.log(f.name);
+              fileEntry.createWriter(function(fileWriter) {
+                fileWriter.write(f); // Note: write() can take a File or Blob object.
+              }, errorHandler);
+            }, errorHandler);
+          })(file);
+
+        }
+      }, errorHandler);
+
+    };
+}
+</script>
+
+
+<input type="file" id="myfile" multiple />
+
+</body>
+</html>
