@@ -55,7 +55,7 @@ var remixed;
 // Send track for analysis, then hit profile every 8 seconds...
 
 function uploadAudio(trackURL) {
-    var url = 'http://developer.echonest.com/api/v4/track/upload';
+    var url = 'http://developer.echonest.com/api/v4/track/upload?callback=?';
 
     $.getJSON(url, { url:trackURL, api_key:apiKey, filetype:'mp3'}, function(data) {
         console.log(data);
