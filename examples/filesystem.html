@@ -42,6 +42,7 @@ function errorHandler(e) {
 }
 
 var fs;
+var theFile;
 
 function init() {
     console.log("Ready");
@@ -69,6 +70,9 @@ function init() {
             fs.root.getFile(f.name, {create: true, exclusive: true}, function(fileEntry) {
               fileEntry.createWriter(function(fileWriter) {
                 fileWriter.write(f); // Note: write() can take a File or Blob object.
+
+                theFile = f;
+
               }, errorHandler);
             }, errorHandler);
           })(file);
