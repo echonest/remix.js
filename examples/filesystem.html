@@ -43,16 +43,41 @@ function errorHandler(e) {
 
 var fs;
 
-
 var apiKey = 'FILDTEOIK2HBORODV';
-var trackID = 'TRBIBEW13936EB37C9';
-
+var trackID = 'TRBIBEW13936EB37C9'; // How can we get this?
 var trackURL;
 
 var remixer;
 var player;
 var track;
 var remixed;
+
+// Send track for analysis, then hit profile every 8 seconds...
+
+function uploadAudio(trackURL) {
+    var url = 'http://developer.echonest.com/api/v4/track/upload'
+
+    $.getJSON(url, { url:trackURL, api_key:apiKey, filetype:'mp3'}, function(data) {
+        console.log(data);
+        
+
+    }
+
+}
+
+
+function analyzeAudio(audio, tag, callback) {
+    var url = 'http://remix.echonest.com/Uploader/qanalyze?callback=?'
+    $.getJSON(url, { url:audio, api_key:apiKey, tag:tag}, function(data) {
+        if (data.status === 'done' || data.status === 'error') {
+            callback(data);
+        } else {
+            $("#info").text(data.status + ' - ready in about ' + data.estimated_wait + ' secs. ');
+            setTimeout(function() { analyzeAudio(audio, tag, callback); }, 8000);
+        } 
+    });
+}
+
 
 function init() {
     console.log("Ready");
@@ -90,6 +115,9 @@ function init() {
                     }, errorHandler);
 
                     trackURL = fileEntry.toURL();
+
+                    console.log("Trying to launch our analyze request");
+                    uploadAudio(trackURL);
 
                     remixer = createJRemixer(context, $, apiKey);
                     player = remixer.getPlayer();

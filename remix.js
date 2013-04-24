@@ -522,7 +522,6 @@ function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
-
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
     name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
@@ -541,7 +540,6 @@ function fetchSignature() {
     });
 }
 
-// And this needs to change to get the URL back from the DB, not from our amazon refs
 function getProfile(trackID, callback) {
     var url = 'http://remix.echonest.com/Uploader/profile?callback=?';
     return $.getJSON(url, {trid: trackID}, callback); 
