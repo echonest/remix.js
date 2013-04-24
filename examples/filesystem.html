@@ -116,10 +116,11 @@ function init() {
 
                     trackURL = fileEntry.toURL();
 
-                              // update the input things fields:  api key, trackURL, filetype, track
+                    // update the input things fields:  api key, trackURL, filetype, track
 
                     $('#input-api-key').val(apiKey);
                     $('#input-url').val(trackURL);
+                    console.log("Ready to try the upload")
 
                     remixer = createJRemixer(context, $, apiKey);
                     player = remixer.getPlayer();
@@ -166,7 +167,7 @@ window.onload = init;
 
 
 <div id='select-track'>
-    <form id='upload-form' action="http://developer.echonest.com/api/v4/track/upload?" method="post" enctype="multipart/form-data">
+    <form id='upload-form' action="http://developer.echonest.com/api/v4/track/upload" method="post" enctype="multipart/form-data">
       <input id="input-api-key" type="hidden" name="api_key" value=""> 
       <input id="input-url" type="hidden" name="url" value=""> 
       <input id="input-filetype" type="hidden" name="filetype" value="mp3"> 
