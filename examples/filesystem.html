@@ -100,7 +100,7 @@ function init() {
         document.querySelector('#myfile').onchange = function(e) {
           var files = this.files;
 
-          // update the input things fields:  api key, trackURL, filetype, track
+
 
           window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
             // Duplicate each file the user selected to the app's fs.
@@ -116,8 +116,10 @@ function init() {
 
                     trackURL = fileEntry.toURL();
 
-                    console.log("Trying to launch our analyze request");
-                    uploadAudio(trackURL);
+                              // update the input things fields:  api key, trackURL, filetype, track
+
+                    $('#input-api-key').val(apiKey);
+                    $('#input-url').val(trackURL);
 
                     remixer = createJRemixer(context, $, apiKey);
                     player = remixer.getPlayer();
@@ -166,8 +168,8 @@ window.onload = init;
 <div id='select-track'>
     <form id='upload-form' action="http://developer.echonest.com/api/v4/track/upload?" method="post" enctype="application/octet-stream">
       <input id="input-api-key" type="hidden" name="api_key" value=""> 
-      <input type="hidden" name="url" value=""> 
-      <input type="hidden" name="filetype" value="mp3"> 
+      <input id="input-url" type="hidden" name="url" value=""> 
+      <input id="input-filetype" type="hidden" name="filetype" value="mp3"> 
 
       Select an <b>MP3</b> to Remix : <input  id="myfile" name="file" type="file"> 
       <br>
