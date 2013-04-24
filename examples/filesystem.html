@@ -71,7 +71,8 @@ function init() {
               fileEntry.createWriter(function(fileWriter) {
                 fileWriter.write(f); // Note: write() can take a File or Blob object.
 
-                theFile = f;
+
+                console.log(fileEntry.toURL());
 
               }, errorHandler);
             }, errorHandler);
