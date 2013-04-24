@@ -43,26 +43,38 @@ function errorHandler(e) {
 
 function init() {
     console.log("Ready");
+
+
+    var fs;
+        // Only use the filesystem if we have access to it.
+    if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
+        window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+        window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
+            fs = filesystem;
+        }, errorHandler);
+    }
+
+
     document.querySelector('#myfile').onchange = function(e) {
-      console.log("changed a file");
-      var files = this.files;
+        console.log("changed a file");
+        var files = this.files;
 
-      window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
-        // Duplicate each file the user selected to the app's fs.
-        for (var i = 0, file; file = files[i]; ++i) {
+        window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
+            // Duplicate each file the user selected to the app's fs.
+            for (var i = 0, file; file = files[i]; ++i) {
 
-          // Capture current iteration's file in local scope for the getFile() callback.
-          (function(f) {
-            fs.root.getFile(f.name, {create: true, exclusive: true}, function(fileEntry) {
-              console.log(f.name);
-              fileEntry.createWriter(function(fileWriter) {
-                fileWriter.write(f); // Note: write() can take a File or Blob object.
-              }, errorHandler);
-            }, errorHandler);
-          })(file);
+              // Capture current iteration's file in local scope for the getFile() callback.
+              (function(f) {
+                fs.root.getFile(f.name, {create: true, exclusive: true}, function(fileEntry) {
+                  console.log(f.name);
+                  fileEntry.createWriter(function(fileWriter) {
+                    fileWriter.write(f); // Note: write() can take a File or Blob object.
+                  }, errorHandler);
+                }, errorHandler);
+              })(file);
 
-        }
-      }, errorHandler);
+            }
+        }, errorHandler);
 
     };
 }
