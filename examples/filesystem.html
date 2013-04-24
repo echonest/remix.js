@@ -56,8 +56,10 @@ var remixed;
 
 function uploadAudio(trackURL) {
     var url = 'http://developer.echonest.com/api/v4/track/upload?callback=?';
+    url = url + '&url=' + trackURL + '&api_key=' + apiKey + '&filetype=mp3';
+    console.log(url);
 
-    $.getJSON(url, { url:trackURL, api_key:apiKey, filetype:'mp3'}, function(data) {
+    $.post(url, function(data) {
         console.log(data);
     });
 }
