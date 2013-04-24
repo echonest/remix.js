@@ -42,7 +42,9 @@ function errorHandler(e) {
 }
 
 function init() {
+    console.log("Ready");
     document.querySelector('#myfile').onchange = function(e) {
+      console.log("changed a file");
       var files = this.files;
 
       window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
