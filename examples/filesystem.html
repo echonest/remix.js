@@ -67,10 +67,11 @@ function init() {
           // Capture current iteration's file in local scope for the getFile() callback.
           (function(f) {
             console.log(f.name)
-            fs.root.getFile(f.name, {create: true, exclusive: true}, function(fileEntry) {
+            fs.root.getFile(f.name, {create: true, exclusive: false}, function(fileEntry) {
                 fileEntry.createWriter(function(fileWriter) {
                     fileWriter.write(f); // Note: write() can take a File or Blob object.
                 }, errorHandler);
+                console.log(fileEntry.toURL);
             }, errorHandler);
           })(file);
 
