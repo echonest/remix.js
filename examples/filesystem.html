@@ -64,7 +64,10 @@ var player;
 var track;
 var remixed;
 var remixFlag = false;
+var wavesurfer 
 
+var wavesurfer;
+var remixedWavesurfer;
 
 function startRemix() {
     if (window.webkitAudioContext === undefined) {
@@ -87,6 +90,7 @@ function startRemix() {
             }
 
             if (track.status == 'ok') {
+                wavesurfer.loadBuffer(track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
                 remixed = new Array();
                 // Extract the first beat of every bar.
@@ -97,7 +101,15 @@ function startRemix() {
                     }
                 }
                 $("#info").text("Remix complete!");
+                remixedWavesurfer.loadBuffer(remixed);
                 $('.btn-remixed').removeAttr('disabled');
+
+                // Only use the filesystem if we have access to it.
+                if (fs) {
+                    remixer.saveRemixLocally(fs, remixed, function(saveURL) {
+                        $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
+                    });
+                }
 
             }
         });
@@ -107,11 +119,29 @@ function startRemix() {
 }
 
 function init() {
-    console.log("Ready");
 
     $('.btn-original').attr('disabled', 'disabled');
     $('.btn-remixed').attr('disabled', 'disabled');
     $('#start-remix').attr('disabled', 'disabled');
+
+    wavesurfer = Object.create(WaveSurfer);
+    wavesurfer.init({
+        canvas: document.querySelector('#waveCanvas'),
+        waveColor: '#888888',
+        progressColor: '#000000',
+        loadingColor: '#000000',
+        cursorColor: '#888888'
+    });
+    
+    remixedWavesurfer = Object.create(WaveSurfer);
+    remixedWavesurfer.init({
+        canvas: document.querySelector('#RemixedWaveCanvas'),
+        waveColor: '#00ACEB',
+        progressColor: '#000000',
+        loadingColor: '#000000',
+        cursorColor: '#00ACEB'
+    });
+
 
     if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
