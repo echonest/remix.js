@@ -6,13 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Echo Nest Remix:  The Internet Synthesizer">
     <meta name="author" content="Brian Whitman / Paul Lamere / Thor Kell">
+
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
 </head>
 
 <body>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
+<script src="../wavesurfer/wavesurfer.js"></script>
+<script src="../wavesurfer/drawer.js"></script>
 
 <script type="text/javascript">
+// Alternative method for loading MP3s for remixing.
+// Requires Chrome and the user picking the appropriate track
 
 function errorHandler(e) {
   var msg = '';
@@ -44,7 +56,7 @@ function errorHandler(e) {
 var fs;
 
 var apiKey = 'FILDTEOIK2HBORODV';
-var trackID = 'TRBIBEW13936EB37C9'; // How can we get this?
+var trackID;
 var trackURL;
 
 var remixer;
