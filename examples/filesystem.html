@@ -93,12 +93,11 @@ function startRemix() {
 
 function init() {
     console.log("Ready");
+    
+
+    // Set up the search function
     var enReq = null;
-
-    // set up the search function
-        $('#searchInput').keyup(function() {
-
-        // Echo Nest search
+    $('#searchInput').keyup(function() {
         enReq.abort();
         var url = 'http://developer.echonest.com/api/v4/song/search?format=json&results=5&bucket=id:7digital-US&bucket=tracks'
         $.getJSON(url, {combined:searchString, api_key:enAPIKey}, function(data) {
@@ -125,45 +124,31 @@ function init() {
     });
 
 
+    document.querySelector('#myfile').onchange = function(e) {
+      var files = this.files;
+      window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
+        // Duplicate each file the user selected to the app's fs.
+        for (var i = 0, file; file = files[i]; ++i) {
 
-
-        // Only use the filesystem if we have access to it.
-        if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
-            window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-            window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
-                fs = filesystem;
-                console.log("We got our filesystem");
-            }, errorHandler);
-        }
-
-        document.querySelector('#myfile').onchange = function(e) {
-          var files = this.files;
-          window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
-            // Duplicate each file the user selected to the app's fs.
-            for (var i = 0, file; file = files[i]; ++i) {
-
-              // Capture current iteration's file in local scope for the getFile() callback.
-              (function(f) {
-                console.log(f.name)
-                fs.root.getFile(f.name, {create: true, exclusive: false}, function(fileEntry) {
-                    fileEntry.createWriter(function(fileWriter) {
-                        fileWriter.write(f); // Note: write() can take a File or Blob object.
-                    }, errorHandler);
-
-                    trackURL = fileEntry.toURL();
-                    console.log(trackURL);
-
+          // Capture current iteration's file in local scope for the getFile() callback.
+          (function(f) {
+            console.log(f.name)
+            fs.root.getFile(f.name, {create: true, exclusive: false}, function(fileEntry) {
+                fileEntry.createWriter(function(fileWriter) {
+                    fileWriter.write(f); // Note: write() can take a File or Blob object.
                 }, errorHandler);
-              })(file);
-            }
-          }, errorHandler);
 
-        };
+                trackURL = fileEntry.toURL();
+                console.log(trackURL);
 
+            }, errorHandler);
+          })(file);
+        }
+      }, errorHandler);
 
-    
-    }
+    };
 }
+
 
 window.onload = init;
 </script>
@@ -172,7 +157,6 @@ window.onload = init;
 <div id='select-track'>
 
         Select an <b>MP3</b> to Remix : <input id="myfile" type="file"> 
-        <br />
         <input class="btn btn-primary btn-default" id='upload' type="submit" value="Load file"> 
         <br />
     <input type="text" id="searchInput" value="Artist - Song Title" />
