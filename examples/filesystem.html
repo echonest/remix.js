@@ -189,6 +189,38 @@ function init() {
 window.onload = init;
 </script>
 
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="index.html">Echo Nest Remix</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li><a href="http://echonest.github.com/remix/python.html">Python</a></li>
+              <li><a href="http://echonest.github.com/remix/javascript.html">JavaScript</a></li>
+              <li><a href="http://echonest.github.com/remix/examples.html">Examples</a></li>
+              <li><a href="http://echonest.github.com/remix/who.html">Who</a></li>
+            </ul>
+          </div> <!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>  <!--/.navbar -->
+
+
+    <div class="container">
+        <div class="hero-unit">
+            <h1>remix.js:  one.html<h1>
+            <div id="theCode">
+                <pre><code>// Extract the first beat of every bar.
+var meter = parseInt(track.analysis.track.time_signature);
+for (var i=0; i < track.analysis.beats.length; i++) {
+    if (i % meter == 0) {
+        remixed.push(track.analysis.beats[i])
+    }
+}
+</code></pre>
+            </div>
+        </div>
+
 
 <div id='select-track'>
     Select an <b>MP3</b> to Remix : <input id="myfile" type="file"> 
@@ -214,6 +246,10 @@ window.onload = init;
     <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
     <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
 </div>
+
+
+    <img src="http://the.echonest.com/media/images/logos/250x80_lt.gif" />
+</div> <!-- /container -->
 
 </body>
 </html>
