@@ -24,6 +24,7 @@ function createJRemixer(context, jquery, apiKey) {
                             remixer.remixTrack(track, trackURL, callback);   
                         }
                         else {
+                            callback(track, "Error:  no analysis data returned for that track");  
                             console.log('error', 'No analysis data returned:  sorry!');
                         }
                 });
