@@ -74,13 +74,11 @@ function startRemix() {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
                 + " support it. Try the latest version of Chrome");
     } else {
+        $("#info").text("Starting to remix...");
          var context = new webkitAudioContext();
 
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
-
-        console.log(trackID, trackURL);
-
         remixer.remixTrackById(trackID, trackURL, function(t, percent) {
             track = t;
 
@@ -119,7 +117,6 @@ function startRemix() {
 }
 
 function init() {
-
     $('.btn-original').attr('disabled', 'disabled');
     $('.btn-remixed').attr('disabled', 'disabled');
     $('#start-remix').attr('disabled', 'disabled');
@@ -169,10 +166,7 @@ function init() {
 
             // Set up the click function
             $(".enSong").click(function() {
-                console.log("clicked an enSong");
-                console.log($(this).data('enID'));
                 trackID = $(this).data('enID');
-
                 $("#info").text('Selected ' +  $(this).data('enTitle'));
 
                 if (remixFlag == false) {
@@ -188,19 +182,15 @@ function init() {
 
     document.querySelector('#myfile').onchange = function(e) {
         var files = this.files;
-        // Duplicate each file the user selected to the app's fs.
+        // Load the file to the fs
         for (var i = 0, file; file = files[i]; ++i) {
-
-            // Capture current iteration's file in local scope for the getFile() callback.
             (function(f) {
-            console.log(f.name)
             fs.root.getFile(f.name, {create: true, exclusive: false}, function(fileEntry) {
                 fileEntry.createWriter(function(fileWriter) {
                     fileWriter.write(f); // Note: write() can take a File or Blob object.
                 }, errorHandler);
-
+                // Get a URL for the file!
                 trackURL = fileEntry.toURL();
-                console.log(trackURL);
 
                 if (remixFlag == false) {
                     remixFlag = true;
@@ -214,7 +204,6 @@ function init() {
 
     };
 }
-
 
 window.onload = init;
 </script>
