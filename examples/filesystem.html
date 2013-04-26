@@ -51,6 +51,7 @@ var remixer;
 var player;
 var track;
 var remixed;
+var remixFlag = false;
 
 
 function startRemix() {
@@ -62,6 +63,8 @@ function startRemix() {
 
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
+
+        console.log(trackID, trackURL);
 
         remixer.remixTrackById(trackID, trackURL, function(t, percent) {
             track = t;
@@ -93,6 +96,10 @@ function startRemix() {
 
 function init() {
     console.log("Ready");
+
+    $('.btn-original').attr('disabled');
+    $('.btn-remixed').attr('disabled');
+    $('#start-remix').attr('disabled');
 
     if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
@@ -126,6 +133,13 @@ function init() {
                 console.log("clicked an enSong");
                 console.log($(this).data('enID'));
                 trackID = $(this).data('enID');
+
+                if (remixFlag == false) {
+                    remixFlag = true;
+                } else {
+                    $('#start-remix').removeAttr('disabled');
+                }
+
             });
 
         });
@@ -148,6 +162,12 @@ function init() {
                 trackURL = fileEntry.toURL();
                 console.log(trackURL);
 
+                if (remixFlag == false) {
+                    remixFlag = true;
+                } else {
+                    $('#start-remix').removeAttr('disabled');
+                }
+
             }, errorHandler);
             })(file);
             }
@@ -163,7 +183,6 @@ window.onload = init;
 <div id='select-track'>
 
         Select an <b>MP3</b> to Remix : <input id="myfile" type="file"> 
-        <input class="btn btn-primary btn-default" id='upload' type="submit" value="Load file"> 
         <br />
     <input type="text" id="searchInput" value="Artist - Song Title" />
 </div>
@@ -171,6 +190,9 @@ window.onload = init;
 <div id='enSongs'> </div>
 
 <div id="info"></div>
+
+<button id='start-remix' onClick="startRemix()">Remix!</button>
+
 <div>
 <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play Original</button>
 <button class='btn btn-original' onClick="player.stop()">Stop Original</button>
@@ -179,7 +201,7 @@ window.onload = init;
 
 
 <div>
-<button onClick="startRemix()">Remix!</button>
+
 <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
 <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
 </div>
