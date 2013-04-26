@@ -107,7 +107,6 @@ function init() {
                 fs = filesystem;
         }, fileErrorHandler);
     }
-    
 
     // Set up the search function
     var enReq = null;
@@ -120,7 +119,7 @@ function init() {
             $('#enSongs').empty();
             songs.forEach(function(song) {
     
-                // avoid songs with no tracks
+                // Avoid songs with no tracks
                 if (song.tracks.length != 0) {
                     var htmlString = '<p class="enSong">' + song.artist_name + ' - ' + song.title + '</p>';
                     $(htmlString).data('enID', song.tracks[0].id).appendTo('#enSongs');
@@ -139,7 +138,6 @@ function init() {
                 } else {
                     $('#start-remix').removeAttr('disabled');
                 }
-
             });
 
         });
@@ -181,9 +179,9 @@ window.onload = init;
 
 
 <div id='select-track'>
-
-        Select an <b>MP3</b> to Remix : <input id="myfile" type="file"> 
-        <br />
+    Select an <b>MP3</b> to Remix : <input id="myfile" type="file"> 
+    <br />
+    Enter the artist and title of your mp3, and then click on the correct track
     <input type="text" id="searchInput" value="Artist - Song Title" />
 </div>
 
@@ -194,16 +192,13 @@ window.onload = init;
 <button id='start-remix' onClick="startRemix()">Remix!</button>
 
 <div>
-<button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play Original</button>
-<button class='btn btn-original' onClick="player.stop()">Stop Original</button>
+    <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play Original</button>
+    <button class='btn btn-original' onClick="player.stop()">Stop Original</button>
 </div>
 
-
-
 <div>
-
-<button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
-<button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
+    <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
+    <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
 </div>
 
 </body>
