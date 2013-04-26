@@ -52,40 +52,79 @@ var player;
 var track;
 var remixed;
 
-// Send track for analysis, then hit profile every 8 seconds...
 
-function uploadAudio(trackURL) {
-    var url = 'http://developer.echonest.com/api/v4/track/upload?callback=?';
-    url = url + '&url=' + trackURL + '&api_key=' + apiKey + '&filetype=mp3';
-    console.log(url);
+function startRemix() {
+    if (window.webkitAudioContext === undefined) {
+        error("Sorry, this app needs advanced web audio. Your browser doesn't"
+                + " support it. Try the latest version of Chrome");
+    } else {
+         var context = new webkitAudioContext();
 
-    $.post(url, function(data) {
-        console.log(data);
-    });
+        remixer = createJRemixer(context, $, apiKey);
+        player = remixer.getPlayer();
+
+        remixer.remixTrackById(trackID, trackURL, function(t, percent) {
+            track = t;
+
+            $("#info").text(percent + "% of the track loaded...");
+            if (percent == 100) {
+                $("#info").text(percent + "% of the track loaded, remixing...");
+            }
+
+            if (track.status == 'ok') {
+                $('.btn-original').removeAttr('disabled');
+                remixed = new Array();
+                // Extract the first beat of every bar.
+                var meter = parseInt(track.analysis.track.time_signature);
+                for (var i=0; i < track.analysis.beats.length; i++) {
+                    if (i % meter == 0) {
+                        remixed.push(track.analysis.beats[i])
+                    }
+                }
+                $("#info").text("Remix complete!");
+                $('.btn-remixed').removeAttr('disabled');
+
+            }
+        });
+
+
+    }
 }
-
-function analyzeAudio(audio, tag, callback) {
-    var url = 'http://remix.echonest.com/Uploader/qanalyze?callback=?'
-    $.getJSON(url, { url:audio, api_key:apiKey, tag:tag}, function(data) {
-        if (data.status === 'done' || data.status === 'error') {
-            callback(data);
-        } else {
-            $("#info").text(data.status + ' - ready in about ' + data.estimated_wait + ' secs. ');
-            setTimeout(function() { analyzeAudio(audio, tag, callback); }, 8000);
-        } 
-    });
-}
-
 
 function init() {
     console.log("Ready");
+    var enReq = null;
+
+    // set up the search function
+        $('#searchInput').keyup(function() {
+
+        // Echo Nest search
+        enReq.abort();
+        var url = 'http://developer.echonest.com/api/v4/song/search?format=json&results=5&bucket=id:7digital-US&bucket=tracks'
+        $.getJSON(url, {combined:searchString, api_key:enAPIKey}, function(data) {
+            var songs = data.response.songs;
+            $('#enSongs').empty();
+            songs.forEach(function(song) {
+    
+                // avoid songs with no tracks
+                if (song.tracks.length != 0) {
+                    var htmlString = '<p class="enSong">' + song.artist_name + ' - ' + song.title + '</p>';
+                    $(htmlString).data('enID', song.tracks[0].id).appendTo('#enSongs');
+                }
+
+            });
+
+            // Set up the click function
+            $(".enSong").click(function() {
+                console.log("clicked an enSong");
+                console.log($(this).data('enID'));
+                trackID = $(this).data('enID');
+            });
+
+        });
+    });
 
 
-    if (window.webkitAudioContext === undefined) {
-            error("Sorry, this app needs advanced web audio. Your browser doesn't"
-                + " support it. Try the latest version of Chrome");
-        } else {
-            var context = new webkitAudioContext();
 
 
         // Only use the filesystem if we have access to it.
@@ -99,9 +138,6 @@ function init() {
 
         document.querySelector('#myfile').onchange = function(e) {
           var files = this.files;
-
-
-
           window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
             // Duplicate each file the user selected to the app's fs.
             for (var i = 0, file; file = files[i]; ++i) {
@@ -116,38 +152,10 @@ function init() {
 
                     trackURL = fileEntry.toURL();
 
-                    // update the input things fields:  api key, trackURL, filetype, track
+ 
+                    
 
-                    $('#input-api-key').val(apiKey);
-                    $('#input-url').val(trackURL);
-                    console.log("Ready to try the upload")
-
-                    remixer = createJRemixer(context, $, apiKey);
-                    player = remixer.getPlayer();
-
-                    remixer.remixTrackById(trackID, trackURL, function(t, percent) {
-                        track = t;
-
-                        $("#info").text(percent + "% of the track loaded...");
-                        if (percent == 100) {
-                            $("#info").text(percent + "% of the track loaded, remixing...");
-                        }
-
-                        if (track.status == 'ok') {
-                            $('.btn-original').removeAttr('disabled');
-                            remixed = new Array();
-                            // Extract the first beat of every bar.
-                            var meter = parseInt(track.analysis.track.time_signature);
-                            for (var i=0; i < track.analysis.beats.length; i++) {
-                                if (i % meter == 0) {
-                                    remixed.push(track.analysis.beats[i])
-                                }
-                            }
-                            $("#info").text("Remix complete!");
-                            $('.btn-remixed').removeAttr('disabled');
-
-                        }
-                    });
+                    
 
 
                 }, errorHandler);
@@ -167,16 +175,10 @@ window.onload = init;
 
 
 <div id='select-track'>
-    <form id='upload-form' action="http://developer.echonest.com/api/v4/track/upload" method="post" enctype="multipart/form-data">
-      <input id="input-api-key" type="hidden" name="api_key" value=""> 
-      <input id="input-url" type="hidden" name="url" value=""> 
-      <input id="input-filetype" type="hidden" name="filetype" value="mp3"> 
-
-      Select an <b>MP3</b> to Remix : <input id="myfile" type="file"> 
-      <br>
-      <input class="btn btn-primary btn-default" id='upload' type="submit" value="Go!"> 
-    </form> 
+    <input type="text" id="searchInput" value="Artist - Song Title" />
 </div>
+
+<div id='enSongs'> </div>
 
 <div id="info"></div>
 <div>
@@ -184,7 +186,10 @@ window.onload = init;
 <button class='btn btn-original' onClick="player.stop()">Stop Original</button>
 </div>
 
+
+
 <div>
+<button onClick="startRemix()">Remix!</button>
 <button class='btn btn-inverse btn-remixed' onClick="player.play(0, remixed);">Play Remix</button>
 <button class='btn btn-remixed' onClick="player.stop()">Stop Remix</button>
 </div>
