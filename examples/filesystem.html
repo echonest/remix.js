@@ -151,12 +151,7 @@ function init() {
                     }, errorHandler);
 
                     trackURL = fileEntry.toURL();
-
- 
-                    
-
-                    
-
+                    console.log(trackURL);
 
                 }, errorHandler);
               })(file);
@@ -175,6 +170,11 @@ window.onload = init;
 
 
 <div id='select-track'>
+
+        Select an <b>MP3</b> to Remix : <input id="myfile" type="file"> 
+        <br />
+        <input class="btn btn-primary btn-default" id='upload' type="submit" value="Load file"> 
+        <br />
     <input type="text" id="searchInput" value="Artist - Song Title" />
 </div>
 
