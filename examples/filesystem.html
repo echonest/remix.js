@@ -93,6 +93,13 @@ function startRemix() {
 
 function init() {
     console.log("Ready");
+
+    if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
+            window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
+            window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
+                fs = filesystem;
+        }, fileErrorHandler);
+    }
     
 
     // Set up the search function
@@ -125,13 +132,12 @@ function init() {
 
 
     document.querySelector('#myfile').onchange = function(e) {
-      var files = this.files;
-      window.requestFileSystem(window.TEMPORARY, 1024*1024, function(fs) {
+        var files = this.files;
         // Duplicate each file the user selected to the app's fs.
         for (var i = 0, file; file = files[i]; ++i) {
 
-          // Capture current iteration's file in local scope for the getFile() callback.
-          (function(f) {
+            // Capture current iteration's file in local scope for the getFile() callback.
+            (function(f) {
             console.log(f.name)
             fs.root.getFile(f.name, {create: true, exclusive: false}, function(fileEntry) {
                 fileEntry.createWriter(function(fileWriter) {
@@ -142,9 +148,8 @@ function init() {
                 console.log(trackURL);
 
             }, errorHandler);
-          })(file);
-        }
-      }, errorHandler);
+            })(file);
+            }
 
     };
 }
