@@ -133,9 +133,7 @@ function init() {
                 // Avoid songs with no tracks
                 if (song.tracks.length != 0) {
                     var htmlString = '<p class="enSong">' + song.artist_name + ' - ' + song.title + '</p>';
-                    $(htmlString).data('enID', song.tracks[0].id);
-                    $(htmlString).data('enTitle', song.title);
-                    $(htmlString).appendTo('#enSongs');
+                    $(htmlString).data({'enID': song.tracks[0].id, 'enTitle': song.title}).appendTo('#enSongs');
                 }
             });
 
