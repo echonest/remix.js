@@ -1,5 +1,5 @@
 // Remix.js
-// Thor Kell & Paul Lamere, 12/2012 - 4/2013
+// Thor Kell & Paul Lamere, 12/2012
 // Based on Paul Lamere's Infinite Jukebox and assorted other javascript projects
 
 function createJRemixer(context, jquery, apiKey) {
@@ -20,11 +20,12 @@ function createJRemixer(context, jquery, apiKey) {
                     { q: "select * from json where url=\"" + analysisURL + "\"", format: "json"}, 
                     function(data) {
                         if (data.query.results != null) {
-                             track.analysis = data.query.results.json;
+                            track.analysis = data.query.results.json;
                             remixer.remixTrack(track, trackURL, callback);   
                         }
                         else {
-                            console.log('error', 'No analysis data returned:  sorry!');
+                            callback(track, "Error:  no analysis data returned for that track - 0 ");  
+                            console.log('error', 'No analysis data returned:  try again, or try another trackID');
                         }
                 });
 
@@ -522,7 +523,6 @@ function endsWith(str, suffix) {
     return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
-
 function fixFileName(name) {
     name = name.replace(/c:\\fakepath\\/i, '');
     name = name.replace(/[^A-Z0-9.\-]+/gi, ' ');
@@ -541,7 +541,6 @@ function fetchSignature() {
     });
 }
 
-// And this needs to change to get the URL back from the DB, not from our amazon refs
 function getProfile(trackID, callback) {
     var url = 'http://remix.echonest.com/Uploader/profile?callback=?';
     return $.getJSON(url, {trid: trackID}, callback); 
