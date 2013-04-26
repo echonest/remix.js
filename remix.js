@@ -20,12 +20,12 @@ function createJRemixer(context, jquery, apiKey) {
                     { q: "select * from json where url=\"" + analysisURL + "\"", format: "json"}, 
                     function(data) {
                         if (data.query.results != null) {
-                             track.analysis = data.query.results.json;
+                            track.analysis = data.query.results.json;
                             remixer.remixTrack(track, trackURL, callback);   
                         }
                         else {
-                            callback(track, "Error:  no analysis data returned for that track");  
-                            console.log('error', 'No analysis data returned:  sorry!');
+                            callback(track, "Error:  no analysis data returned for that track - 0 ");  
+                            console.log('error', 'No analysis data returned:  try again, or try another trackID');
                         }
                 });
 
