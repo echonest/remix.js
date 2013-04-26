@@ -97,9 +97,9 @@ function startRemix() {
 function init() {
     console.log("Ready");
 
-    $('.btn-original').attr('disabled');
-    $('.btn-remixed').attr('disabled');
-    $('#start-remix').attr('disabled');
+    $('.btn-original').attr('disabled', 'disabled');
+    $('.btn-remixed').attr('disabled', 'disabled');
+    $('#start-remix').attr('disabled', 'disabled');
 
     if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
             window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
