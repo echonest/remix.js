@@ -130,13 +130,12 @@ function init() {
             var songs = data.response.songs;
             $('#enSongs').empty();
             songs.forEach(function(song) {
-    
                 // Avoid songs with no tracks
                 if (song.tracks.length != 0) {
                     var htmlString = '<p class="enSong">' + song.artist_name + ' - ' + song.title + '</p>';
                     $(htmlString).data('enID', song.tracks[0].id).appendTo('#enSongs');
+                    $(htmlString).data('enTitle', song.title).appendTo('#enSongs'); 
                 }
-
             });
 
             // Set up the click function
@@ -144,6 +143,8 @@ function init() {
                 console.log("clicked an enSong");
                 console.log($(this).data('enID'));
                 trackID = $(this).data('enID');
+
+                $("#info").text('Selected' +  $(this).data('enTitle'));
 
                 if (remixFlag == false) {
                     remixFlag = true;
