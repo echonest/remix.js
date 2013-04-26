@@ -108,7 +108,7 @@ function init() {
         var searchString = $('#searchInput').val();
         if (enReq) { enReq.abort(); }
         var url = 'http://developer.echonest.com/api/v4/song/search?format=json&results=5&bucket=id:7digital-US&bucket=tracks'
-        $.getJSON(url, {combined:searchString, api_key:enAPIKey}, function(data) {
+        $.getJSON(url, {combined:searchString, api_key:apiKey}, function(data) {
             var songs = data.response.songs;
             $('#enSongs').empty();
             songs.forEach(function(song) {
