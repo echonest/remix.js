@@ -106,10 +106,12 @@ function init() {
                 }
 
                 // Make the graph
+                var the_width = 1024;
+                var the_height = 256;
                 graph = new Rickshaw.Graph( {
                         element: document.querySelector("#main-chart"),
-                        width: 1024,
-                        height: 256,
+                        width: the_width,
+                        height: the_height,
                         series: [ {
                                 color: 'steelblue',
                                 data: data
@@ -129,8 +131,15 @@ function init() {
 
 
                // Then I need to give my player a callback that draws a playback head on the graph
+                svg = d3.select('svg');
+                var marker = svg.append("svg:line")
+                    .attr("x1", 0)
+                    .attr("y1", 0)
+                    .attr("x2", 0)
+                    .attr("y2", the_height)
+                    .style("stroke", "rgb(255,0,0)");
 
-
+                // Set up the playback clicks
                 $('div.detail').on('click', 'div', function(event) {
                     var the_index = parseInt($('#graph-index').text());
                     player.stop();
