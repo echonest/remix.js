@@ -84,7 +84,7 @@ function init() {
                 // create the data
                 var data = [];
                 for (var i = 0; i <  track.analysis.beats.length; i++) {
-                    data.push( {x: i, y: track.analysis.beats[i].confidence});
+                    data.push({x: i, y: float(track.analysis.beats[i].confidence)});
                 }
 
                 // Make the graph
@@ -98,6 +98,11 @@ function init() {
                         } ]
                 } );
                 graph.render();
+
+                // 
+                var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+                    graph: graph
+                } );
 
 
             }
@@ -145,7 +150,7 @@ window.onload = init;
             <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
             <br />
             <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play </button>
-            <button class='btn btn-original' onClick="player.stop()">Stop Original</button>
+            <button class='btn btn-original' onClick="player.stop()">Stop</button>
             </div>
         </section>
 
