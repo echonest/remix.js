@@ -128,10 +128,10 @@ function init() {
 
                // Then I need to give my player a callback that draws a playback head on the graph
                 $('div.detail').on('click', 'div', function(event) {
-                    var the_index = $('#graph-index').text();
+                    var the_index = parseInt($('#graph-index').text());
                     console.log("the index is: ", the_index);
                     player.stop();
-                    player.play(track.analysis.beats.slice(the_index));
+                    player.play(0, track.analysis.beats.slice(the_index));
 
                 });
 
