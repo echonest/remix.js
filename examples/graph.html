@@ -123,6 +123,13 @@ function init() {
                 } );
                 graph.render();
 
+                // Generic Y-Axis
+                var yAxis = new Rickshaw.Graph.Axis.Y({
+                    graph: graph
+                });
+
+                yAxis.render();
+
                 // wrestlng with hover details
                 var hoverDetail = new Rickshaw.Graph.HoverDetail( {
                     graph: graph,
