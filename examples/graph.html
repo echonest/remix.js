@@ -105,13 +105,17 @@ function init() {
                 $('.btn-original').removeAttr('disabled');
 
 
-                var data = []
+                var all_data = []
                 // check out what the user wants to see and create the data
                 if (timeRes == 'beats') {
-                    var data = [];
+                    var beatConf = [];
+                    var beatDur = [];
                     for (var i = 0; i < track.analysis.beats.length; i++) {
-                        data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
+                        beatConf.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
+                        beatDur.push({x: i, y: parseFloat(track.analysis.beats[i].duration)});
                     }
+                    all_data.push({color: 'steelblue', data: beatConf});
+                    all_data.push({color: 'lightblue', data: beatDur});
                 }
 
                 // ALL THE HUGE LONG GRAPHING CODE
@@ -144,16 +148,16 @@ function init() {
                 xAxis.render();
 
                 // Generic legend
-                var legend = new Rickshaw.Graph.Legend({
-                    graph: graph,
-                    element: document.querySelector('#graph')
-                });
+                // var legend = new Rickshaw.Graph.Legend({
+                //     graph: graph,
+                //     element: document.querySelector('#graph')
+                // });
 
-                // Line toggle
-                var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
-                    graph: graph,
-                    legend: legend
-                });
+                // // Line toggle
+                // var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+                //     graph: graph,
+                //     legend: legend
+                // });
 
 
                 // wrestlng with hover details -- still need to fix this
@@ -240,6 +244,7 @@ window.onload = init;
                 <button class='btn btn-success' onClick="timeRes = 'segments';">Segments</button>
             </div>
 
+            <br />
 
             <button class='btn btn-inverse btn-original' onClick="currentLoc = 0;player.play(0, track.analysis.beats);">Play </button>
             <button class='btn btn-original' onClick="player.stop()">Stop</button>
