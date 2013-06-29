@@ -54,6 +54,7 @@ var remixed;
 
 // temp for ease of hacking
 var graph;
+var currentLoc;
 
 function init() {
     $('.btn').attr('disabled','disabled');
@@ -108,6 +109,8 @@ function init() {
                 // Make the graph
                 var the_width = 1024;
                 var the_height = 256;
+                var step = the_width / data.len;
+
                 graph = new Rickshaw.Graph( {
                         element: document.querySelector("#main-chart"),
                         width: the_width,
@@ -131,27 +134,40 @@ function init() {
 
 
                // Then I need to give my player a callback that draws a playback head on the graph
+               // marker.attr('transform', 'translate(10)'); // moves to the given pixel
                 svg = d3.select('svg');
-                var marker = svg.append('rect')
-                    .attr('class', 'bar')
-                    .attr('y', 0)
-                    .attr('height', the_height))
-                    .attr('fill', 'red')
-                    .attr('stroke', 'red')
-                    .attr('fill-opacity', '0.25');
+                var marker = svg.append("svg:line")
+                    .attr("x1", 0)
+                    .attr("y1", 0)
+                    .attr("x2", 0)
+                    .attr("y2", the_height)
+                    .style("stroke", "rgb(0,255,0)");
 
                 // Set up the playback clicks
                 $('div.detail').on('click', 'div', function(event) {
                     var the_index = parseInt($('#graph-index').text());
                     player.stop();
+                    currentLoc = step * the_index;
+                    marker.attr('transform', 'translate(' + currentLoc + ')')
                     player.play(0, track.analysis.beats.slice(the_index));
+
                 });
 
                 $('#main-chart').on('click', 'div', function(event) {
                     var the_index = parseInt($('#graph-index').text());
                     player.stop();
+                    currentLoc = step * the_index;
+                    marker.attr('transform', 'translate(' + currentLoc + ')')
                     player.play(0, track.analysis.beats.slice(the_index));
                 });
+
+
+                player.addAfterPlayCallback(function() {
+                    currentLoc = currentLoc + step;
+                    marker.attr('transform', 'translate(' + currentLoc + ')')
+                });
+
+
 
             } // end actual remix code
         });
