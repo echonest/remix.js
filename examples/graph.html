@@ -58,11 +58,20 @@ var currentLoc = 0;
 var step
 
 
-function playFrom(the_index) {
+function playFrom(index, marker) {
     player.stop();
-    currentLoc = step * the_index;
+    currentLoc = step * index;
     marker.attr('transform', 'translate(' + currentLoc + ')')
-    player.play(0, track.analysis.beats.slice(the_index));
+    player.play(0, track.analysis.beats.slice(index));
+}
+
+
+function generateGraph(data) {
+    // clear old graph?
+    var the_width = 1024;
+    var the_height = 256;
+    step = the_width / data.length;
+
 }
 
 function init() {
@@ -157,11 +166,11 @@ function init() {
 
                 // Set up the playback clicks
                 $('div.detail').on('click', 'div', function(event) {
-                    playFrom(parseInt($('#graph-index').text()))
+                    playFrom(parseInt($('#graph-index').text()), marker)
                 });
 
                 $('#main-chart').on('click', 'div', function(event) {
-                    playFrom(parseInt($('#graph-index').text()))
+                    playFrom(parseInt($('#graph-index').text()), marker)
                 });
 
 
