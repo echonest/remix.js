@@ -13,6 +13,14 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+    <style>
+        .rickshaw_graph .detail .x_label { display: none }
+        .rickshaw_graph .detail .item { line-height: 1.4; padding: 0.5em }
+        .detail_swatch { float: right; display: inline-block; width: 10px; height: 10px; margin: 0 4px 0 0 }
+        .rickshaw_graph .detail .date { color: #a0a0a0 }
+    </style>
+
 </head>
 
 <body>
@@ -27,6 +35,8 @@
 <script src="../graph/rickshaw.min.js"></script>
 
 <script type="text/javascript">
+
+
 
 // First-beat extraction and assembly
 var apiKey = 'SWHCFHJA2PPHKX7A5';
@@ -73,10 +83,12 @@ function init() {
 
             $("#info").text(percent + "% of the track loaded...");
             if (percent == 100) {
-                $("#info").text(percent + "% of the track loaded!");
+                $("#info").text(percent + "% of the track loaded, checking status");
             }
 
             if (track.status == 'ok') {
+                $("#info").text(percent + "Track is ready");
+            }
                 wavesurfer.loadBuffer(track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
 
@@ -84,14 +96,15 @@ function init() {
                 // create the data
                 var data = [];
                 for (var i = 0; i <  track.analysis.beats.length; i++) {
-                    data.push({x: i, y: float(track.analysis.beats[i].confidence)});
+                    data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
                 }
+
 
                 // Make the graph
                 var graph = new Rickshaw.Graph( {
                         element: document.querySelector("#main-chart"),
-                        width: 600,
-                        height: 250,
+                        width: 1024,
+                        height: 256,
                         series: [ {
                                 color: 'steelblue',
                                 data: data
@@ -99,10 +112,22 @@ function init() {
                 } );
                 graph.render();
 
-                // 
+                // wrestlng with hover details
                 var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-                    graph: graph
+                    graph: graph,
+                    formatter: function(series, x, y) {
+                        var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
+                        var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
+                        var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
+                        return content;
+                    }
                 } );
+
+                $('div.detail').on('click', 'div', function(event) {
+                   // do something here
+                   console.log(x, y);
+                });
+
 
 
             }
