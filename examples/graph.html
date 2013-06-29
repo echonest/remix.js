@@ -73,20 +73,24 @@ function init() {
 
             $("#info").text(percent + "% of the track loaded...");
             if (percent == 100) {
-                $("#info").text(percent + "% of the track loaded, remixing...");
+                $("#info").text(percent + "% of the track loaded!");
             }
 
             if (track.status == 'ok') {
                 wavesurfer.loadBuffer(track.analysis.beats);
 
                 $('.btn-original').removeAttr('disabled');
-                // Do graph magic here!
 
-                // This is demo graph magic
-                var data = [ { x: 0, y: 40 }, { x: 1, y: 49 }, { x: 2, y: 17 }, { x: 3, y: 42 } ];
+                // create the data
+                var data = [];
+                for (var i = 0; i <  track.analysis.beats.length; i++) {
+                    data.append( {x: i, y: track.analysis.beats[i].confidence})
+                }
+
+                // Make the graph
                 var graph = new Rickshaw.Graph( {
                         element: document.querySelector("#main-chart"),
-                        width: 580,
+                        width: 600,
                         height: 250,
                         series: [ {
                                 color: 'steelblue',
