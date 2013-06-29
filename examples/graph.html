@@ -54,7 +54,7 @@ var remixed;
 
 // temp for ease of hacking
 var graph;
-var currentLoc;
+var currentLoc = 0;
 var step
 
 function init() {
@@ -110,7 +110,7 @@ function init() {
                 // Make the graph
                 var the_width = 1024;
                 var the_height = 256;
-                step = the_width / data.len;
+                step = the_width / data.length;
 
                 graph = new Rickshaw.Graph( {
                         element: document.querySelector("#main-chart"),
