@@ -124,11 +124,17 @@ function init() {
                     }
                 });
                // And I need to fix my damn style.
+               // I need the line.  What is the liiine
 
                // Then I need to give my player a callback that draws a playback head on the graph
                 $('div.detail').on('click', 'div', function(event) {
                     var the_index = parseInt($('#graph-index').text());
-                    console.log("the index is: ", the_index);
+                    player.stop();
+                    player.play(0, track.analysis.beats.slice(the_index));
+                });
+
+                $('#main-chart').on('click', 'div', function(event) {
+                    var the_index = parseInt($('#graph-index').text());
                     player.stop();
                     player.play(0, track.analysis.beats.slice(the_index));
                 });
