@@ -52,6 +52,9 @@ var player;
 var track;
 var remixed;
 
+// temp for ease of hacking
+var graph;
+
 function init() {
     $('.btn').attr('disabled','disabled');
     var wavesurfer = Object.create(WaveSurfer);
@@ -103,7 +106,7 @@ function init() {
                 }
 
                 // Make the graph
-                var graph = new Rickshaw.Graph( {
+                graph = new Rickshaw.Graph( {
                         element: document.querySelector("#main-chart"),
                         width: 1024,
                         height: 256,
@@ -126,6 +129,8 @@ function init() {
 
 
                // Then I need to give my player a callback that draws a playback head on the graph
+
+
                 $('div.detail').on('click', 'div', function(event) {
                     var the_index = parseInt($('#graph-index').text());
                     player.stop();
