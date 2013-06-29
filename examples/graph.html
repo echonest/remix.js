@@ -127,8 +127,13 @@ function init() {
                 var yAxis = new Rickshaw.Graph.Axis.Y({
                     graph: graph
                 });
-
                 yAxis.render();
+
+                // Generic X-Axis
+                var xAxis = new Rickshaw.Graph.Axis.Time({
+                    graph: graph
+                });
+                xAxis.render();
 
                 // wrestlng with hover details
                 var hoverDetail = new Rickshaw.Graph.HoverDetail( {
