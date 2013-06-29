@@ -54,8 +54,11 @@ var remixed;
 
 // temp for ease of hacking
 var graph;
+
+// These I think we need though
 var currentLoc = 0;
 var step
+var timeRes = "beats"
 
 
 function playFrom(index, marker) {
@@ -65,91 +68,6 @@ function playFrom(index, marker) {
     player.play(0, track.analysis.beats.slice(index));
 }
 
-
-function generateGraph(data) {
-    // clear old graph?
-    var the_width = 1024;
-    var the_height = 256;
-    step = the_width / data.length;
-
-    graph = new Rickshaw.Graph( {
-            element: document.querySelector("#main-chart"),
-            renderer: 'line',
-            width: the_width,
-            height: the_height,
-            series: [ {
-                    color: 'steelblue',
-                    data: data
-            } ]
-    } );
-    graph.render();
-
-    // Generic Y-Axis
-    var yAxis = new Rickshaw.Graph.Axis.Y({
-        graph: graph
-    });
-    yAxis.render();
-
-    // Generic X-Axis
-    var xAxis = new Rickshaw.Graph.Axis.Time({
-        graph: graph
-    });
-    xAxis.render();
-
-    // Generic legend
-    var legend = new Rickshaw.Graph.Legend({
-        graph: graph,
-        element: document.querySelector('#graph')
-    });
-
-    // Line toggle
-    var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
-        graph: graph,
-        legend: legend
-    });
-
-
-    // wrestlng with hover details.
-    // Still need to fix this
-    var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-        graph: graph,
-        formatter: function(series, x, y) {
-            var swatch = '<span class="detail_swatch" id="graph-index" style="background-color: ' + series.color + '">' + x + '</span>';
-            var content = swatch + ": " + parseInt(y);
-            return content;
-        }
-    });
-
-    // Create the playback marker
-    svg = d3.select('svg');
-    var marker = svg.append("svg:line")
-        .attr("x1", 0)
-        .attr("y1", 0)
-        .attr("x2", 0)
-        .attr("y2", the_height)
-        .style("stroke", "rgb(0,255,0)");
-
-
-    // Set up the playback clicks
-    $('div.detail').on('click', 'div', function(event) {
-        playFrom(parseInt($('#graph-index').text()), marker)
-    });
-
-    $('#main-chart').on('click', 'div', function(event) {
-        playFrom(parseInt($('#graph-index').text()), marker)
-    });
-
-
-    // Move the marker along as the player plays
-    player.addAfterPlayCallback(function() {
-        currentLoc = currentLoc + step;
-        console.log(currentLoc);
-        marker.attr('transform', 'translate(' + currentLoc + ')')
-    });
-
-
-
-}
 
 function init() {
     $('.btn').attr('disabled','disabled');
@@ -186,13 +104,95 @@ function init() {
             
                 $('.btn-original').removeAttr('disabled');
 
-                // create the data
-                var data = [];
-                for (var i = 0; i < track.analysis.beats.length; i++) {
-                    data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
+
+                var data = []
+                // check out what the user wants to see and create the data
+                if (timeRes == 'beats') {
+                    var data = [];
+                    for (var i = 0; i < track.analysis.beats.length; i++) {
+                        data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
+                    }
                 }
 
-                generateGraph(data);
+                // ALL THE HUGE LONG GRAPHING CODE
+                var the_width = 1024;
+                var the_height = 256;
+                step = the_width / data.length;
+
+                graph = new Rickshaw.Graph( {
+                        element: document.querySelector("#main-chart"),
+                        renderer: 'line',
+                        width: the_width,
+                        height: the_height,
+                        series: [ {
+                                color: 'steelblue',
+                                data: data
+                        } ]
+                } );
+                graph.render();
+
+                // Generic Y-Axis
+                var yAxis = new Rickshaw.Graph.Axis.Y({
+                    graph: graph
+                });
+                yAxis.render();
+
+                // Generic X-Axis
+                var xAxis = new Rickshaw.Graph.Axis.Time({
+                    graph: graph
+                });
+                xAxis.render();
+
+                // Generic legend
+                var legend = new Rickshaw.Graph.Legend({
+                    graph: graph,
+                    element: document.querySelector('#graph')
+                });
+
+                // Line toggle
+                var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+                    graph: graph,
+                    legend: legend
+                });
+
+
+                // wrestlng with hover details.
+                // Still need to fix this
+                var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+                    graph: graph,
+                    formatter: function(series, x, y) {
+                        var swatch = '<span class="detail_swatch" id="graph-index" style="background-color: ' + series.color + '">' + x + '</span>';
+                        var content = swatch + ": " + parseInt(y);
+                        return content;
+                    }
+                });
+
+                // Create the playback marker
+                svg = d3.select('svg');
+                var marker = svg.append("svg:line")
+                    .attr("x1", 0)
+                    .attr("y1", 0)
+                    .attr("x2", 0)
+                    .attr("y2", the_height)
+                    .style("stroke", "rgb(0,255,0)");
+
+
+                // Set up the playback clicks
+                $('div.detail').on('click', 'div', function(event) {
+                    playFrom(parseInt($('#graph-index').text()), marker)
+                });
+
+                $('#main-chart').on('click', 'div', function(event) {
+                    playFrom(parseInt($('#graph-index').text()), marker)
+                });
+
+
+                // Move the marker along as the player plays
+                player.addAfterPlayCallback(function() {
+                    currentLoc = currentLoc + step;
+                    console.log(currentLoc);
+                    marker.attr('transform', 'translate(' + currentLoc + ')')
+                });
 
             } // end actual remix code
         });
@@ -233,6 +233,16 @@ window.onload = init;
             </div>
 
             <br />
+
+
+            <div id="toggle-buttons">
+                <button class='btn btn-original' onClick="timeRes = 'beats';">Beats</button>
+                <button class='btn btn-original' onClick="timeRes = 'tatums';">Tatums</button>
+                <button class='btn btn-original' onClick="timeRes = 'segments';">Segments</button>
+            </div>
+
+            
+
 
             <button class='btn btn-inverse btn-original' onClick="currentLoc = 0;player.play(0, track.analysis.beats);">Play </button>
             <button class='btn btn-original' onClick="player.stop()">Stop</button>
