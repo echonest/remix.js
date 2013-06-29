@@ -78,13 +78,13 @@ function init() {
 
             if (track.status == 'ok') {
                 wavesurfer.loadBuffer(track.analysis.beats);
-
                 $('.btn-original').removeAttr('disabled');
+
 
                 // create the data
                 var data = [];
                 for (var i = 0; i <  track.analysis.beats.length; i++) {
-                    data.append( {x: i, y: track.analysis.beats[i].confidence})
+                    data.push( {x: i, y: track.analysis.beats[i].confidence});
                 }
 
                 // Make the graph
@@ -133,18 +133,20 @@ window.onload = init;
         <div id="info"></div>
 
         <section>
+
+            <h2>The Graph</h2>
+            <div id="main-chart">
+            </div>
+
+            <br />
+
             <div id='waveform'>
-            <h2>Original Track</h2>
+            <h2>The Track</h2>
             <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
             <br />
             <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play </button>
             <button class='btn btn-original' onClick="player.stop()">Stop Original</button>
             </div>
-
-            <!-- Will put the rickshaw / D3 canvas here-->
-            <div id="main-chart"></div>
-
-
         </section>
 
     <img src="http://the.echonest.com/media/images/logos/250x80_lt.gif" />
