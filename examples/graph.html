@@ -132,12 +132,13 @@ function init() {
 
                // Then I need to give my player a callback that draws a playback head on the graph
                 svg = d3.select('svg');
-                var marker = svg.append("svg:line")
-                    .attr("x1", 0)
-                    .attr("y1", 0)
-                    .attr("x2", 0)
-                    .attr("y2", the_height)
-                    .style("stroke", "rgb(255,0,0)");
+                var marker = svg.append('rect')
+                    .attr('class', 'bar')
+                    .attr('y', 0)
+                    .attr('height', the_height))
+                    .attr('fill', 'red')
+                    .attr('stroke', 'red')
+                    .attr('fill-opacity', '0.25');
 
                 // Set up the playback clicks
                 $('div.detail').on('click', 'div', function(event) {
