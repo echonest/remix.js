@@ -87,7 +87,7 @@ function init() {
             }
 
             if (track.status == 'ok') {
-                $("#info").text(percent + "Track is ready");
+                $("#info").text("");
             
                 wavesurfer.loadBuffer(track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
@@ -95,7 +95,7 @@ function init() {
 
                 // create the data
                 var data = [];
-                for (var i = 0; i <  track.analysis.beats.length; i++) {
+                for (var i = 0; i < track.analysis.beats.length; i++) {
                     data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
                 }
 
@@ -116,16 +116,20 @@ function init() {
                 var hoverDetail = new Rickshaw.Graph.HoverDetail( {
                     graph: graph,
                     formatter: function(series, x, y) {
-                        var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
-                        var swatch = '<span class="detail_swatch" style="background-color: ' + series.color + '"></span>';
-                        var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
+                        var swatch = '<span class="detail_swatch" id="graph-index" style="background-color: ' + series.color + '">' + x + '</span>';
+                        var content = swatch + x + ": " + parseInt(y);
                         return content;
                     }
-                } );
+                });
 
+               // I need to get the index of the data, and then play things from the same index with my player.  
+
+               // And I need to fix my damn style.
+
+               // Then I need to give my player a callback that draws a playback head on the graph
                 $('div.detail').on('click', 'div', function(event) {
-                   // do something here
-                   console.log(x, y);
+                    var the_index = $('#graph-index').text();
+                    console.log("the index is: ", the_index);
                 });
 
             }
