@@ -177,76 +177,8 @@ function init() {
                 for (var i = 0; i < track.analysis.beats.length; i++) {
                     data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
                 }
-
-
-                // we're going to go from here, I think.
-                // Make the graph
-                var the_width = 1024;
-                var the_height = 256;
-                step = the_width / data.length;
-
-                graph = new Rickshaw.Graph( {
-                        element: document.querySelector("#main-chart"),
-                        width: the_width,
-                        height: the_height,
-                        series: [ {
-                                color: 'steelblue',
-                                data: data
-                        } ]
-                } );
-                graph.render();
-
-                // Generic Y-Axis
-                var yAxis = new Rickshaw.Graph.Axis.Y({
-                    graph: graph
-                });
-                yAxis.render();
-
-                // Generic X-Axis
-                var xAxis = new Rickshaw.Graph.Axis.Time({
-                    graph: graph
-                });
-                xAxis.render();
-
-                // wrestlng with hover details.
-                // Still need to fix this
-                var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-                    graph: graph,
-                    formatter: function(series, x, y) {
-                        var swatch = '<span class="detail_swatch" id="graph-index" style="background-color: ' + series.color + '">' + x + '</span>';
-                        var content = swatch + ": " + parseInt(y);
-                        return content;
-                    }
-                });
-
-                // Create the playback marker
-                svg = d3.select('svg');
-                var marker = svg.append("svg:line")
-                    .attr("x1", 0)
-                    .attr("y1", 0)
-                    .attr("x2", 0)
-                    .attr("y2", the_height)
-                    .style("stroke", "rgb(0,255,0)");
-
-
-                // Set up the playback clicks
-                $('div.detail').on('click', 'div', function(event) {
-                    playFrom(parseInt($('#graph-index').text()), marker)
-                });
-
-                $('#main-chart').on('click', 'div', function(event) {
-                    playFrom(parseInt($('#graph-index').text()), marker)
-                });
-
-
-                // Move the marker along as the player plays
-                player.addAfterPlayCallback(function() {
-                    currentLoc = currentLoc + step;
-                    console.log(currentLoc);
-                    marker.attr('transform', 'translate(' + currentLoc + ')')
-                });
-
-
+                
+                generateGraph(data);
 
             } // end actual remix code
         });
@@ -288,7 +220,7 @@ window.onload = init;
 
             <br />
 
-            <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play </button>
+            <button class='btn btn-inverse btn-original' onClick="currentLoc = 0;player.play(0, track.analysis.beats);">Play </button>
             <button class='btn btn-original' onClick="player.stop()">Stop</button>
             </div>
         </section>
