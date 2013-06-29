@@ -57,16 +57,16 @@ var graph;
 var currentLoc = 0;
 var step
 
+
+function playFrom(the_index) {
+    player.stop();
+    currentLoc = step * the_index;
+    marker.attr('transform', 'translate(' + currentLoc + ')')
+    player.play(0, track.analysis.beats.slice(the_index));
+}
+
 function init() {
     $('.btn').attr('disabled','disabled');
-    var wavesurfer = Object.create(WaveSurfer);
-    wavesurfer.init({
-        canvas: document.querySelector('#waveCanvas'),
-        waveColor: '#888888',
-        progressColor: '#000000',
-        loadingColor: '#000000',
-        cursorColor: '#888888'
-    });
 
     if (window.webkitAudioContext === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
@@ -98,7 +98,6 @@ function init() {
             if (track.status == 'ok') {
                 $("#info").text("");
             
-                wavesurfer.loadBuffer(track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
 
                 // create the data
@@ -135,7 +134,8 @@ function init() {
                 });
                 xAxis.render();
 
-                // wrestlng with hover details
+                // wrestlng with hover details.
+                // Still need to fix this
                 var hoverDetail = new Rickshaw.Graph.HoverDetail( {
                     graph: graph,
                     formatter: function(series, x, y) {
@@ -145,9 +145,7 @@ function init() {
                     }
                 });
 
-
-               // Then I need to give my player a callback that draws a playback head on the graph
-               // marker.attr('transform', 'translate(10)'); // moves to the given pixel
+                // Create the playback marker
                 svg = d3.select('svg');
                 var marker = svg.append("svg:line")
                     .attr("x1", 0)
@@ -156,25 +154,18 @@ function init() {
                     .attr("y2", the_height)
                     .style("stroke", "rgb(0,255,0)");
 
+
                 // Set up the playback clicks
                 $('div.detail').on('click', 'div', function(event) {
-                    var the_index = parseInt($('#graph-index').text());
-                    player.stop();
-                    currentLoc = step * the_index;
-                    marker.attr('transform', 'translate(' + currentLoc + ')')
-                    player.play(0, track.analysis.beats.slice(the_index));
-
+                    playFrom(parseInt($('#graph-index').text()))
                 });
 
                 $('#main-chart').on('click', 'div', function(event) {
-                    var the_index = parseInt($('#graph-index').text());
-                    player.stop();
-                    currentLoc = step * the_index;
-                    marker.attr('transform', 'translate(' + currentLoc + ')')
-                    player.play(0, track.analysis.beats.slice(the_index));
+                    playFrom(parseInt($('#graph-index').text()))
                 });
 
 
+                // Move the marker along as the player plays
                 player.addAfterPlayCallback(function() {
                     currentLoc = currentLoc + step;
                     console.log(currentLoc);
@@ -223,10 +214,6 @@ window.onload = init;
 
             <br />
 
-            <div id='waveform'>
-            <h2>The Track</h2>
-            <canvas id='waveCanvas' width='1024px' height='100px'></canvas>
-            <br />
             <button class='btn btn-inverse btn-original' onClick="player.play(0, track.analysis.beats);">Play </button>
             <button class='btn btn-original' onClick="player.stop()">Stop</button>
             </div>
