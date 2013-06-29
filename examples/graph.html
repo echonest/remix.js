@@ -55,6 +55,7 @@ var remixed;
 // temp for ease of hacking
 var graph;
 var currentLoc;
+var step
 
 function init() {
     $('.btn').attr('disabled','disabled');
@@ -109,7 +110,7 @@ function init() {
                 // Make the graph
                 var the_width = 1024;
                 var the_height = 256;
-                var step = the_width / data.len;
+                step = the_width / data.len;
 
                 graph = new Rickshaw.Graph( {
                         element: document.querySelector("#main-chart"),
@@ -164,6 +165,7 @@ function init() {
 
                 player.addAfterPlayCallback(function() {
                     currentLoc = currentLoc + step;
+                    console.log(currentLoc);
                     marker.attr('transform', 'translate(' + currentLoc + ')')
                 });
 
