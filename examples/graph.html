@@ -119,12 +119,11 @@ function init() {
                     graph: graph,
                     formatter: function(series, x, y) {
                         var swatch = '<span class="detail_swatch" id="graph-index" style="background-color: ' + series.color + '">' + x + '</span>';
-                        var content = swatch + x + ": " + parseInt(y);
+                        var content = swatch + ": " + parseInt(y);
                         return content;
                     }
                 });
-               // And I need to fix my damn style.
-               // I need the line.  What is the liiine
+
 
                // Then I need to give my player a callback that draws a playback head on the graph
                 $('div.detail').on('click', 'div', function(event) {
@@ -166,7 +165,7 @@ window.onload = init;
     <div class="container">
         <div class="hero-unit">
             <h1>remix.js:  graph.html<h1>
-            <p>See your music in a whole new way</p>
+            <p>See your music how an electrical engineer sees it.</p>
         </div>
 
         <div id="info"></div>
