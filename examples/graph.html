@@ -130,6 +130,9 @@ function init() {
                 $('div.detail').on('click', 'div', function(event) {
                     var the_index = $('#graph-index').text();
                     console.log("the index is: ", the_index);
+                    player.stop();
+                    player.play(track.analysis.beats.slice(the_index));
+
                 });
 
             }
