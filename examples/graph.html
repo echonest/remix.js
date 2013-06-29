@@ -156,8 +156,7 @@ function init() {
                 });
 
 
-                // wrestlng with hover details.
-                // Still need to fix this
+                // wrestlng with hover details -- still need to fix this
                 var hoverDetail = new Rickshaw.Graph.HoverDetail( {
                     graph: graph,
                     formatter: function(series, x, y) {
@@ -236,12 +235,10 @@ window.onload = init;
 
 
             <div id="toggle-buttons">
-                <button class='btn btn-original' onClick="timeRes = 'beats';">Beats</button>
-                <button class='btn btn-original' onClick="timeRes = 'tatums';">Tatums</button>
-                <button class='btn btn-original' onClick="timeRes = 'segments';">Segments</button>
+                <button class='btn btn-primary' onClick="timeRes = 'beats';">Beats</button>
+                <button class='btn btn-info' onClick="timeRes = 'tatums';">Tatums</button>
+                <button class='btn btn-success' onClick="timeRes = 'segments';">Segments</button>
             </div>
-
-            
 
 
             <button class='btn btn-inverse btn-original' onClick="currentLoc = 0;player.play(0, track.analysis.beats);">Play </button>
