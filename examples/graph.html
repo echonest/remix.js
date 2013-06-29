@@ -88,7 +88,7 @@ function init() {
 
             if (track.status == 'ok') {
                 $("#info").text(percent + "Track is ready");
-            }
+            
                 wavesurfer.loadBuffer(track.analysis.beats);
                 $('.btn-original').removeAttr('disabled');
 
@@ -127,8 +127,6 @@ function init() {
                    // do something here
                    console.log(x, y);
                 });
-
-
 
             }
         });
