@@ -74,6 +74,7 @@ function generateGraph(data) {
 
     graph = new Rickshaw.Graph( {
             element: document.querySelector("#main-chart"),
+            renderer: 'line',
             width: the_width,
             height: the_height,
             series: [ {
@@ -94,6 +95,19 @@ function generateGraph(data) {
         graph: graph
     });
     xAxis.render();
+
+    // Generic legend
+    var legend = new Rickshaw.Graph.Legend({
+        graph: graph,
+        element: document.querySelector('#graph')
+    });
+
+    // Line toggle
+    var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
+        graph: graph,
+        legend: legend
+    });
+
 
     // wrestlng with hover details.
     // Still need to fix this
@@ -177,7 +191,7 @@ function init() {
                 for (var i = 0; i < track.analysis.beats.length; i++) {
                     data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
                 }
-                
+
                 generateGraph(data);
 
             } // end actual remix code
