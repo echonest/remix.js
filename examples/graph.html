@@ -316,11 +316,6 @@ function generateGraph(the_series, the_width, the_height) {
             element: document.getElementById('legend')
 
         } );
-
-        var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
-            graph: graph,
-            legend: legend
-        } );
     }
 
     // Show the timbre helper!
@@ -519,7 +514,6 @@ window.onload = init;
             <h2 id='graph-heading'></h2>
 
             <div id="legend_container" style="float: right;">
-                <div id="smoother" title="Smoothing"></div>
                 <div id="legend"></div>
             </div>
 
@@ -527,7 +521,7 @@ window.onload = init;
             </div>
 
             <br />
-        <img id="timbre-basis" src="assets/timbre-basis.png" style="display: block; margin-left: auto;margin-right: auto;">
+            <img id="timbre-basis" src="assets/timbre-basis.png" style="display: block; margin-left: auto;margin-right: auto;">
             <br />
 
             <div id="toggle-buttons">
