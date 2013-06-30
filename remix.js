@@ -194,11 +194,11 @@ function createJRemixer(context, jquery, apiKey) {
                     for (var j = last; j < segs.length; j++) {
                         var qseg = segs[j];
                         // seg starts before quantum so no
-                        if ((qseg.start + qseg.duration) < q.start) {
+                        if (parseFloat(qseg.start) + parseFloat(qseg.duration) < parseFloat(q.start)) {
                             continue;
                         }
                         // seg starts after quantum so no
-                        if (qseg.start > (q.start + q.duration)) {
+                        if (parseFloat(qseg.start) > parseFloat(q.start) + parseFloat(q.duration)) {
                             break;
                         }
                         last = j;
