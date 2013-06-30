@@ -56,7 +56,9 @@ var graph;
 // These I think we need though
 var currentLoc = 0;
 var step
-var timeRes = "beats"
+var dataType = "beats-conf";
+var the_width = 1024;
+var the_height = 256;
 
 
 function playFrom(index, marker) {
@@ -66,6 +68,93 @@ function playFrom(index, marker) {
     player.play(0, track.analysis.beats.slice(index));
 }
 
+function getData(dataType) {
+    all_data = [];
+    if (dataType == 'beats-conf') {
+        for (var i = 0; i < track.analysis.beats.length; i++) {
+            all_data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
+        }
+    }
+
+    if (dataType == 'beats-dur') {
+        step = the_width / track.analysis.beats.length;
+        for (var i = 0; i < track.analysis.beats.length; i++) {
+            all_data.push({x: i, y: parseFloat(track.analysis.beats[i].duration)});
+        }
+    }
+    return all_data;
+}
+
+function generateGraph(all_data, the_width, the_height) {
+    // ALL THE HUGE LONG GRAPHING CODE
+    graph = new Rickshaw.Graph( {
+            element: document.querySelector("#main-chart"),
+            renderer: 'line',
+            width: the_width,
+            height: the_height,
+            series: [{color: 'steelblue', data: all_data}],
+    } );
+    graph.render();
+
+    // Generic Y-Axis
+    var yAxis = new Rickshaw.Graph.Axis.Y({
+        graph: graph
+    });
+    yAxis.render();
+
+    // Generic X-Axis
+    var xAxis = new Rickshaw.Graph.Axis.Time({
+        graph: graph
+    });
+    xAxis.render();
+
+    // wrestlng with hover details -- still need to fix this
+    var hoverDetail = new Rickshaw.Graph.HoverDetail( {
+        graph: graph,
+        formatter: function(series, x, y) {
+            var swatch = '<span class="detail_swatch" id="graph-index" style="background-color: ' + series.color + '">' + x + '</span>';
+            var content = swatch + ": " + parseInt(y);
+            return content;
+        }
+    });
+
+    // Create the playback marker
+    svg = d3.select('svg');
+    var marker = svg.append("svg:line")
+        .attr("x1", 0)
+        .attr("y1", 0)
+        .attr("x2", 0)
+        .attr("y2", the_height)
+        .style("stroke", "rgb(0,255,0)");
+
+
+    // Set up the playback clicks
+    $('.detail').on('click', 'div', function(event) {
+        playFrom(parseInt($('#graph-index').text()), marker)
+    });
+
+    $('#main-chart').on('click', 'div', function(event) {
+        playFrom(parseInt($('#graph-index').text()), marker)
+    });
+
+    $('svg').on('click', 'div', function(event) {
+        playFrom(parseInt($('#graph-index').text()), marker)
+    });
+
+    // Move the marker along as the player plays
+    player.addAfterPlayCallback(function() {
+        currentLoc = currentLoc + step;
+        marker.attr('transform', 'translate(' + currentLoc + ')')
+    });
+}
+
+function update(dataType) {
+    var all_data = getData(dataType);
+    step = the_width / all_data.length;
+    generateGraph(all_data, the_width, the_height);
+    $('.btn').removeAttr('disabled');
+
+}
 
 function init() {
     $('.btn').attr('disabled','disabled');
@@ -75,16 +164,6 @@ function init() {
             + " support it. Try the latest version of Chrome");
     } else {
         var context = new webkitAudioContext();
-        var fs;
-        // Only use the filesystem if we have access to it.
-        if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
-            window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-            window.requestFileSystem(window.TEMPORARY, 1024*1024, function(filesystem) {
-                fs = filesystem;
-            }, fileErrorHandler);
-        }
-
-
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
         $("#info").text("Loading analysis data...");
@@ -99,98 +178,10 @@ function init() {
 
             if (track.status == 'ok') {
                 $("#info").text("");
-            
                 $('.btn-original').removeAttr('disabled');
-
-
-                var the_width = 1024;
-                var the_height = 256
-                var all_data = []
                 // check out what the user wants to see and create the data
-                if (timeRes == 'beats') {
-                    step = the_width / track.analysis.beats.length;
-                    var beatConf = [];
-                    var beatDur = [];
-                    for (var i = 0; i < track.analysis.beats.length; i++) {
-                        beatConf.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
-                        beatDur.push({x: i, y: parseFloat(track.analysis.beats[i].duration)});
-                    }
-                    all_data.push({color: 'steelblue', data: beatConf});
-                    all_data.push({color: 'lightblue', data: beatDur});
-                }
+                update(dataType);
 
-                // ALL THE HUGE LONG GRAPHING CODE
-                graph = new Rickshaw.Graph( {
-                        element: document.querySelector("#main-chart"),
-                        renderer: 'line',
-                        width: the_width,
-                        height: the_height,
-                        series: all_data,
-                } );
-                graph.render();
-
-                // Generic Y-Axis
-                var yAxis = new Rickshaw.Graph.Axis.Y({
-                    graph: graph
-                });
-                yAxis.render();
-
-                // Generic X-Axis
-                var xAxis = new Rickshaw.Graph.Axis.Time({
-                    graph: graph
-                });
-                xAxis.render();
-
-                // Generic legend
-                var legend = new Rickshaw.Graph.Legend({
-                    graph: graph,
-                    element: document.querySelector('#graph')
-                });
-
-                // // Line toggle
-                // var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
-                //     graph: graph,
-                //     legend: legend
-                // });
-
-
-                // wrestlng with hover details -- still need to fix this
-                var hoverDetail = new Rickshaw.Graph.HoverDetail( {
-                    graph: graph,
-                    formatter: function(series, x, y) {
-                        var swatch = '<span class="detail_swatch" id="graph-index" style="background-color: ' + series.color + '">' + x + '</span>';
-                        var content = swatch + ": " + parseInt(y);
-                        return content;
-                    }
-                });
-
-                // Create the playback marker
-                svg = d3.select('svg');
-                var marker = svg.append("svg:line")
-                    .attr("x1", 0)
-                    .attr("y1", 0)
-                    .attr("x2", 0)
-                    .attr("y2", the_height)
-                    .style("stroke", "rgb(0,255,0)");
-
-
-                // Set up the playback clicks
-                $('div.detail').on('click', 'div', function(event) {
-                    playFrom(parseInt($('#graph-index').text()), marker)
-                });
-
-                $('#main-chart').on('click', 'div', function(event) {
-                    playFrom(parseInt($('#graph-index').text()), marker)
-                });
-
-
-                // Move the marker along as the player plays
-                player.addAfterPlayCallback(function() {
-                    currentLoc = currentLoc + step;
-                    marker.attr('transform', 'translate(' + currentLoc + ')')
-                });
-
-                $('.btn').removeAttr('disabled');
 
             } // end actual remix code
         });
@@ -218,7 +209,7 @@ window.onload = init;
     
     <div class="container">
         <div class="hero-unit">
-            <h1>remix.js:  graph.html<h1>
+            <h1>remix.js:  graph<h1>
             <p>See your music how an electrical engineer sees it.</p>
         </div>
 
@@ -231,12 +222,19 @@ window.onload = init;
             </div>
 
             <br />
-
+            <br />
 
             <div id="toggle-buttons">
-                <button class='btn btn-primary' onClick="timeRes = 'beats';">Beats</button>
-                <button class='btn btn-info' onClick="timeRes = 'tatums';">Tatums</button>
-                <button class='btn btn-success' onClick="timeRes = 'segments';">Segments</button>
+                <p>
+                    <button class='btn btn-primary' onClick="update('beats-conf');">Beats - Confidence</button>
+                    <button class='btn btn-primary' onClick="update('beats-dur');">Beats - Duratiion</button>
+                </p>
+                <p>
+                    <button class='btn btn-info' onClick="timeRes = 'tatums';">Tatums</button>
+                </p>
+                <p>
+                    <button class='btn btn-success' onClick="timeRes = 'segments';">Segments</button>
+                </p>
             </div>
 
             <br />
