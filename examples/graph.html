@@ -31,8 +31,6 @@
 
 <script src="assets/js/bootstrap.min.js"></script>
 <script type="text/javascript" src='../remix.js'></script>
-<script src="../wavesurfer/wavesurfer.js"></script>
-<script src="../wavesurfer/drawer.js"></script>
 
 <script src="../graph/d3.min.js"></script>
 <script src="../graph/d3.layout.min.js"></script>
@@ -105,9 +103,12 @@ function init() {
                 $('.btn-original').removeAttr('disabled');
 
 
+                var the_width = 1024;
+                var the_height = 256
                 var all_data = []
                 // check out what the user wants to see and create the data
                 if (timeRes == 'beats') {
+                    step = the_width / track.analysis.beats.length;
                     var beatConf = [];
                     var beatDur = [];
                     for (var i = 0; i < track.analysis.beats.length; i++) {
@@ -119,19 +120,12 @@ function init() {
                 }
 
                 // ALL THE HUGE LONG GRAPHING CODE
-                var the_width = 1024;
-                var the_height = 256;
-                step = the_width / data.length;
-
                 graph = new Rickshaw.Graph( {
                         element: document.querySelector("#main-chart"),
                         renderer: 'line',
                         width: the_width,
                         height: the_height,
-                        series: [ {
-                                color: 'steelblue',
-                                data: data
-                        } ]
+                        series: all_data,
                 } );
                 graph.render();
 
@@ -148,10 +142,10 @@ function init() {
                 xAxis.render();
 
                 // Generic legend
-                // var legend = new Rickshaw.Graph.Legend({
-                //     graph: graph,
-                //     element: document.querySelector('#graph')
-                // });
+                var legend = new Rickshaw.Graph.Legend({
+                    graph: graph,
+                    element: document.querySelector('#graph')
+                });
 
                 // // Line toggle
                 // var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
@@ -193,9 +187,10 @@ function init() {
                 // Move the marker along as the player plays
                 player.addAfterPlayCallback(function() {
                     currentLoc = currentLoc + step;
-                    console.log(currentLoc);
                     marker.attr('transform', 'translate(' + currentLoc + ')')
                 });
+
+                $('.btn').removeAttr('disabled');
 
             } // end actual remix code
         });
