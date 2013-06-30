@@ -58,15 +58,14 @@ var currentLoc = 0;
 var step
 var dataType = "beats-conf";
 var the_width = 1024;
-var the_height = 256;
+var the_height = 768;
 
+var chromaDict = {0: 'C', 1: 'C#', 2: 'D', 3: 'Eb', 4: 'E', 5: 'F', 6: 'F#', 7: 'G', 8: 'Ab', 9: 'A', 10: 'Bb', 11: 'B'}
 
 function playFrom(index, marker) {
     player.stop();
     currentLoc = step * index;
     marker.attr('transform', 'translate(' + currentLoc + ')')
-
-    // FIX THIS TO WORK WITH TATS AND SEGS
     var theArray = []
     if (dataType.indexOf('beats') != -1) {
         theArray = track.analysis.beats
@@ -82,57 +81,68 @@ function playFrom(index, marker) {
 }
 
 function getData(dataType) {
-    all_data = [];
+    var all_data = [];
+    var the_series = [];
     if (dataType == 'beats-conf') {
+        $('#graph-heading').text('Beat Confidence');
         for (var i = 0; i < track.analysis.beats.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
         }
+        the_series = [{color: 'steelblue', data: all_data}];
     }
 
+
     if (dataType == 'beats-dur') {
-        step = the_width / track.analysis.beats.length;
+        $('#graph-heading').text('Beat Duration');
         for (var i = 0; i < track.analysis.beats.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.beats[i].duration)});
         }
+        the_series = [{color: 'steelblue', data: all_data}];
     }
 
     if (dataType == 'tats-conf') {
-        step = the_width / track.analysis.tatums.length;
+        $('#graph-heading').text('Tatum Confidence');
         for (var i = 0; i < track.analysis.tatums.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.tatums[i].confidence)});
         }
+        the_series = [{color: 'steelblue', data: all_data}];
     }
 
     if (dataType == 'tats-dur') {
-        step = the_width / track.analysis.tatums.length;
+        $('#graph-heading').text('Tatum Duration');
         for (var i = 0; i < track.analysis.tatums.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.tatums[i].duration)});
         }
+        the_series = [{color: 'steelblue', data: all_data}];    
+    the_series = [{color: 'steelblue', data: all_data}];
     }
 
     if (dataType == 'segs-conf') {
-        step = the_width / track.analysis.segments.length;
+        $('#graph-heading').text('Segment Confidence');
         for (var i = 0; i < track.analysis.segments.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.segments[i].confidence)});
         }
+        the_series = [{color: 'steelblue', data: all_data}];
     }
 
     if (dataType == 'segs-dur') {
-        step = the_width / track.analysis.segments.length;
+        $('#graph-heading').text('Segment Duration');
         for (var i = 0; i < track.analysis.segments.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.segments[i].duration)});
         }
+        the_series = [{color: 'steelblue', data: all_data}];    
     }
 
     if (dataType == 'segs-loud') {
-        step = the_width / track.analysis.segments.length;
+        $('#graph-heading').text('Segment Loudness');
         for (var i = 0; i < track.analysis.segments.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.segments[i].loudness_max)});
         }
+        the_series = [{color: 'steelblue', data: all_data}];    
     }
 
     if (dataType == 'segs-max-chroma') {
-        step = the_width / track.analysis.segments.length;
+        $('#graph-heading').text('Segment Maximum Chroma');
         for (var i = 0; i < track.analysis.segments.length; i++) {
 
             chroma = []
@@ -142,20 +152,60 @@ function getData(dataType) {
             maxVal = Math.max.apply(Math, chroma);
             all_data.push({x: i, y: chroma.indexOf(maxVal)});
         }
+        the_series = [{color: 'steelblue', data: all_data}];
     }
 
-    return all_data;
+    if (dataType == 'segs-all-chroma') {
+        $('#graph-heading').text('Segment All Chroma');
+        var the_series = []
+        var palette = new Rickshaw.Color.Palette();
+        for (var j = 0; j < 12; j++) {
+            the_series.push({name: chromaDict[j], color: palette.color(), data: []})
+        }
+
+        for (var i = 0; i < track.analysis.segments.length; i++) {
+            for (var j = 0; j < track.analysis.segments[i].pitches.length; j++) {
+               the_series[j]['data'].push({x: i, y: parseFloat(track.analysis.segments[i].pitches[j])});
+            }
+        }
+    }
+
+    if (dataType == 'segs-all-timbre') {
+        $('#graph-heading').text('Segment All Timbre Weights');
+        var the_series = []
+        var palette = new Rickshaw.Color.Palette();
+        for (var j = 0; j <12; j++) {
+            the_series.push({color: palette.color(), data: []})
+        }
+
+        for (var i = 0; i < track.analysis.segments.length; i++) {
+            for (var j = 0; j < track.analysis.segments[i].timbre.length; j++) {
+               the_series[j]['data'].push({x: i, y: parseFloat(track.analysis.segments[i].timbre[j])});
+            }
+        }
+    }
+
+    return the_series;
 }
 
-function generateGraph(all_data, the_width, the_height) {
+function generateGraph(the_series, the_width, the_height) {
     $('#main-chart').empty();
     // ALL THE HUGE LONG GRAPHING CODE
+
+    var render_method = 'line';
+    if (dataType.indexOf('max-chroma') != -1) {
+        render_method = 'scatterplot';
+    }
+    if (dataType.indexOf('all-chroma') != -1) {
+        render_method = 'bar';
+    }
+
     graph = new Rickshaw.Graph( {
             element: document.querySelector("#main-chart"),
-            renderer: 'line',
+            renderer: render_method,
             width: the_width,
             height: the_height,
-            series: [{color: 'steelblue', data: all_data}],
+            series: the_series,
     } );
     graph.render();
 
@@ -176,10 +226,21 @@ function generateGraph(all_data, the_width, the_height) {
         graph: graph,
         formatter: function(series, x, y) {
             var swatch = '<span class="detail_swatch" id="graph-index" style="background-color: ' + series.color + '">' + x + '</span>';
-            var content = swatch + ": " + parseInt(y);
+            var content = swatch + ": " + y;
             return content;
         }
     });
+
+    // Conditional Legend stuff
+
+    if (dataType.indexOf('all-chroma') != -1) {
+        // need a legend!
+        var legend = new Rickshaw.Graph.Legend( {
+            graph: graph,
+            element: document.getElementById('legend')
+
+        } );
+    }
 
     // Create the playback marker
     svg = d3.select('svg');
@@ -213,9 +274,10 @@ function generateGraph(all_data, the_width, the_height) {
 
 function update(newType) {
     dataType = newType;
-    var all_data = getData(dataType);
-    step = the_width / all_data.length;
-    generateGraph(all_data, the_width, the_height);
+    var the_series = getData(dataType);
+    step = the_width / the_series[0]['data'].length;
+
+    generateGraph(the_series, the_width, the_height);
     $('.btn').removeAttr('disabled');
 
 }
@@ -281,8 +343,13 @@ window.onload = init;
 
         <section>
 
-            <h2>The Graph</h2>
+            <h2 id='graph-heading'>The Graph</h2>
             <div id="main-chart">
+            </div>
+
+            <div id="legend_container">
+                <div id="smoother" title="Smoothing"></div>
+                <div id="legend"></div>
             </div>
 
             <br />
@@ -301,7 +368,7 @@ window.onload = init;
                     <button class='btn btn-success' onClick="update('segs-loud');">Segments - Max Loudness</button>
                     <button class='btn btn-success' onClick="update('segs-max-chroma');">Segments - Max Chroma</button>
                     <button class='btn btn-success' onClick="update('segs-all-chroma');">Segments - All Chroma</button>
-                    <button class='btn btn-success' onClick="update('segs-timbre');">Segments - All Timbre</button>
+                    <button class='btn btn-success' onClick="update('segs-all-timbre');">Segments - All Timbre</button>
 
                 </p>
             </div>
