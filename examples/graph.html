@@ -56,12 +56,11 @@ var graph;
 // These I think we need though
 var currentLoc = 0;
 var step
-var dataType = "beats-conf";
+var dataType = "beats-loud";
 var the_width = 1024;
-var the_height = 768;
+var the_height = 512;
 
 var chromaDict = {0: 'C', 1: 'C#', 2: 'D', 3: 'Eb', 4: 'E', 5: 'F', 6: 'F#', 7: 'G', 8: 'Ab', 9: 'A', 10: 'Bb', 11: 'B'}
-
 
 // Get an estimation of analysis time
 function fetchQinfo() {
@@ -84,7 +83,6 @@ function analyzeAudio(audio, tag, callback) {
     });
 }
 
-
 function playFrom(index, marker) {
     player.stop();
     currentLoc = step * index;
@@ -106,6 +104,8 @@ function playFrom(index, marker) {
 function getData(dataType) {
     var all_data = [];
     var the_series = [];
+
+    // Beat stuff
     if (dataType == 'beats-conf') {
         $('#graph-heading').text('Beat Confidence');
         for (var i = 0; i < track.analysis.beats.length; i++) {
@@ -121,7 +121,6 @@ function getData(dataType) {
         }
         the_series = [{color: 'steelblue', data: all_data}];
     }
-
 
     if (dataType == 'beats-loud') {
         $('#graph-heading').text('Beat Loudness');
@@ -160,10 +159,8 @@ function getData(dataType) {
         for (var j = 0; j < 12; j++) {
             the_series.push({name: chromaDict[j], color: palette.color(), data: []})
         }
-
         for (var i = 0; i < track.analysis.beats.length; i++) {
             for (var j = 0; j < 12; j++) {
-
                 var meanChroma = 0;
                 for (var k = 0; k < track.analysis.beats[i].overlappingSegments.length; k++) {
                     meanChroma = meanChroma + parseFloat(track.analysis.beats[i].overlappingSegments[k].pitches[j]);
@@ -175,23 +172,27 @@ function getData(dataType) {
         }
     }
 
-    if (dataType == 'tats-conf') {
-        $('#graph-heading').text('Tatum Confidence');
-        for (var i = 0; i < track.analysis.tatums.length; i++) {
-            all_data.push({x: i, y: parseFloat(track.analysis.tatums[i].confidence)});
+    if (dataType == 'beats-all-timbre') {
+        $('#graph-heading').text('Beat All Timbre Weights');
+        var the_series = []
+        var palette = new Rickshaw.Color.Palette();
+        for (var j = 0; j <12; j++) {
+            the_series.push({name: String(j), color: palette.color(), data: []})
         }
-        the_series = [{color: 'steelblue', data: all_data}];
+
+        for (var i = 0; i < track.analysis.beats.length; i++) {
+            for (var j = 0; j < 12; j++) {
+                var meanWeight = 0;
+                for (var k = 0; k < track.analysis.beats[i].overlappingSegments.length; k++) {
+                    meanWeight = meanWeight + parseFloat(track.analysis.beats[i].overlappingSegments[k].timbre[j]);
+                }
+                meanWeight = meanWeight / track.analysis.beats[i].overlappingSegments.length;
+                the_series[j]['data'].push({x: i, y: meanWeight});
+            }
+        }
     }
 
-    if (dataType == 'tats-dur') {
-        $('#graph-heading').text('Tatum Duration');
-        for (var i = 0; i < track.analysis.tatums.length; i++) {
-            all_data.push({x: i, y: parseFloat(track.analysis.tatums[i].duration)});
-        }
-        the_series = [{color: 'steelblue', data: all_data}];    
-    the_series = [{color: 'steelblue', data: all_data}];
-    }
-
+    // Segment code
     if (dataType == 'segs-conf') {
         $('#graph-heading').text('Segment Confidence');
         for (var i = 0; i < track.analysis.segments.length; i++) {
@@ -249,7 +250,7 @@ function getData(dataType) {
         var the_series = []
         var palette = new Rickshaw.Color.Palette();
         for (var j = 0; j <12; j++) {
-            the_series.push({color: palette.color(), data: []})
+            the_series.push({name: String(j), color: palette.color(), data: []})
         }
 
         for (var i = 0; i < track.analysis.segments.length; i++) {
@@ -296,7 +297,7 @@ function generateGraph(the_series, the_width, the_height) {
     });
     xAxis.render();
 
-    // wrestlng with hover details -- still need to fix this
+    // wrestlng with hover details -- could still be better
     var hoverDetail = new Rickshaw.Graph.HoverDetail( {
         graph: graph,
         formatter: function(series, x, y) {
@@ -306,9 +307,8 @@ function generateGraph(the_series, the_width, the_height) {
         }
     });
 
-    // Conditional Legend stuff
-
-    if (dataType.indexOf('all-chroma') != -1) {
+    // Conditional Legend stuff for chorma / timbre things
+    if (dataType.indexOf('all') != -1) {
         // need a legend!
         var legend = new Rickshaw.Graph.Legend( {
             graph: graph,
@@ -504,13 +504,16 @@ window.onload = init;
         <section>
 
             <h2 id='graph-heading'>The Graph</h2>
-            <div id="main-chart">
-            </div>
 
-            <div id="legend_container">
+            <div id="legend_container" style="float: right;">
                 <div id="smoother" title="Smoothing"></div>
                 <div id="legend"></div>
             </div>
+            
+            <div id="main-chart">
+            </div>
+
+
 
             <br />
             <br />
@@ -519,19 +522,16 @@ window.onload = init;
                 <p>
                     <button class='btn btn-primary' onClick="update('beats-conf');">Beats - Confidence</button>
                     <button class='btn btn-primary' onClick="update('beats-dur');">Beats - Duration</button>
-                    <button class='btn btn-primary' onClick="update('beats-loud');">Beats - Loudness</button>
-                    <button class='btn btn-primary' onClick="update('beats-max-chroma');">Beats - Max Chroma</button>
+                    <button class='btn btn-primary' onClick="update('beats-loud');">Beats - Mean Loudness</button>
+                    <button class='btn btn-primary' onClick="update('beats-max-chroma');">Beats - Max Chroma Index</button>
                     <button class='btn btn-primary' onClick="update('beats-all-chroma');">Beats - Mean Chroma</button>
-                </p>
-                <p>
-                    <button class='btn btn-info' onClick="update('tats-conf');";>Tatums - Confidence</button>
-                    <button class='btn btn-info' onClick="update('tats-dur');">Tatums - Duration</button>
+                    <button class='btn btn-primary' onClick="update('beats-all-timbre');">Beats - Mean Timbre</button>
                 </p>
                 <p>
                     <button class='btn btn-success' onClick="update('segs-conf');">Segments - Confidence</button>
                     <button class='btn btn-success' onClick="update('segs-dur');">Segments - Duration</button>
                     <button class='btn btn-success' onClick="update('segs-loud');">Segments - Max Loudness</button>
-                    <button class='btn btn-success' onClick="update('segs-max-chroma');">Segments - Max Chroma</button>
+                    <button class='btn btn-success' onClick="update('segs-max-chroma');">Segments - Max Chroma Index</button>
                     <button class='btn btn-success' onClick="update('segs-all-chroma');">Segments - All Chroma</button>
                     <button class='btn btn-success' onClick="update('segs-all-timbre');">Segments - All Timbre</button>
 
@@ -559,10 +559,10 @@ window.onload = init;
               <input class="btn btn-primary btn-default" id='upload' type="submit" value="Upload MP3"> 
             </form> 
         </div>
+
+        <img src="http://the.echonest.com/media/images/logos/250x80_lt.gif" />
         </section>
 
-
-    <img src="http://the.echonest.com/media/images/logos/250x80_lt.gif" />
     </div> <!-- /container -->
 </body>
 </html>
