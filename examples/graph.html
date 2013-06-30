@@ -86,6 +86,7 @@ function getData(dataType) {
 }
 
 function generateGraph(all_data, the_width, the_height) {
+    $('#main-chart').empty();
     // ALL THE HUGE LONG GRAPHING CODE
     graph = new Rickshaw.Graph( {
             element: document.querySelector("#main-chart"),
