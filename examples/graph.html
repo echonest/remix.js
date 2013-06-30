@@ -107,7 +107,7 @@ function getData(dataType) {
 
     // Beat stuff
     if (dataType == 'beats-conf') {
-        $('#graph-heading').text('Beat Confidence');
+        $('#graph-heading').text('Beats - Confidence');
         for (var i = 0; i < track.analysis.beats.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
         }
@@ -115,7 +115,7 @@ function getData(dataType) {
     }
 
     if (dataType == 'beats-dur') {
-        $('#graph-heading').text('Beat Duration');
+        $('#graph-heading').text('Beats - Duration');
         for (var i = 0; i < track.analysis.beats.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.beats[i].duration)});
         }
@@ -123,7 +123,7 @@ function getData(dataType) {
     }
 
     if (dataType == 'beats-loud') {
-        $('#graph-heading').text('Beat Loudness');
+        $('#graph-heading').text('Beats - Mean Loudness');
         for (var i = 0; i < track.analysis.beats.length; i++) {
             var meanLoudness = 0;
             for (var j = 0; j < track.analysis.beats[i].overlappingSegments.length; j++) {
@@ -136,7 +136,7 @@ function getData(dataType) {
     }   
 
     if (dataType == 'beats-max-chroma') {
-        $('#graph-heading').text('Beat Max Chroma');
+        $('#graph-heading').text('Beats - Max Chroma Index');
         for (var i = 0; i < track.analysis.beats.length; i++) {
             meanChromas = [];
             for (var j = 0; j < 12; j++) {
@@ -154,7 +154,7 @@ function getData(dataType) {
     }
 
     if (dataType == 'beats-all-chroma') {
-        $('#graph-heading').text('Beat Mean Chroma');
+        $('#graph-heading').text('Beats - Mean Chroma');
         var palette = new Rickshaw.Color.Palette();
         for (var j = 0; j < 12; j++) {
             the_series.push({name: chromaDict[j], color: palette.color(), data: []})
@@ -173,11 +173,11 @@ function getData(dataType) {
     }
 
     if (dataType == 'beats-all-timbre') {
-        $('#graph-heading').text('Beat All Timbre Weights');
+        $('#graph-heading').text('Beats - Mean Timbre');
         var the_series = []
         var palette = new Rickshaw.Color.Palette();
         for (var j = 0; j <12; j++) {
-            the_series.push({name: String(j), color: palette.color(), data: []})
+            the_series.push({name: String(j + 1), color: palette.color(), data: []})
         }
 
         for (var i = 0; i < track.analysis.beats.length; i++) {
@@ -194,7 +194,7 @@ function getData(dataType) {
 
     // Segment code
     if (dataType == 'segs-conf') {
-        $('#graph-heading').text('Segment Confidence');
+        $('#graph-heading').text('Segments -  Confidence');
         for (var i = 0; i < track.analysis.segments.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.segments[i].confidence)});
         }
@@ -202,7 +202,7 @@ function getData(dataType) {
     }
 
     if (dataType == 'segs-dur') {
-        $('#graph-heading').text('Segment Duration');
+        $('#graph-heading').text('Segments - Duration');
         for (var i = 0; i < track.analysis.segments.length; i++) {
             all_data.push({x: i, y: parseFloat(track.analysis.segments[i].duration)});
         }
@@ -210,7 +210,7 @@ function getData(dataType) {
     }
 
     if (dataType == 'segs-loud') {
-        $('#graph-heading').text('Segment Loudness');
+        $('#graph-heading').text('Segments - Loudness');
         for (var i = 0; i < track.analysis.segments.length; i++) {
             all_data.push({x: i, y: 60 + parseFloat(track.analysis.segments[i].loudness_max)});
         }
@@ -218,7 +218,7 @@ function getData(dataType) {
     }
 
     if (dataType == 'segs-max-chroma') {
-        $('#graph-heading').text('Segment Maximum Chroma');
+        $('#graph-heading').text('Segments - Max Chroma Index');
         for (var i = 0; i < track.analysis.segments.length; i++) {
             chroma = []
             for (var j = 0; j < track.analysis.segments[i].pitches.length; j++) {
@@ -231,7 +231,7 @@ function getData(dataType) {
     }
 
     if (dataType == 'segs-all-chroma') {
-        $('#graph-heading').text('Segment All Chroma');
+        $('#graph-heading').text('Segments - All Chroma');
         var the_series = []
         var palette = new Rickshaw.Color.Palette();
         for (var j = 0; j < 12; j++) {
@@ -246,11 +246,11 @@ function getData(dataType) {
     }
 
     if (dataType == 'segs-all-timbre') {
-        $('#graph-heading').text('Segment All Timbre Weights');
+        $('#graph-heading').text('Segments - All Timbre');
         var the_series = []
         var palette = new Rickshaw.Color.Palette();
         for (var j = 0; j <12; j++) {
-            the_series.push({name: String(j), color: palette.color(), data: []})
+            the_series.push({name: String(j +1), color: palette.color(), data: []})
         }
 
         for (var i = 0; i < track.analysis.segments.length; i++) {
@@ -266,6 +266,7 @@ function getData(dataType) {
 function generateGraph(the_series, the_width, the_height) {
     $('#main-chart').empty();
     $('#legend').empty();
+    $("#timbre-basis").hide();
     // ALL THE HUGE LONG GRAPHING CODE
 
     var render_method = 'line';
@@ -307,7 +308,7 @@ function generateGraph(the_series, the_width, the_height) {
         }
     });
 
-    // Conditional Legend stuff for chorma / timbre things
+    // Conditional Legend stuff for chroma / timbre things
     if (dataType.indexOf('all') != -1) {
         // need a legend!
         var legend = new Rickshaw.Graph.Legend( {
@@ -315,6 +316,16 @@ function generateGraph(the_series, the_width, the_height) {
             element: document.getElementById('legend')
 
         } );
+
+        var shelving = new Rickshaw.Graph.Behavior.Series.Toggle( {
+            graph: graph,
+            legend: legend
+        } );
+    }
+
+    // Show the timbre helper!
+    if (dataType.indexOf('timbre') != -1) {
+        $("#timbre-basis").show();
     }
 
     // Create the playback marker
@@ -358,6 +369,8 @@ function update(newType) {
 
 
 function init() {
+    $("#timbre-basis").hide();
+
     if (window.webkitAudioContext === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
             + " support it. Try the latest version of Chrome");
@@ -379,7 +392,7 @@ function init() {
         // We just uploaded a track.
         // We need to log the trackID and the URL, and then redirect.
         $("#select-track").hide();
-        $("#play-remix").hide();
+        $("#toggle-buttons").hide();
         $("#info").text("Analyzing audio...");
         trackURL = 'http://' + params['bucket'] + '/' + urldecode(params['key']);
 
@@ -395,7 +408,7 @@ function init() {
         // We were passed a trackID directly in the url
         // We can remix the track we get back!
         trackID = params['trid'];
-        $("#play-remix").show();
+        $("#toggle-buttons").show();
         $("#select-track").hide();
 
         var urlXHR = getProfile(trackID, function(data) {
@@ -429,7 +442,7 @@ function init() {
             }
             else {
                 console.log("Track id error.");
-                $("#play-remix").hide();
+                $("#toggle-buttons").hide();
                 $("#select-track").show();
                 $("#info").text("Error getting the track URL - please try again, or re-upload the file.");
                 $("#redirect-url").attr('value', document.URL);
@@ -452,7 +465,7 @@ function init() {
         });
     } else {
         // We're waiting for the user to pick a track and upload it
-        $("#play-remix").hide();
+        $("#toggle-buttons").hide();
         $("#redirect-url").attr('value', document.URL);
 
         $("#file").change( 
@@ -503,19 +516,18 @@ window.onload = init;
 
         <section>
 
-            <h2 id='graph-heading'>The Graph</h2>
+            <h2 id='graph-heading'></h2>
 
             <div id="legend_container" style="float: right;">
                 <div id="smoother" title="Smoothing"></div>
                 <div id="legend"></div>
             </div>
-            
+
             <div id="main-chart">
             </div>
 
-
-
             <br />
+        <img id="timbre-basis" src="assets/timbre-basis.png" style="display: block; margin-left: auto;margin-right: auto;">
             <br />
 
             <div id="toggle-buttons">
@@ -536,12 +548,11 @@ window.onload = init;
                     <button class='btn btn-success' onClick="update('segs-all-timbre');">Segments - All Timbre</button>
 
                 </p>
-            </div>
 
-            <br />
-
-            <button class='btn btn-inverse btn-original' onClick="currentLoc = 0;player.play(0, track.analysis.beats);">Play </button>
-            <button class='btn btn-original' onClick="player.stop()">Stop</button>
+                <p>
+                    <button class='btn btn-inverse btn-original' onClick="currentLoc = 0;player.play(0, track.analysis.beats);">Play </button>
+                    <button class='btn btn-original' onClick="player.stop()">Stop</button>
+                </p>
             </div>
 
         <div id='select-track'>
