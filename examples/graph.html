@@ -110,7 +110,7 @@ function getData(dataType) {
     if (dataType == 'beats-conf') {
         $('#graph-heading').text('Beat Confidence (%)');
         for (var i = 0; i < track.analysis.beats.length; i++) {
-            all_data.push({x: i, y: parseFloat(track.analysis.beats[i].confidence)});
+            all_data.push({x: i / step, y: parseFloat(track.analysis.beats[i].confidence)});
         }
         the_series = [{color: 'steelblue', data: all_data}];
     }
@@ -118,7 +118,7 @@ function getData(dataType) {
     if (dataType == 'beats-dur') {
         $('#graph-heading').text('Beat Duration (seconds)');
         for (var i = 0; i < track.analysis.beats.length; i++) {
-            all_data.push({x: i, y: parseFloat(track.analysis.beats[i].duration)});
+            all_data.push({x: i / step, y: parseFloat(track.analysis.beats[i].duration)});
         }
         the_series = [{color: 'steelblue', data: all_data}];
     }
@@ -131,13 +131,13 @@ function getData(dataType) {
                     meanLoudness = meanLoudness + 60 + parseFloat(track.analysis.beats[i].overlappingSegments[j].loudness_max);
                 }
             meanLoudness = meanLoudness / track.analysis.beats[i].overlappingSegments.length
-            all_data.push({x: i, y: meanLoudness});
+            all_data.push({x: i / step, y: meanLoudness});
         }
         the_series = [{color: 'steelblue', data: all_data}];
     }   
 
     if (dataType == 'beats-max-chroma') {
-        $('#graph-heading').text('Max Chroma Index (c = 0)');
+        $('#graph-heading').text('Max Chroma Index (c = 1)');
         for (var i = 0; i < track.analysis.beats.length; i++) {
             meanChromas = [];
             for (var j = 0; j < 12; j++) {
@@ -149,7 +149,7 @@ function getData(dataType) {
                 meanChromas.push(meanChroma);
             }
             maxVal = Math.max.apply(Math, meanChromas);
-            all_data.push({x: i, y: meanChromas.indexOf(maxVal)});
+            all_data.push({x: i / step, y: meanChromas.indexOf(maxVal) + 1});
         }
         the_series = [{color: 'steelblue', data: all_data}];
     }
@@ -168,7 +168,7 @@ function getData(dataType) {
                 }
                 meanChroma = meanChroma / track.analysis.beats[i].overlappingSegments.length;
 
-               the_series[j]['data'].push({x: i, y: meanChroma});
+               the_series[j]['data'].push({x: i / step, y: meanChroma});
             }
         }
     }
@@ -188,7 +188,7 @@ function getData(dataType) {
                     meanWeight = meanWeight + parseFloat(track.analysis.beats[i].overlappingSegments[k].timbre[j]);
                 }
                 meanWeight = meanWeight / track.analysis.beats[i].overlappingSegments.length;
-                the_series[j]['data'].push({x: i, y: meanWeight});
+                the_series[j]['data'].push({x: i / step, y: meanWeight});
             }
         }
     }
@@ -219,17 +219,18 @@ function generateGraph(the_series, the_width, the_height) {
 
     // Generic Y-Axis
     var yAxis = new Rickshaw.Graph.Axis.Y({
-        graph: graph
+        graph: graph,
+        tickFormat: Rickshaw.Fixtures.Number.formatKMBT,
     });
-    yAxis.render();
+    yAxis.render();       
 
     // Generic X-Axis
-    var xAxis = new Rickshaw.Graph.Axis.Time({
+    var xAxis = new Rickshaw.Graph.Axis.X({
         graph: graph
     });
     xAxis.render();
 
-    // wrestlng with hover details -- could still be better
+    // wrestlng with hover details -- could be better, but will do
     var hoverDetail = new Rickshaw.Graph.HoverDetail( {
         graph: graph,
         formatter: function(series, x, y) {
@@ -242,11 +243,15 @@ function generateGraph(the_series, the_width, the_height) {
     // Conditional Legend stuff for chroma / timbre things
     if (dataType.indexOf('all') != -1) {
         // need a legend!
+        $('#legend').show();
         var legend = new Rickshaw.Graph.Legend( {
             graph: graph,
             element: document.getElementById('legend')
 
         } );
+    } 
+    else {
+        $('#legend').hide();
     }
 
     // Show the timbre helper!
@@ -298,8 +303,8 @@ function generateGraph(the_series, the_width, the_height) {
 
 function update(newType) {
     dataType = newType;
+    step = the_width / track.analysis.beats.length;
     var the_series = getData(dataType);
-    step = the_width / the_series[0]['data'].length;
     generateGraph(the_series, the_width, the_height);
     $('.btn').removeAttr('disabled');
     playFrom(currentLoc / step, marker)
