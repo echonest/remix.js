@@ -192,75 +192,6 @@ function getData(dataType) {
             }
         }
     }
-
-    // Segment code
-    if (dataType == 'segs-conf') {
-        $('#graph-heading').text('Segments -  Confidence');
-        for (var i = 0; i < track.analysis.segments.length; i++) {
-            all_data.push({x: i, y: parseFloat(track.analysis.segments[i].confidence)});
-        }
-        the_series = [{color: 'steelblue', data: all_data}];
-    }
-
-    if (dataType == 'segs-dur') {
-        $('#graph-heading').text('Segments - Duration');
-        for (var i = 0; i < track.analysis.segments.length; i++) {
-            all_data.push({x: i, y: parseFloat(track.analysis.segments[i].duration)});
-        }
-        the_series = [{color: 'steelblue', data: all_data}];    
-    }
-
-    if (dataType == 'segs-loud') {
-        $('#graph-heading').text('Segments - Loudness');
-        for (var i = 0; i < track.analysis.segments.length; i++) {
-            all_data.push({x: i, y: 60 + parseFloat(track.analysis.segments[i].loudness_max)});
-        }
-        the_series = [{color: 'steelblue', data: all_data}];    
-    }
-
-    if (dataType == 'segs-max-chroma') {
-        $('#graph-heading').text('Segments - Max Chroma Index');
-        for (var i = 0; i < track.analysis.segments.length; i++) {
-            chroma = []
-            for (var j = 0; j < track.analysis.segments[i].pitches.length; j++) {
-                chroma.push(parseFloat(track.analysis.segments[i].pitches[j]));
-            }
-            maxVal = Math.max.apply(Math, chroma);
-            all_data.push({x: i, y: chroma.indexOf(maxVal)});
-        }
-        the_series = [{color: 'steelblue', data: all_data}];
-    }
-
-    if (dataType == 'segs-all-chroma') {
-        $('#graph-heading').text('Segments - All Chroma');
-        var the_series = []
-        var palette = new Rickshaw.Color.Palette();
-        for (var j = 0; j < 12; j++) {
-            the_series.push({name: chromaDict[j], color: palette.color(), data: []})
-        }
-
-        for (var i = 0; i < track.analysis.segments.length; i++) {
-            for (var j = 0; j < track.analysis.segments[i].pitches.length; j++) {
-               the_series[j]['data'].push({x: i, y: parseFloat(track.analysis.segments[i].pitches[j])});
-            }
-        }
-    }
-
-    if (dataType == 'segs-all-timbre') {
-        $('#graph-heading').text('Segments - All Timbre');
-        var the_series = []
-        var palette = new Rickshaw.Color.Palette();
-        for (var j = 0; j <12; j++) {
-            the_series.push({name: String(j +1), color: palette.color(), data: []})
-        }
-
-        for (var i = 0; i < track.analysis.segments.length; i++) {
-            for (var j = 0; j < track.analysis.segments[i].timbre.length; j++) {
-               the_series[j]['data'].push({x: i, y: parseFloat(track.analysis.segments[i].timbre[j])});
-            }
-        }
-    }
-
     return the_series;
 }
 
@@ -533,20 +464,6 @@ window.onload = init;
                     <button class='btn btn-primary' onClick="update('beats-max-chroma');">Max Chroma Index</button>
                     <button class='btn btn-primary' onClick="update('beats-all-chroma');">Chroma</button>
                     <button class='btn btn-primary' onClick="update('beats-all-timbre');">Timbre</button>
-                </p>
-                <!--
-                <p>
-                    <button class='btn btn-success' onClick="update('segs-conf');">Segments - Confidence</button>
-                    <button class='btn btn-success' onClick="update('segs-dur');">Segments - Duration</button>
-                    <button class='btn btn-success' onClick="update('segs-loud');">Segments - Max Loudness</button>
-                    <button class='btn btn-success' onClick="update('segs-max-chroma');">Segments - Max Chroma Index</button>
-                    <button class='btn btn-success' onClick="update('segs-all-chroma');">Segments - All Chroma</button>
-                    <button class='btn btn-success' onClick="update('segs-all-timbre');">Segments - All Timbre</button>
-
-                </p>
-                -->
-
-                <p>
                     <button class='btn btn-inverse btn-original' onClick="currentLoc = 0;player.play(0, track.analysis.beats);">Play </button>
                     <button class='btn btn-original' onClick="player.stop()">Stop</button>
                 </p>
