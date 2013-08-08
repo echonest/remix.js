@@ -42,8 +42,8 @@
 
 // First-beat extraction and assembly
 var apiKey = 'SWHCFHJA2PPHKX7A5';
-var trackID = 'TRCYWPQ139279B3308';
-var trackURL = 'audio/1451_-_D.mp3';
+var trackID;
+var trackURL;
 
 var remixer;
 var player;
@@ -55,6 +55,7 @@ var graph;
 
 // These I think we need though
 var currentLoc = 0;
+var marker;
 var step
 var dataType = "beats-loud";
 var the_width = 1024;
@@ -83,10 +84,10 @@ function analyzeAudio(audio, tag, callback) {
     });
 }
 
-function playFrom(index, marker) {
+function playFrom(index, markerLine) {
     player.stop();
     currentLoc = step * index;
-    marker.attr('transform', 'translate(' + currentLoc + ')')
+    markerLine.attr('transform', 'translate(' + currentLoc + ')')
     var theArray = []
     if (dataType.indexOf('beats') != -1) {
         theArray = track.analysis.beats
@@ -325,7 +326,7 @@ function generateGraph(the_series, the_width, the_height) {
 
     // Create the playback marker
     svg = d3.select('svg');
-    var marker = svg.append("svg:line")
+    marker = svg.append("svg:line")
         .attr("x1", 0)
         .attr("y1", 0)
         .attr("x2", 0)
@@ -359,7 +360,7 @@ function update(newType) {
     step = the_width / the_series[0]['data'].length;
     generateGraph(the_series, the_width, the_height);
     $('.btn').removeAttr('disabled');
-
+    playFrom(currentLoc / step, marker)
 }
 
 
@@ -526,13 +527,14 @@ window.onload = init;
 
             <div id="toggle-buttons">
                 <p>
-                    <button class='btn btn-primary' onClick="update('beats-conf');">Beats - Confidence</button>
-                    <button class='btn btn-primary' onClick="update('beats-dur');">Beats - Duration</button>
-                    <button class='btn btn-primary' onClick="update('beats-loud');">Beats - Mean Loudness</button>
-                    <button class='btn btn-primary' onClick="update('beats-max-chroma');">Beats - Max Chroma Index</button>
-                    <button class='btn btn-primary' onClick="update('beats-all-chroma');">Beats - Mean Chroma</button>
-                    <button class='btn btn-primary' onClick="update('beats-all-timbre');">Beats - Mean Timbre</button>
+                    <button class='btn btn-primary' onClick="update('beats-conf');">Beat Confidence</button>
+                    <button class='btn btn-primary' onClick="update('beats-dur');">Beat Duration</button>
+                    <button class='btn btn-primary' onClick="update('beats-loud');">Loudness</button>
+                    <button class='btn btn-primary' onClick="update('beats-max-chroma');">Max Chroma Index</button>
+                    <button class='btn btn-primary' onClick="update('beats-all-chroma');">Chroma</button>
+                    <button class='btn btn-primary' onClick="update('beats-all-timbre');">Timbre</button>
                 </p>
+                <!--
                 <p>
                     <button class='btn btn-success' onClick="update('segs-conf');">Segments - Confidence</button>
                     <button class='btn btn-success' onClick="update('segs-dur');">Segments - Duration</button>
@@ -542,6 +544,7 @@ window.onload = init;
                     <button class='btn btn-success' onClick="update('segs-all-timbre');">Segments - All Timbre</button>
 
                 </p>
+                -->
 
                 <p>
                     <button class='btn btn-inverse btn-original' onClick="currentLoc = 0;player.play(0, track.analysis.beats);">Play </button>
