@@ -51,12 +51,12 @@ var track;
 var remixed;
 
 // temp for ease of hacking
-var graph;
 
 // These I think we need though
+var graph;
 var currentLoc = 0;
 var marker;
-var step
+var step;
 var dataType = "beats-loud";
 var the_width = 1024;
 var the_height = 512;
@@ -110,7 +110,7 @@ function getData(dataType) {
     if (dataType == 'beats-conf') {
         $('#graph-heading').text('Beat Confidence (%)');
         for (var i = 0; i < track.analysis.beats.length; i++) {
-            all_data.push({x: i / step, y: parseFloat(track.analysis.beats[i].confidence)});
+            all_data.push({x: i / track.audio_summary.tempo * 60, y: parseFloat(track.analysis.beats[i].confidence)});
         }
         the_series = [{color: 'steelblue', data: all_data}];
     }
@@ -118,7 +118,7 @@ function getData(dataType) {
     if (dataType == 'beats-dur') {
         $('#graph-heading').text('Beat Duration (seconds)');
         for (var i = 0; i < track.analysis.beats.length; i++) {
-            all_data.push({x: i / step, y: parseFloat(track.analysis.beats[i].duration)});
+            all_data.push({x: i / track.audio_summary.tempo * 60, y: parseFloat(track.analysis.beats[i].duration)});
         }
         the_series = [{color: 'steelblue', data: all_data}];
     }
@@ -131,7 +131,7 @@ function getData(dataType) {
                     meanLoudness = meanLoudness + 60 + parseFloat(track.analysis.beats[i].overlappingSegments[j].loudness_max);
                 }
             meanLoudness = meanLoudness / track.analysis.beats[i].overlappingSegments.length
-            all_data.push({x: i / step, y: meanLoudness});
+            all_data.push({x: i / track.audio_summary.tempo * 60, y: meanLoudness});
         }
         the_series = [{color: 'steelblue', data: all_data}];
     }   
@@ -149,7 +149,7 @@ function getData(dataType) {
                 meanChromas.push(meanChroma);
             }
             maxVal = Math.max.apply(Math, meanChromas);
-            all_data.push({x: i / step, y: meanChromas.indexOf(maxVal) + 1});
+            all_data.push({x: i / track.audio_summary.tempo * 60, y: meanChromas.indexOf(maxVal) + 1});
         }
         the_series = [{color: 'steelblue', data: all_data}];
     }
@@ -168,7 +168,7 @@ function getData(dataType) {
                 }
                 meanChroma = meanChroma / track.analysis.beats[i].overlappingSegments.length;
 
-               the_series[j]['data'].push({x: i / step, y: meanChroma});
+               the_series[j]['data'].push({x: i / track.audio_summary.tempo * 60, y: meanChroma});
             }
         }
     }
@@ -188,7 +188,7 @@ function getData(dataType) {
                     meanWeight = meanWeight + parseFloat(track.analysis.beats[i].overlappingSegments[k].timbre[j]);
                 }
                 meanWeight = meanWeight / track.analysis.beats[i].overlappingSegments.length;
-                the_series[j]['data'].push({x: i / step, y: meanWeight});
+                the_series[j]['data'].push({x: i / track.audio_summary.tempo * 60, y: meanWeight});
             }
         }
     }
@@ -271,27 +271,27 @@ function generateGraph(the_series, the_width, the_height) {
 
     // Set up the playback clicks
     $('.detail').on('click', 'div', function(event) {
-        playFrom(parseInt($('#graph-index').text()), marker)
+        playFrom(parseInt($('#graph-index').text()) / 60 * track.audio_summary.tempo, marker)
     });
 
     $('.detail inactive').on('click', 'div', function(event) {
-        playFrom(parseInt($('#graph-index').text()), marker)
+        playFrom(parseInt($('#graph-index').text()) / 60 * track.audio_summary.tempo, marker)
     });
 
     $('.x_tick plain').on('click', 'div', function(event) {
-        playFrom(parseInt($('#graph-index').text()), marker)
+        playFrom(parseInt($('#graph-index').text()) / 60 * track.audio_summary.tempo, marker)
     });
 
     $('#main-chart').on('click', 'div', function(event) {
-        playFrom(parseInt($('#graph-index').text()), marker)
+        playFrom(parseInt($('#graph-index').text()) / 60 * track.audio_summary.tempo, marker)
     });
 
     $('svg').on('click', function(event) {
-        playFrom(parseInt($('#graph-index').text()), marker)
+        playFrom(parseInt($('#graph-index').text()) / 60 * track.audio_summary.tempo, marker)
     });
 
     $('path').on('click', 'div', function(event) {
-        playFrom(parseInt($('#graph-index').text()), marker)
+        playFrom(parseInt($('#graph-index').text()) / 60 * track.audio_summary.tempo, marker)
     });
 
     // Move the marker along as the player plays
