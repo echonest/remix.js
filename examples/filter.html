@@ -51,7 +51,7 @@ function changeFrequency(element) {
 };
 
 function changeQuality (element) {
-  filter.Q.value = element.value * 64;
+  filter.Q.value = element.value * 32;
 };
 
 
@@ -186,8 +186,11 @@ player = remixer.getPlayer([filter]);
             <span id='downloadButton'></a>
             </div>
 
+            <br />
+
             <div id="filter" style="width: 640px;">
                 Frequency: <input type="range" min="0" max="1" step="0.01" value="1" oninput="changeFrequency(this);"/>
+                <br />
                 Quality: <input type="range" min="0" max="1" step="0.01" value="0" oninput="changeQuality(this);"/>
             </div
 
