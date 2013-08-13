@@ -36,20 +36,21 @@ var remixed;
 var filter;
 
 // from http://www.html5rocks.com/en/tutorials/webaudio/intro/
-function changeFrequency(filter) {
+function changeFrequency(element) {
   // Clamp the frequency between the minimum value (40 Hz) and half of the
   // sampling rate.
   var minValue = 40;
-  var maxValue = context.sampleRate / 2;
+  var maxValue = 22050;
   // Logarithm (base 2) to compute how many octaves fall in the range.
   var numberOfOctaves = Math.log(maxValue / minValue) / Math.LN2;
   // Compute a multiplier from 0 to 1 based on an exponential scale.
   var multiplier = Math.pow(2, numberOfOctaves * (element.value - 1.0));
   // Get back to the frequency value between min and max.
   filter.frequency.value = maxValue * multiplier;
+  console.l
 };
 
-function changeQuality (filter) {
+function changeQuality (element) {
   filter.Q.value = element.value * this.QUAL_MUL;
 };
 
@@ -186,8 +187,8 @@ player = remixer.getPlayer([filter]);
             </div>
 
             <div id="filter">
-                Frequency: <input type="range" min="0" max="1" step="0.01" value="1" oninput="changeFrequency(filter);"/>
-                Quality: <input type="range" min="0" max="1" step="0.01" value="0" oninput="changeQuality(filter);"/>
+                Frequency: <input type="range" min="0" max="1" step="0.01" value="1" oninput="changeFrequency(this);"/>
+                Quality: <input type="range" min="0" max="1" step="0.01" value="0" oninput="changeQuality(this);"/>
             </div
 
         </section>
