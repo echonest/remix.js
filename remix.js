@@ -7,6 +7,17 @@ function createJRemixer(context, jquery, apiKey) {
     $.ajaxSetup({ cache: false });
 
     var remixer = {
+        // If you have the analysis URL already, or if you've cached it in your app
+        remixTrackByURL: function(analysisURL, trackURL, callback) {
+            var track = new Object();
+            $.getJSON(analysisURL, function(data) {
+                track.analysis = data;
+                track.status = "complete";
+                remixer.remixTrack(track, trackURL, callback);
+
+            });
+        },
+        // If you have an EN TRack ID.
         remixTrackById: function(trackID, trackURL, callback) {
             var track;
             var url = 'http://developer.echonest.com/api/v4/track/profile?format=json&bucket=audio_summary'
@@ -42,6 +53,7 @@ function createJRemixer(context, jquery, apiKey) {
                 this.request = request;
 
                 request.onload = function() {
+
                     trace('audio loaded');
                      if (false) {
                         track.buffer = context.createBuffer(request.response, false);
