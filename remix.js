@@ -80,10 +80,24 @@ function createJRemixer(context, jquery, apiKey) {
                     trace('preprocessTrack ' + type);
                     for (var j in track.analysis[type]) {
                         var qlist = track.analysis[type]
-
                         j = parseInt(j)
-
                         var q = qlist[j]
+
+                        q.start = parseFloat(q.start);
+                        q.duration = parseFloat(q.duration);
+                        q.confidence = parseFloat(q.confidence);
+                        if (type == 'segments') {
+                            q.loudness_max = parseFloat(q.loudness_max);
+                            q.loudness_max_time = parseFloat(q.loudness_max_time);
+                            q.loudness_start = parseFloat(q.loudness_start);
+
+                            for (var k = 0; k < q.pitches.length; q++) {
+                                q.pitches[k] = parseFloat(q.pitches[k]);
+                            }
+                            for (var k = 0; k < q.timbre.length; q++) {
+                                q.timbre[k] = parseFloat(q.timbre[k]);
+                            }
+                        }
                         q.track = track;
                         q.which = j;
                         if (j > 0) {
