@@ -7,16 +7,6 @@ function createJRemixer(context, jquery, apiKey) {
     $.ajaxSetup({ cache: false });
 
     var remixer = {
-        // If you have the analysis URL already, or if you've cached it in your app
-        remixTrackByURL: function(analysisURL, trackURL, callback) {
-            var track = new Object();
-            $.getJSON(analysisURL, function(data) {
-                track.analysis = data;
-                track.status = "complete";
-                remixer.remixTrack(track, trackURL, callback);
-
-            });
-        },
         // If you have an EN TRack ID.
         remixTrackById: function(trackID, trackURL, callback) {
             var track;
@@ -39,6 +29,18 @@ function createJRemixer(context, jquery, apiKey) {
                             console.log('error', 'No analysis data returned:  try again, or try another trackID');
                         }
                 });
+
+            });
+        },
+
+        // If you have the analysis URL already, or if you've cached it in your app.
+        // Be *very* careful when searching for analysis URL by song:  it may not match the track being used.  
+        remixTrackByURL: function(analysisURL, trackURL, callback) {
+            var track = new Object();
+            $.getJSON(analysisURL, function(data) {
+                track.analysis = data;
+                track.status = "complete";
+                remixer.remixTrack(track, trackURL, callback);
 
             });
         },
