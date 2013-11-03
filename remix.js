@@ -105,10 +105,10 @@ function createJRemixer(context, jquery, apiKey) {
                             q.loudness_max_time = parseFloat(q.loudness_max_time);
                             q.loudness_start = parseFloat(q.loudness_start);
 
-                            for (var k = 0; k < q.pitches.length; q++) {
+                            for (var k = 0; k < q.pitches.length; k++) {
                                 q.pitches[k] = parseFloat(q.pitches[k]);
                             }
-                            for (var k = 0; k < q.timbre.length; q++) {
+                            for (var k = 0; k < q.timbre.length; k++) {
                                 q.timbre[k] = parseFloat(q.timbre[k]);
                             }
                         }
