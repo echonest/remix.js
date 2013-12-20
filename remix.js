@@ -41,7 +41,7 @@ function createJRemixer(context, jquery, apiKey) {
             $.getJSON(bridgeURL, function(data) {
                 console.log(data);
                 // can we go straight to RemixTrackByID here?
-            }
+            });
         },
 
         // If you have the analysis URL already, or if you've cached it in your app.
