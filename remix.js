@@ -38,8 +38,18 @@ function createJRemixer(context, jquery, apiKey) {
            var bridgeURL = "http://labs.echonest.com/SCAnalyzer/analyze?id=" + soundCloudURL;
             $.getJSON(bridgeURL, function(data) {
                 if (data.status == "OK") {
+                    console.log("got a valid EN track ID");
                     var trackID = data.trid;
-                    remixer.remixTrackById(trackID, soundCloudURL, callback);
+
+                    // I need to get things into this form
+                    // http://api.soundcloud.com/tracks/13158665/download
+                    var scResolveURL = 'http://api.soundcloud.com/resolve.json'
+                    $.getJSON(url, {client_id:'c6e103442e91e22a24f93a8cc42b75eb', url:soundCloudURL}, function(data) {
+                        console.log("got a valid SC response");
+                        console.log(data);
+                        //remixer.remixTrackById(trackID, downloadURL, callback);
+                    });
+                   
                 }
                 else {
                     callback(track, "Error:  no analysis data returned for that track - 0 ");  
