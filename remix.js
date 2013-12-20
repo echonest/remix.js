@@ -7,7 +7,7 @@ function createJRemixer(context, jquery, apiKey) {
     $.ajaxSetup({ cache: false });
 
     var remixer = {
-        // If you have an EN TRack ID.
+        // If you have an EN TRack ID and the location of the  audio.
         remixTrackById: function(trackID, trackURL, callback) {
             var track;
             var url = 'http://developer.echonest.com/api/v4/track/profile?format=json&bucket=audio_summary'
@@ -33,14 +33,18 @@ function createJRemixer(context, jquery, apiKey) {
             });
         },
 
-
-        // If you have a SoundCloud URL
+        // If you have a SoundCloud URL.
         remixTrackBySoundCloudURL: function(soundCloudURL, callback) {
-
            var bridgeURL = "http://labs.echonest.com/SCAnalyzer/analyze?id=" + soundCloudURL;
             $.getJSON(bridgeURL, function(data) {
-                console.log(data);
-                // can we go straight to RemixTrackByID here?
+                if (data.status == "OK") {
+                    var trackID = data.trid;
+                    remixTrackById(trackID, soundCloudURL, callback);
+                }
+                else {
+                    callback(track, "Error:  no analysis data returned for that track - 0 ");  
+                    console.log('error', 'No analysis data returned:  try again, or try another SoundCloud URL');
+                }
             });
         },
 
