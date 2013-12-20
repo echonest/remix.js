@@ -11,28 +11,43 @@ function createJRemixer(context, jquery, apiKey) {
         remixTrackById: function(trackID, trackURL, callback) {
             var track;
             var url = 'http://developer.echonest.com/api/v4/track/profile?format=json&bucket=audio_summary'
-            $.getJSON(url, {id:trackID, api_key:apiKey}, function(data) {
-                var analysisURL = data.response.track.audio_summary.analysis_url;
-                track = data.response.track;
-                
-                // This call is proxied through the yahoo query engine.  
-                // This is temporary, but works.
-                $.getJSON("http://query.yahooapis.com/v1/public/yql", 
-                    { q: "select * from json where url=\"" + analysisURL + "\"", format: "json"}, 
-                    function(data) {
-                        if (data.query.results != null) {
-                            track.analysis = data.query.results.json;
-                            console.log("Analysis obtained...");
-                            remixer.remixTrack(track, trackURL, callback);   
-                        }
-                        else {
-                            callback(track, "Error:  no analysis data returned for that track - 0 ");  
-                            console.log('error', 'No analysis data returned:  try again, or try another trackID');
-                            console.log(data);
-                        }
-                });
 
-            });
+           var retryCount = 3;
+           var retryInterval = 4000;
+
+            function lookForAnalysis(trackID, trackURL, callback) {
+                $.getJSON(url, {id:trackID, api_key:apiKey}, function(data) {
+                    var analysisURL = data.response.track.audio_summary.analysis_url;
+                    track = data.response.track;
+                    
+                    // This call is proxied through the yahoo query engine.  
+                    // This is temporary, but works.
+                    $.getJSON("http://query.yahooapis.com/v1/public/yql", 
+                        { q: "select * from json where url=\"" + analysisURL + "\"", format: "json"}, 
+                        function(data) {
+                            if (data.query.results != null) {
+                                track.analysis = data.query.results.json;
+                                console.log("Analysis obtained...");
+                                remixer.remixTrack(track, trackURL, callback);   
+                            }
+                            else {
+                                retryCount = retryCount - 1;
+                                retryInterval = retryInterval + retryInterval;
+                                if (retryCount > 0) {
+                                    console.log('checking for analysis again -- pass this back up, somehow?')
+                                    callback(track, "Analysis pending, retrying...");  
+                                    setTimeout(function () {
+                                        lookForAnalysis(trackID, trackURL, callback);
+                                    }, retryInterval);
+                                } else {
+                                    callback(track, "Error:  no analysis data returned for that track - 0 ");  
+                                    console.log('error', 'No analysis data returned:  try again, or try another trackID');   
+                                }
+                            }
+                    }); // end yahoo proxy getJson
+                });
+            } // end lookForAnalysis
+            lookForAnalysis(trackID, trackURL, callback);
         },
 
 
@@ -42,7 +57,7 @@ function createJRemixer(context, jquery, apiKey) {
            var retryCount = 3;
            var retryInterval = 2000;
 
-           function lookForAnalysis(bridgeURL, soundClouddClientID, callback) {
+           function lookForTrackID(bridgeURL, soundClouddClientID, callback) {
                 $.getJSON(bridgeURL, function(data) {
                     console.log(data);
                     if (data.status == "OK") {
@@ -59,8 +74,7 @@ function createJRemixer(context, jquery, apiKey) {
                         retryInterval = retryInterval + retryInterval;
                         if (retryCount > 0) {
                             setTimeout(function () {
-                                console.log('checking the bridge again...');  
-                                lookForAnalysis(bridgeURL, soundClouddClientID, callback);
+                                lookForTrackID(bridgeURL, soundClouddClientID, callback);
                             }, retryInterval);
                         } else {
                             callback(track, "Error:  no trackID returned.");  
@@ -69,7 +83,7 @@ function createJRemixer(context, jquery, apiKey) {
                      } // end else
                 });
             }
-            lookForAnalysis(bridgeURL, soundClouddClientID, callback);
+            lookForTrackID(bridgeURL, soundClouddClientID, callback);
         },
 
         // If you have the analysis URL already, or if you've cached it in your app.
