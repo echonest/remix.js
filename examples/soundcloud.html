@@ -114,7 +114,7 @@ function init() {
                     $('.btn-remixed').removeAttr('disabled');
 
                 }
-            }); // end remixBySc
+            }); // end remixTrackBySoundCloudURL
         });
     
     }
@@ -144,6 +144,9 @@ window.onload = init;
             <h1>remix.js:  soundcloud.html<h1>
             <div id="theCode">
                 <pre><code>// Remix a track from SoundCloud
+remixer.remixTrackBySoundCloudURL(soundCloudURL, soundCloudApiKey, function(t, percent) {
+    // Your remix here!
+}
 </code></pre>
             </div>
         </div>
