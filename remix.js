@@ -52,7 +52,7 @@ function createJRemixer(context, jquery, apiKey) {
                         $.getJSON(scResolveURL, {client_id:soundClouddClientID, url:soundCloudURL}, function(data) {
                             if (data.downloadable == true) {
                                 console.log(data);
-                                var downloadURL = data.download_url + '?client_id=' + soundClouddClientID;
+                                var downloadURL = data.stream_url + '?client_id=' + soundClouddClientID;
                                 console.log('got all data from SoundCloud, about to start remix');  
                                 remixer.remixTrackById(trackID, downloadURL, callback);
                             } else {
