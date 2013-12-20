@@ -54,8 +54,8 @@ function createJRemixer(context, jquery, apiKey) {
                    
                 }
                 else {
-                    callback(track, "Error:  no analysis data returned for that track - 0 ");  
-                    console.log('error', 'No analysis data returned:  try again, or try another SoundCloud URL');
+                    callback(track, "Error:  no trackID returned (Make sure the SoundCloud track is downloadable).");  
+                    console.log('error', 'No trackID data returned:  try again, or try another SoundCloud URL');
                 }
             });
         },
