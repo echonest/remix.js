@@ -34,30 +34,46 @@ function createJRemixer(context, jquery, apiKey) {
             });
         },
 
+
+
+
         // If you have a SoundCloud URL.
         remixTrackBySoundCloudURL: function(soundCloudURL, soundClouddClientID, callback) {
            var bridgeURL = "http://labs.echonest.com/SCAnalyzer/analyze?id=" + soundCloudURL;
-            $.getJSON(bridgeURL, function(data) {
-                if (data.status == "OK") {
-                    var trackID = data.trid;
-                    var scResolveURL = 'http://api.soundcloud.com/resolve.json'
-                    $.getJSON(scResolveURL, {client_id:soundClouddClientID, url:soundCloudURL}, function(data) {
-                        if (data.downloadable == true) {
-                            var downloadURL = data.download_url + '?client_id=' + soundClouddClientID;
-                            console.log('got all data from SoundCloud, about to start remix');  
-                            remixer.remixTrackById(trackID, downloadURL, callback);
+           var retryCount = 3;
+           var retryInterval = 2000;
+
+           function lookForAnalysis(bridgeURL, soundClouddClientID, callback) {
+                $.getJSON(bridgeURL, function(data) {
+                    if (data.status == "OK") {
+                        var trackID = data.trid;
+                        var scResolveURL = 'http://api.soundcloud.com/resolve.json'
+                        $.getJSON(scResolveURL, {client_id:soundClouddClientID, url:soundCloudURL}, function(data) {
+                            if (data.downloadable == true) {
+                                var downloadURL = data.download_url + '?client_id=' + soundClouddClientID;
+                                console.log('got all data from SoundCloud, about to start remix');  
+                                remixer.remixTrackById(trackID, downloadURL, callback);
+                            } else {
+                                callback(track, "Error:  SoundCloud URL is not downloadable - 0 ");  
+                                console.log('error', 'SoundCloud URL is not downloadable');  
+                            }
+                        });
+                    } else {
+                        retryCount = retryCount - 1;
+                        retryInterval = retryInterval + retryInterval;
+                        if (retryCount > 0) {
+                            setTimeout(function () {
+                                console.log('checking the bridge again...');  
+                                lookForAnalysis(bridgeURL, soundClouddClientID, callback);
+                            }, retryInterval);
                         } else {
-                            callback(track, "Error:  SoundCloud URL is not downloadable - 0 ");  
-                            console.log('error', 'SoundCloud URL is not downloadable');  
+                            callback(track, "Error:  no trackID returned.");  
+                            console.log('error', 'no trackID returned.');       
                         }
-                    });
-                   
-                }
-                else {
-                    callback(track, "Error:  no trackID returned (Make sure the SoundCloud track is downloadable).");  
-                    console.log('error', 'No trackID data returned:  try again, or try another SoundCloud URL');
-                }
-            });
+                     } // end else
+                });
+            }
+            lookForAnalysis(bridgeURL, soundClouddClientID, callback);
         },
 
         // If you have the analysis URL already, or if you've cached it in your app.
