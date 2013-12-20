@@ -46,19 +46,15 @@ function createJRemixer(context, jquery, apiKey) {
 
            function lookForAnalysis(bridgeURL, soundClouddClientID, callback) {
                 $.getJSON(bridgeURL, function(data) {
+                    console.log(data);
                     if (data.status == "OK") {
                         var trackID = data.trid;
                         var scResolveURL = 'http://api.soundcloud.com/resolve.json'
                         $.getJSON(scResolveURL, {client_id:soundClouddClientID, url:soundCloudURL}, function(data) {
-                            if (data.downloadable == true) {
-                                console.log(data);
-                                var downloadURL = data.stream_url + '?client_id=' + soundClouddClientID;
-                                console.log('got all data from SoundCloud, about to start remix');  
-                                remixer.remixTrackById(trackID, downloadURL, callback);
-                            } else {
-                                callback(track, "Error:  SoundCloud URL is not downloadable - 0 ");  
-                                console.log('error', 'SoundCloud URL is not downloadable');  
-                            }
+                            console.log(data);
+                            var downloadURL = data.stream_url + '?client_id=' + soundClouddClientID;
+                            console.log('got all data from SoundCloud, about to start remix');  
+                            remixer.remixTrackById(trackID, downloadURL, callback);
                         });
                     } else {
                         retryCount = retryCount - 1;
