@@ -44,7 +44,7 @@ function createJRemixer(context, jquery, apiKey) {
                     // I need to get things into this form
                     // http://api.soundcloud.com/tracks/13158665/download
                     var scResolveURL = 'http://api.soundcloud.com/resolve.json'
-                    $.getJSON(url, {client_id:'c6e103442e91e22a24f93a8cc42b75eb', url:soundCloudURL}, function(data) {
+                    $.getJSON(scResolveURL, {client_id:'c6e103442e91e22a24f93a8cc42b75eb', url:soundCloudURL}, function(data) {
                         console.log("got a valid SC response");
                         console.log(data);
                         //remixer.remixTrackById(trackID, downloadURL, callback);
