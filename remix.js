@@ -47,7 +47,13 @@ function createJRemixer(context, jquery, apiKey) {
                     $.getJSON(scResolveURL, {client_id:'c6e103442e91e22a24f93a8cc42b75eb', url:soundCloudURL}, function(data) {
                         console.log("got a valid SC response");
                         console.log(data);
-                        //remixer.remixTrackById(trackID, downloadURL, callback);
+                        if (data.downloadable == true) {
+                            var downloadURL = data.download_url;
+                            remixer.remixTrackById(trackID, downloadURL, callback);
+                        } else {
+                            callback(track, "Error:  SoundCloud URL is not downloadable - 0 ");  
+                            console.log('error', 'SoundCloud URL is not downloadable');  
+                        }
                     });
                    
                 }
