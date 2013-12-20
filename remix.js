@@ -35,12 +35,12 @@ function createJRemixer(context, jquery, apiKey) {
                                 retryInterval = retryInterval + retryInterval;
                                 if (retryCount > 0) {
                                     console.log('Analysis pending, trying again')
-                                    callback(track, "Analysis pending, retrying - 0 ");  
+                                    callback(track, "Analysis pending, retrying - 0");  
                                     setTimeout(function () {
                                         lookForAnalysis(trackID, trackURL, callback);
                                     }, retryInterval);
                                 } else {
-                                    callback(track, "Error:  no analysis data returned for that track - 0 ");  
+                                    callback(track, "Error:  no analysis data returned for that track - 0");  
                                     console.log('error', 'No analysis data returned:  try again, or try another trackID');   
                                 }
                             }
