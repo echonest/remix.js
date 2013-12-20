@@ -11,6 +11,7 @@ function createJRemixer(context, jquery, apiKey) {
         remixTrackById: function(trackID, trackURL, callback) {
             var track;
             var url = 'http://developer.echonest.com/api/v4/track/profile?format=json&bucket=audio_summary'
+            console.log("remixTrackById - got the analysis URL");
             $.getJSON(url, {id:trackID, api_key:apiKey}, function(data) {
                 var analysisURL = data.response.track.audio_summary.analysis_url;
                 track = data.response.track;
@@ -22,6 +23,7 @@ function createJRemixer(context, jquery, apiKey) {
                     function(data) {
                         if (data.query.results != null) {
                             track.analysis = data.query.results.json;
+                            console.log("remixTrackById - got the analysis!");
                             remixer.remixTrack(track, trackURL, callback);   
                         }
                         else {
@@ -49,6 +51,7 @@ function createJRemixer(context, jquery, apiKey) {
                         console.log(data);
                         if (data.downloadable == true) {
                             var downloadURL = data.download_url;
+                            console.log("about to start remixByTrackID");
                             remixer.remixTrackById(trackID, downloadURL, callback);
                         } else {
                             callback(track, "Error:  SoundCloud URL is not downloadable - 0 ");  
