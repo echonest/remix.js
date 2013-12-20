@@ -13,7 +13,7 @@ function createJRemixer(context, jquery, apiKey) {
             var url = 'http://developer.echonest.com/api/v4/track/profile?format=json&bucket=audio_summary'
 
            var retryCount = 3;
-           var retryInterval = 4000;
+           var retryInterval = 3000;
 
             function lookForAnalysis(trackID, trackURL, callback) {
                 $.getJSON(url, {id:trackID, api_key:apiKey}, function(data) {
@@ -34,8 +34,8 @@ function createJRemixer(context, jquery, apiKey) {
                                 retryCount = retryCount - 1;
                                 retryInterval = retryInterval + retryInterval;
                                 if (retryCount > 0) {
-                                    console.log('checking for analysis again -- pass this back up, somehow?')
-                                    callback(track, "Analysis pending, retrying...");  
+                                    console.log('Analysis pending, trying again')
+                                    callback(track, "Analysis pending, retrying - 0 ");  
                                     setTimeout(function () {
                                         lookForAnalysis(trackID, trackURL, callback);
                                     }, retryInterval);
@@ -59,12 +59,10 @@ function createJRemixer(context, jquery, apiKey) {
 
            function lookForTrackID(bridgeURL, soundClouddClientID, callback) {
                 $.getJSON(bridgeURL, function(data) {
-                    console.log(data);
                     if (data.status == "OK") {
                         var trackID = data.trid;
                         var scResolveURL = 'http://api.soundcloud.com/resolve.json'
                         $.getJSON(scResolveURL, {client_id:soundClouddClientID, url:soundCloudURL}, function(data) {
-                            console.log(data);
                             var downloadURL = data.stream_url + '?client_id=' + soundClouddClientID;
                             console.log('got all data from SoundCloud, about to start remix');  
                             remixer.remixTrackById(trackID, downloadURL, callback);
