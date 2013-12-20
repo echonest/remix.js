@@ -36,7 +36,7 @@ function createJRemixer(context, jquery, apiKey) {
         },
 
         // If you have a SoundCloud URL.
-        remixTrackBySoundCloudURL: function(soundCloudURL, callback) {
+        remixTrackBySoundCloudURL: function(soundCloudURL, soundClouddClientID, callback) {
            var bridgeURL = "http://labs.echonest.com/SCAnalyzer/analyze?id=" + soundCloudURL;
             $.getJSON(bridgeURL, function(data) {
                 if (data.status == "OK") {
@@ -46,11 +46,11 @@ function createJRemixer(context, jquery, apiKey) {
                     // I need to get things into this form
                     // http://api.soundcloud.com/tracks/13158665/download
                     var scResolveURL = 'http://api.soundcloud.com/resolve.json'
-                    $.getJSON(scResolveURL, {client_id:'c6e103442e91e22a24f93a8cc42b75eb', url:soundCloudURL}, function(data) {
+                    $.getJSON(scResolveURL, {client_id:soundClouddClientID, url:soundCloudURL}, function(data) {
                         console.log("got a valid SC response");
                         console.log(data);
                         if (data.downloadable == true) {
-                            var downloadURL = data.download_url + '?client_id=c6e103442e91e22a24f93a8cc42b75eb';
+                            var downloadURL = data.download_url + '?client_id=' + soundClouddClientID;
                             console.log("about to start remixByTrackID");
                             remixer.remixTrackById(trackID, downloadURL, callback);
                         } else {
