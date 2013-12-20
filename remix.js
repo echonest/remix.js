@@ -11,7 +11,6 @@ function createJRemixer(context, jquery, apiKey) {
         remixTrackById: function(trackID, trackURL, callback) {
             var track;
             var url = 'http://developer.echonest.com/api/v4/track/profile?format=json&bucket=audio_summary'
-            console.log("remixTrackById - got the analysis URL");
             $.getJSON(url, {id:trackID, api_key:apiKey}, function(data) {
                 var analysisURL = data.response.track.audio_summary.analysis_url;
                 track = data.response.track;
@@ -23,7 +22,7 @@ function createJRemixer(context, jquery, apiKey) {
                     function(data) {
                         if (data.query.results != null) {
                             track.analysis = data.query.results.json;
-                            console.log("remixTrackById - got the analysis!");
+                            console.log("Analysis obtained...");
                             remixer.remixTrack(track, trackURL, callback);   
                         }
                         else {
@@ -40,18 +39,12 @@ function createJRemixer(context, jquery, apiKey) {
            var bridgeURL = "http://labs.echonest.com/SCAnalyzer/analyze?id=" + soundCloudURL;
             $.getJSON(bridgeURL, function(data) {
                 if (data.status == "OK") {
-                    console.log("got a valid EN track ID");
                     var trackID = data.trid;
-
-                    // I need to get things into this form
-                    // http://api.soundcloud.com/tracks/13158665/download
                     var scResolveURL = 'http://api.soundcloud.com/resolve.json'
                     $.getJSON(scResolveURL, {client_id:soundClouddClientID, url:soundCloudURL}, function(data) {
-                        console.log("got a valid SC response");
-                        console.log(data);
                         if (data.downloadable == true) {
                             var downloadURL = data.download_url + '?client_id=' + soundClouddClientID;
-                            console.log("about to start remixByTrackID");
+                            console.log('got all data from SoundCloud, about to start remix');  
                             remixer.remixTrackById(trackID, downloadURL, callback);
                         } else {
                             callback(track, "Error:  SoundCloud URL is not downloadable - 0 ");  
