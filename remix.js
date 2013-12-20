@@ -50,7 +50,6 @@ function createJRemixer(context, jquery, apiKey) {
             lookForAnalysis(trackID, trackURL, callback);
         },
 
-
         // If you have a SoundCloud URL.
         remixTrackBySoundCloudURL: function(soundCloudURL, soundClouddClientID, callback) {
            var bridgeURL = "http://labs.echonest.com/SCAnalyzer/analyze?id=" + soundCloudURL;
