@@ -7,6 +7,7 @@ function createJRemixer(context, jquery, apiKey) {
     $.ajaxSetup({ cache: false });
 
     var remixer = {
+        // If you have an EN TRack ID.
         remixTrackById: function(trackID, trackURL, callback) {
             var track;
             var url = 'http://developer.echonest.com/api/v4/track/profile?format=json&bucket=audio_summary'
@@ -32,6 +33,29 @@ function createJRemixer(context, jquery, apiKey) {
             });
         },
 
+
+        // If you have a SoundCloud URL
+        remixTrackBySoundCloudURL: function(soundCloudURL, callback) {
+
+           var bridgeURL = "http://labs.echonest.com/SCAnalyzer/analyze?id=" + soundCloudURL;
+            $.getJSON(bridgeURL, function(data) {
+                console.log(data);
+                // can we go straight to RemixTrackByID here?
+            }
+        },
+
+        // If you have the analysis URL already, or if you've cached it in your app.
+        // Be *very* careful when searching for analysis URL by song:  it may not match the track being used.  
+        remixTrackByURL: function(analysisURL, trackURL, callback) {
+            var track = new Object();
+            $.getJSON(analysisURL, function(data) {
+                track.analysis = data;
+                track.status = "complete";
+                remixer.remixTrack(track, trackURL, callback);
+
+            });
+        },
+
         remixTrack : function(track, trackURL, callback) {
             function fetchAudio(url) {
                 var request = new XMLHttpRequest();
@@ -42,6 +66,7 @@ function createJRemixer(context, jquery, apiKey) {
                 this.request = request;
 
                 request.onload = function() {
+
                     trace('audio loaded');
                      if (false) {
                         track.buffer = context.createBuffer(request.response, false);
@@ -80,10 +105,24 @@ function createJRemixer(context, jquery, apiKey) {
                     trace('preprocessTrack ' + type);
                     for (var j in track.analysis[type]) {
                         var qlist = track.analysis[type]
-
                         j = parseInt(j)
-
                         var q = qlist[j]
+
+                        q.start = parseFloat(q.start);
+                        q.duration = parseFloat(q.duration);
+                        q.confidence = parseFloat(q.confidence);
+                        if (type == 'segments') {
+                            q.loudness_max = parseFloat(q.loudness_max);
+                            q.loudness_max_time = parseFloat(q.loudness_max_time);
+                            q.loudness_start = parseFloat(q.loudness_start);
+
+                            for (var k = 0; k < q.pitches.length; k++) {
+                                q.pitches[k] = parseFloat(q.pitches[k]);
+                            }
+                            for (var k = 0; k < q.timbre.length; k++) {
+                                q.timbre[k] = parseFloat(q.timbre[k]);
+                            }
+                        }
                         q.track = track;
                         q.which = j;
                         if (j > 0) {
