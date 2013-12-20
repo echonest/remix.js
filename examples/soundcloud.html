@@ -34,6 +34,12 @@ var player;
 var track;
 var remixed;
 
+function beginRemix() {
+    
+
+}
+
+
 function init() {
     $('.btn').attr('disabled','disabled');
     var wavesurfer = Object.create(WaveSurfer);
@@ -73,40 +79,17 @@ function init() {
         player = remixer.getPlayer();
         $("#info").text("Please enter a SoundCloud URL");
 
-        remixer.remixTrackById(trackID, trackURL, function(t, percent) {
-            track = t;
+        $("#soundcloud-submit").click(function() {
+            $("#info").text("Getting data from SoundCloud...");
+            var soundCloudURL = $("#soundcloud-url").val();
+            remixer.remixTrackBySoundCloudURL(soundCloudURL, function(t, percent) {
 
-            $("#info").text(percent + "% of the track loaded...");
-            if (percent == 100) {
-                $("#info").text(percent + "% of the track loaded, remixing...");
-            }
 
-            if (track.status == 'ok') {
-                wavesurfer.loadBuffer(track.analysis.beats);
+                $("#info").text("and sooo...")
 
-                $('.btn-original').removeAttr('disabled');
-                remixed = new Array();
-                // Extract the first beat of every bar.
-                var meter = parseInt(track.analysis.track.time_signature);
-                for (var i=0; i < track.analysis.beats.length; i++) {
-                    if (i % meter == 0) {
-                        remixed.push(track.analysis.beats[i])
-                    }
-                }
-                $("#info").text("Remix complete!");
-
-                remixedWavesurfer.loadBuffer(remixed);
-
-                // Only use the filesystem if we have access to it.
-                if (fs) {
-                    remixer.saveRemixLocally(fs, remixed, function(saveURL) {
-                        $('#downloadButton').html('<a href="' + saveURL + '" target="_blank">Download Remix</a>')
-                    });
-                }
-                $('.btn-remixed').removeAttr('disabled');
-
-            }
+            }); // end remixBySc
         });
+    
     }
 }
 
