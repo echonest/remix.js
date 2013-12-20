@@ -28,6 +28,7 @@ function createJRemixer(context, jquery, apiKey) {
                         else {
                             callback(track, "Error:  no analysis data returned for that track - 0 ");  
                             console.log('error', 'No analysis data returned:  try again, or try another trackID');
+                            console.log(data);
                         }
                 });
 
@@ -50,6 +51,7 @@ function createJRemixer(context, jquery, apiKey) {
                         var scResolveURL = 'http://api.soundcloud.com/resolve.json'
                         $.getJSON(scResolveURL, {client_id:soundClouddClientID, url:soundCloudURL}, function(data) {
                             if (data.downloadable == true) {
+                                console.log(data);
                                 var downloadURL = data.download_url + '?client_id=' + soundClouddClientID;
                                 console.log('got all data from SoundCloud, about to start remix');  
                                 remixer.remixTrackById(trackID, downloadURL, callback);
