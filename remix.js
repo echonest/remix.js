@@ -7,7 +7,7 @@ function createJRemixer(context, jquery, apiKey) {
     $.ajaxSetup({ cache: false });
 
     var remixer = {
-        // If you have an EN TRack ID and the location of the  audio.
+        // If you have an EN TRack ID and the location of the audio.
         remixTrackById: function(trackID, trackURL, callback) {
             var track;
             var url = 'http://developer.echonest.com/api/v4/track/profile?format=json&bucket=audio_summary'
@@ -39,7 +39,7 @@ function createJRemixer(context, jquery, apiKey) {
             $.getJSON(bridgeURL, function(data) {
                 if (data.status == "OK") {
                     var trackID = data.trid;
-                    remixTrackById(trackID, soundCloudURL, callback);
+                    remixer.remixTrackById(trackID, soundCloudURL, callback);
                 }
                 else {
                     callback(track, "Error:  no analysis data returned for that track - 0 ");  
