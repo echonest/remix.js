@@ -50,7 +50,7 @@ function createJRemixer(context, jquery, apiKey) {
                         console.log("got a valid SC response");
                         console.log(data);
                         if (data.downloadable == true) {
-                            var downloadURL = data.download_url;
+                            var downloadURL = data.download_url + '?client_id=c6e103442e91e22a24f93a8cc42b75eb';
                             console.log("about to start remixByTrackID");
                             remixer.remixTrackById(trackID, downloadURL, callback);
                         } else {
