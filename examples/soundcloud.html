@@ -73,9 +73,15 @@ function init() {
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
         $("#info").text("Please enter a SoundCloud URL");
+        $("#waveform").hide();
+        $("#newWaveform").hide();
 
         $("#soundcloud-submit").click(function() {
             $("#info").text("Getting data from SoundCloud...");
+
+            $("#waveform").show();
+            $("#newWaveform").show();
+
             var soundCloudURL = $("#soundcloud-url").val();
             remixer.remixTrackBySoundCloudURL(soundCloudURL, soundCloudApiKey, function(t, percent) {
                 track = t;
