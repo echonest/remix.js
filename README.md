@@ -4,7 +4,7 @@ Echo Nest Remix is **the Internet Synthesizer.**
 Make amazing things from music, automatically.  Turn any music Javascript code, cut it up, move through it, and control it.
 
 It is based on code from the mighty [Infinite Jukebox](http://www.infinitejuke.com/ ""), 
-and makes use of the WebAudio API to cut, queue, and remix music.
+and makes use of the WebAudio API to cut, queue, and remix music. Echo Nest Remix is Webkit-only.
 
 ## Getting Started
 We've made a shiny new page for working with Remix: [check it out.](http://echonest.github.com/remix/javascript.html) 
