@@ -296,7 +296,7 @@ function createJRemixer(context, jquery, apiKey) {
 
         getPlayer : function(effects) {
             var queueTime = 0;
-            var audioGain = context.createGainNode();
+            var audioGain = context.createGain();
             var curAudioSource = null;
             var currentlyQueued = new Array();
             var curQ = null;
