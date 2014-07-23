@@ -10,6 +10,6 @@ and makes use of the WebAudio API to cut, queue, and remix music.
 We've made a shiny new page for working with Remix: [check it out.](http://echonest.github.com/remix/javascript.html) 
 This is a new project, so things may change very rapidly - let us know if you have any problems!
 
-![""](https://a248.e.akamai.net/camo.github.com/c7a3810cd59b15375246e5468b46cdecd18edbb9/687474703a2f2f692e696d6775722e636f6d2f57574c596f2e676966 "Head-nodding-cat.js")
+-![alt text](http://i.imgur.com/WWLYo.gif "Head-nodding-cat.js")
 
 (If you're looking for the original, Python version of remix, go [here.](https://github.com/echonest/remix))
