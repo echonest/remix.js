@@ -70,12 +70,13 @@ var wavesurfer;
 var remixedWavesurfer;
 
 function startRemix() {
-    if (window.webkitAudioContext === undefined) {
+    var contextFunction = window.webkitAudioContext || window.AudioContext;
+    if (contextFunction === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
-                + " support it. Try the latest version of Chrome");
+                + " support it. Try the latest version of Chrome?");
     } else {
         $("#info").text("Starting to remix...");
-         var context = new webkitAudioContext();
+        var context = new contextFunction();
 
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();

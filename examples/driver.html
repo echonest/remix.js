@@ -9,9 +9,7 @@
 <script type="text/javascript" src='../remix.js'></script>
 <script type="text/javascript">
 
-// Hop through the beats of a track using the arrow keys
-// You will need to supply your Echo Nest API key, the trackID, and a URL to the track.
-// The supplied track can be found in the audio subdirectory.
+// Hop through the beats of a track using the arrow keys.
 var apiKey = 'SWHCFHJA2PPHKX7A5';
 var trackID = 'TRCYWPQ139279B3308';
 var trackURL = 'audio/1451_-_D.mp3';
@@ -23,11 +21,12 @@ var remixed;
 var playbackIndex = -1;
 
 function init() {
-    if (window.webkitAudioContext === undefined) {
+    var contextFunction = window.webkitAudioContext || window.AudioContext;
+    if (contextFunction === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
-            + " support it. Try the latest version of Chrome");
+            + " support it. Try the latest version of Chrome?");
     } else {
-        var context = new webkitAudioContext();
+        var context = new contextFunction();
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
         $("#info").text("Loading analysis data...");
