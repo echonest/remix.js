@@ -82,12 +82,11 @@ function init() {
         cursorColor: '#00ACEB'
     });
 
-
-    if (window.webkitAudioContext === undefined) {
+    var context = window.AudioContext || window.webkitAudioContext;
+    if (context === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
-            + " support it. Try the latest version of Chrome");
+            + " support it. Try the latest version of Chrome?");
     } else {
-        var context = new webkitAudioContext();
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();
         $("#info").text("Loading analysis data...");
