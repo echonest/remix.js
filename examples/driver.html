@@ -23,7 +23,7 @@ var playbackIndex = -1;
 function init() {
     var contextFunction = window.webkitAudioContext || window.AudioContext;
     if (contextFunction === undefined) {
-        error("Sorry, this app needs advanced web audio. Your browser doesn't"
+        $("#info").text("Sorry, this app needs advanced web audio. Your browser doesn't"
             + " support it. Try the latest version of Chrome?");
     } else {
         var context = new contextFunction();
