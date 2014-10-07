@@ -25,11 +25,12 @@ var track2;
 var remixed;
 
 function init() {
-    if (window.webkitAudioContext === undefined) {
-        error("Sorry, this app needs advanced web audio. Your browser doesn't"
-            + " support it. Try the latest version of Chrome");
+    var contextFunction = window.webkitAudioContext || window.AudioContext;
+    if (contextFunction === undefined) {
+        $("#info").text("Sorry, this app needs advanced web audio. Your browser doesn't"
+            + " support it. Try the latest version of Chrome?");
     } else {
-        var context = new webkitAudioContext();
+        var context = new contextFunction();
 
         remixer = createJRemixer(context, $, apiKey);
         player = remixer.getPlayer();

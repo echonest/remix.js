@@ -47,8 +47,9 @@ function analyzeAudio(audio, tag, callback) {
 
 
 function init() {
-    if (window.webkitAudioContext === undefined) {
-        error("Sorry, this app needs advanced web audio. Your browser doesn't"
+    var contextFunction = window.webkitAudioContext || window.AudioContext;
+    if (contextFunction === undefined) {
+        $("#info").text("Sorry, this app needs advanced web audio. Your browser doesn't"
             + " support it. Try the latest version of Chrome");
     }
     // Read the URL query string to decide what to do
@@ -98,7 +99,7 @@ function init() {
         var urlXHR = getReference(trackID, function(data) {
             trackURL = data.trackURL;
             console.log("Ready to remix");
-            var context = new webkitAudioContext();
+            var context = new contextFunction();
             var fs;
             // Only use the filesystem if we have access to it.
             if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
