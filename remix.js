@@ -129,7 +129,7 @@ function createJRemixer(context, jquery, apiKey) {
                     track.status = 'error: loading audio'
                 }
                 request.onprogress = function(e) {
-                    var percent = Math.round(e.position * 100  / e.totalSize);
+                    var percent = Math.round(e.loaded * 100 / e.total);
                     callback(track, percent);   
                 }
                 request.send();
@@ -616,7 +616,7 @@ function fixFileName(name) {
 }
 
 function fetchSignature() {
-    var url = 'http://remix.echonest.com/Uploader/verify?callback=?&v=audio'
+    var url = 'http://remix.echonest.com/Uploader/verify?callback=?&v=audio';
     $.getJSON(url, {}, function(data) {
         policy = data.policy;
         signature = data.signature;
