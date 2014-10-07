@@ -616,7 +616,7 @@ function fixFileName(name) {
 }
 
 function fetchSignature() {
-    var url = 'http://remix.echonest.com/Uploader/verify?callback=?&v=audio'
+    var url = 'http://remix.echonest.com/Uploader/verify?callback=?&v=audio';
     $.getJSON(url, {}, function(data) {
         policy = data.policy;
         signature = data.signature;
