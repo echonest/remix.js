@@ -129,7 +129,7 @@ function createJRemixer(context, jquery, apiKey) {
                     track.status = 'error: loading audio'
                 }
                 request.onprogress = function(e) {
-                    var percent = Math.round(e.position * 100  / e.totalSize);
+                    var percent = Math.round(e.loaded * 100 / e.total);
                     callback(track, percent);   
                 }
                 request.send();
