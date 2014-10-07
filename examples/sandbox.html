@@ -93,7 +93,7 @@ function analyzeAudio(audio, tag, callback) {
 
 function init() {
     var contextFunction = window.webkitAudioContext || window.AudioContext;
-    if (contextFunction) {
+    if (contextFunction === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
             + " support it. Try the latest version of Chrome?");
     }
