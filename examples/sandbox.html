@@ -92,7 +92,7 @@ function analyzeAudio(audio, tag, callback) {
 
 
 function init() {
-    if (window.webkitAudioContext === undefined) {
+    if (window.webkitAudioContext === undefined && window.AudioContext === undefined ) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
             + " support it. Try the latest version of Chrome");
     }
@@ -137,7 +137,13 @@ function init() {
 
             if (data.status == true) {
                 console.log("Ready to remix");
-                var context = new webkitAudioContext();
+                // Use the right call for both Chrome/Safari and FireFox
+                if (window.webkitAudioContext === undefined) {
+                    var context = new AudioContext();
+                } else if (window.AudioContext === undefined) {
+                    var context = new webkitAudioContext();
+                }
+                
                 // Only use the filesystem if we have access to it.
                 if (window.File && window.FileReader && window.FileList && window.Blob && window.webkitRequestFileSystem) {
                     window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
