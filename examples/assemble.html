@@ -82,7 +82,7 @@ function init() {
         cursorColor: '#00ACEB'
     });
 
-    var context = window.AudioContext || window.webkitAudioContext;
+    var context = window.webkitAudioContext || window.AudioContext;
     if (context === undefined) {
         error("Sorry, this app needs advanced web audio. Your browser doesn't"
             + " support it. Try the latest version of Chrome?");
