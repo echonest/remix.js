@@ -1,0 +1,26 @@
+{
+  "globals": {
+    "describe"   : false,
+    "it"         : false,
+    "to"         : false,
+    "ok"         : false,
+    "be"         : false,
+    "before"     : false,
+    "beforeEach" : false,
+    "after"      : false,
+    "afterEach"  : false,
+    "equal"      : false,
+    "angular"    : false,
+    "alert"      : false
+  },
+  "globalstrict": true,
+  "quotmark": false,
+  "smarttabs": true,
+  "trailing": true,
+  "undef": true,
+  "unused": true,
+  "indent": 2,
+  "node": true,
+  "jasmine": true,
+  "browser": true
+}
